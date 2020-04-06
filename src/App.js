@@ -1,25 +1,71 @@
+import Layer from './model/Layer';
+import Network from './model/Network';
+import Perceptron from './model/Perceptron';
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-// Object Models
-// 1. Input Layer
-// 2. Hidden Layer
-// 3. Output Layer
-// 4. Neuron
+export default class App extends React.Component {
+    hiddenLayer = new Layer()
+        .setPerceptron(new Perceptron()
+            .setActivationFunction(Perceptron.activationFunctionCollection.sigmoid)
+            .setLearnRate(0.6)
+            .setNetwork(new Network()
+                .setInput(0.8)
+                .setWeight(0.3)
+            )
+            .setNetwork(new Network()
+                .setInput(0.5)
+                .setWeight(0.7)
+            )
+        )
+        .setPerceptron(new Perceptron()
+            .setActivationFunction(Perceptron.activationFunctionCollection.sigmoid)
+            .setLearnRate(0.6)
+            .setNetwork(new Network()
+                .setInput(0.8)
+                .setWeight(0.4)
+            )
+            .setNetwork(new Network()
+                .setInput(0.5)
+                .setWeight(0.9)
+            )
+        );
 
-// Business Logic
-// 1 .Calculate all outputs of   all neurons in the hidden layer
-// 2. Calculate all outputs from all neurons in the output layer
-// 3. Calculate the output layer error
-// 4. Update weight between hidden layer to output layer
-// 5. Calculate the hidden layer error
-// 6. Update weight between input layer to hidden layer
+    handleStart = () => {
+        // Business Logic
+        // 1 .Calculate all outputs of   all neurons in the hidden layer
+        this
+            .hiddenLayer
+            .getOutput()
+            // 2. Calculate all outputs from all neurons in the output layer
+            .then((hiddenOutputs) => {
+                return new Perceptron()
+                    .setActivationFunction(Perceptron.activationFunctionCollection.sigmoid)
+                    .setLearnRate(0.6)
+                    .setNetwork(new Network()
+                        .setInput(hiddenOutputs[0])
+                        .setWeight(0.6)
+                    )
+                    .setNetwork(new Network()
+                        .setInput(hiddenOutputs[1])
+                        .setWeight(0.9)
+                    )
+                    .calculateOutput()
+                    .output;
+            })
+            // 3. Calculate the output layer error
+            .then((output) => {
 
-function App() {
-  return <div className="App">
+            })
+            // 4. Update weight between hidden layer to output layer
+            // 5. Calculate the hidden layer error
+            // 6. Update weight between input layer to hidden layer
+            .then();
+    };
 
-  </div>;
+    render() {
+        return <div className="App">
+            <button onClick={this.handleStart}>Start</button>
+        </div>;
+    }
 }
-
-export default App;
