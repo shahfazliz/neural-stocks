@@ -7,8 +7,8 @@ class App {
     _trainingOptions = {
         activation: 'sigmoid',
         binaryThresh: 0.5,
-        errorThresh: 0.1,
-        hiddenLayers: [40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40],
+        errorThresh: 0.01,
+        hiddenLayers: [840, 840, 840, 840, 840],
         iterations: 1000000,
         learningRate: 0.3,
         log: true,
@@ -67,11 +67,30 @@ class App {
                         .keys(data[j]) // ['Open', 'Close', 'High', 'Low']
                         .forEach(key => {
                             
-                            const yesterdayClose = parseFloat(data[j - 1]['Close'].replace(/,/, ''));
-                            const todayOpen = parseFloat(data[j]['Open'].replace(/,/, ''));
-                            const todayClose = parseFloat(data[j]['Close'].replace(/,/, ''));
-                            const todayHigh = parseFloat(data[j]['High'].replace(/,/, ''));
-                            const todayLow = parseFloat(data[j]['Low'].replace(/,/, ''));
+                            let yesterdayClose = data[j - 1].Close; 
+                            yesterdayClose = typeof(yesterdayClose) === 'string' 
+                                ? parseFloat(yesterdayClose.replace(/,/, ''))
+                                : yesterdayClose;
+                            
+                            let todayOpen = data[j].Open;
+                            todayOpen = typeof(todayOpen) === 'string'
+                                ? parseFloat(todayOpen.replace(/,/, ''))
+                                : todayOpen;
+                            
+                            let todayClose = data[j].Close;
+                            todayClose = typeof(todayClose) === 'string'
+                                ? parseFloat(todayClose.replace(/,/, ''))
+                                : todayClose;
+                            
+                            let todayHigh = data[j].High;
+                            todayHigh = typeof(todayHigh) === 'string'
+                                ? parseFloat(todayHigh.replace(/,/, ''))
+                                : todayHigh;
+                            
+                            let todayLow = data[j].Low;
+                            todayLow = typeof(todayLow) === 'string'
+                                ? parseFloat(todayLow.replace(/,/, ''))
+                                : todayLow;
 
                             // For debugging, see the dates
                             // subResult[`${appendString}_Date_${replaceDateWithCount}`] = data[j]['Date'];
@@ -89,13 +108,18 @@ class App {
                     replaceDateWithCount += 1;
                 }
 
-                // To long or to short 
-                const outputValue = parseFloat(data[i + numberOfElemet]
-                        .Close
-                        .replace(/,/, '')) 
-                    - parseFloat(data[i + numberOfElemet - 1]
-                        .Close
-                        .replace(/,/, ''));
+                // To long or to short
+                let lastDayPlusOneClose =  data[i + numberOfElemet].Close;
+                lastDayPlusOneClose = typeof(lastDayPlusOneClose) === 'string'
+                    ? parseFloat(lastDayPlusOneClose.replace(/,/, ''))
+                    : lastDayPlusOneClose;
+
+                let lastDayClose =  data[i + numberOfElemet - 1].Close;
+                lastDayClose = typeof(lastDayClose) === 'string'
+                    ? parseFloat(lastDayClose.replace(/,/, ''))
+                    : lastDayClose;
+
+                const outputValue = lastDayPlusOneClose - lastDayClose;
 
                 // Push the input and output objects for training
                 result.push({ 
@@ -167,16 +191,57 @@ class App {
 }
 
 const app = new App();
+const listOfTickers = [
+    'DJIA', 
+    'FXA', 'FXB', 'FXC', 'FXE', 'FXF', 'FXY', 
+    'GLD', 'GOVT', 'GOVZ', 
+    'IEF', 'IEI',
+    'MID',
+    'NDX',
+    'RUT',
+    'SGOV', 'SHY', 'SPX',
+    'TLH', 'TLT',
+    'VIX',
+];
 
-app
-    .readFromCSVFileToJson('./Download Data - INDEX_US_S&P US_SPX.csv') // from https://www.marketwatch.com/investing/index/spx/download-data
-    .then((jsonData) => {
-        return app.createTrainingData({
-            appendString: 'SPX',
+Promise
+    .all(listOfTickers.map(tickerSymbol => app
+        .readFromCSVFileToJson(`./csv_sample/${tickerSymbol}.csv`)
+        .then(jsonData => app.createTrainingData({
+            appendString: tickerSymbol,
             data: jsonData,
             numberOfElemet: 10,
             sortDataFunction: (a, b) => moment(a.Date, 'MM/DD/YYYY').diff(moment(b.Date, 'MM/DD/YYYY')),
+        })
+    )))
+    // Combine multiple training data sets
+    .then(multipleTrainingData => {
+        const accumulator = [];
+        multipleTrainingData.forEach(trainingData => {
+            trainingData.forEach((trainingSet, index) => {
+                
+                // Initialize new training set to be combined
+                if (!accumulator[index]) {
+                    accumulator[index] = {
+                        input: {},
+                        output: {},
+                    };
+                }
+
+                Object
+                    .keys(trainingSet.input)
+                    .forEach(key => {
+                        accumulator[index]['input'][key] = trainingSet.input[key]; 
+                    });
+                
+                Object
+                    .keys(trainingSet.output)
+                    .forEach(key => {
+                        accumulator[index]['output'][key] = trainingSet.output[key]; 
+                    });
+            }); 
         });
+        return accumulator;
     })
     // Create new training
     .then(trainingData => {
@@ -188,10 +253,10 @@ app
                 console.log('actual:', lastTrainingData.output);
             });
     })
-    // Load from saved training
-    // .then((trainingData) => {
+    // // Load from saved training
+    // .then(trainingData => {
     //     return app
-    //         .continueTraining('./trained.txt', trainingData)
+    //         .continueTraining(trainingData)
     //         .then(net => {
     //             const lastTrainingData = trainingData[trainingData.length - 1];
     //             console.log('result:', net.run(lastTrainingData.input))
