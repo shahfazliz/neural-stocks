@@ -1,9 +1,8 @@
 import brain from 'brain.js';
 import fs from 'fs';
 import { csvToJson } from './util/AdaptorCSV2JSON.js';
-import moment from 'moment';
 
-class App {
+export default class App {
     _trainingOptions = {
         activation: 'sigmoid',
         binaryThresh: 0.5,
@@ -188,79 +187,75 @@ class App {
                 return this.saveTraining(net);
             });
     }
-}
 
-const app = new App();
-const listOfTickers = [
-    'DJIA', 
-    'FXA', 'FXB', 'FXC', 'FXE', 'FXF', 'FXY', 
-    'GLD', 'GOVT', 'GOVZ', 
-    'IEF', 'IEI',
-    'MID',
-    'NDX',
-    'RUT',
-    'SGOV', 'SHY', 'SPX',
-    'TLH', 'TLT',
-    'VIX',
-];
+    createLastInput({
+        appendString = 'N/A',
+        data = [],
+        numberOfElemet = 10,
+        sortDataFunction,
+    }) {
+        return new Promise((resolve, reject) => {
+            if (data.length < numberOfElemet) {
+                return reject(`number of element is less than ${numberOfElemet}`);
+            }
 
-Promise
-    .all(listOfTickers.map(tickerSymbol => app
-        .readFromCSVFileToJson(`./csv_sample/${tickerSymbol}.csv`)
-        .then(jsonData => app.createTrainingData({
-            appendString: tickerSymbol,
-            data: jsonData,
-            numberOfElemet: 10,
-            sortDataFunction: (a, b) => moment(a.Date, 'MM/DD/YYYY').diff(moment(b.Date, 'MM/DD/YYYY')),
-        })
-    )))
-    // Combine multiple training data sets
-    .then(multipleTrainingData => {
-        const accumulator = [];
-        multipleTrainingData.forEach(trainingData => {
-            trainingData.forEach((trainingSet, index) => {
-                
-                // Initialize new training set to be combined
-                if (!accumulator[index]) {
-                    accumulator[index] = {
-                        input: {},
-                        output: {},
-                    };
-                }
+            data = sortDataFunction !== null 
+                && typeof(sortDataFunction) === 'function'
+                ? data.sort(sortDataFunction)
+                : data
 
+            // Create the last set without output
+            let result = {};
+            let replaceDateWithCount = 1;
+
+            for (let k = data.length - numberOfElemet; k < data.length; k++) {
                 Object
-                    .keys(trainingSet.input)
+                    .keys(data[k]) // ['Open', 'Close', 'High', 'Low']
                     .forEach(key => {
-                        accumulator[index]['input'][key] = trainingSet.input[key]; 
+                        
+                        let yesterdayClose = data[k - 1].Close; 
+                        yesterdayClose = typeof(yesterdayClose) === 'string' 
+                            ? parseFloat(yesterdayClose.replace(/,/, ''))
+                            : yesterdayClose;
+                        
+                        let todayOpen = data[k].Open;
+                        todayOpen = typeof(todayOpen) === 'string'
+                            ? parseFloat(todayOpen.replace(/,/, ''))
+                            : todayOpen;
+                        
+                        let todayClose = data[k].Close;
+                        todayClose = typeof(todayClose) === 'string'
+                            ? parseFloat(todayClose.replace(/,/, ''))
+                            : todayClose;
+                        
+                        let todayHigh = data[k].High;
+                        todayHigh = typeof(todayHigh) === 'string'
+                            ? parseFloat(todayHigh.replace(/,/, ''))
+                            : todayHigh;
+                        
+                        let todayLow = data[k].Low;
+                        todayLow = typeof(todayLow) === 'string'
+                            ? parseFloat(todayLow.replace(/,/, ''))
+                            : todayLow;
+
+                        // For debugging, see the dates
+                        // result[`${appendString}_Date_${replaceDateWithCount}`] = data[k]['Date'];
+
+                        // Calculate difference with today
+                        result[`${appendString}_Open_${replaceDateWithCount}`] = todayOpen - yesterdayClose;
+                        result[`${appendString}_Close_${replaceDateWithCount}`] = todayClose - yesterdayClose;
+                        result[`${appendString}_High_${replaceDateWithCount}`] = todayOpen <= todayClose 
+                            ? todayHigh - todayClose
+                            : todayHigh - todayOpen;
+                        result[`${appendString}_Low_${replaceDateWithCount}`] = todayOpen <= todayClose
+                            ? todayLow - todayOpen
+                            : todayLow - todayClose;
                     });
-                
-                Object
-                    .keys(trainingSet.output)
-                    .forEach(key => {
-                        accumulator[index]['output'][key] = trainingSet.output[key]; 
-                    });
-            }); 
+
+                    replaceDateWithCount += 1;
+            }
+
+            return resolve(result);
         });
-        return accumulator;
-    })
-    // Create new training
-    .then(trainingData => {
-        return app
-            .startTraining(trainingData)
-            .then(net => {
-                const lastTrainingData = trainingData[trainingData.length - 1];
-                console.log('result:', net.run(lastTrainingData.input))
-                console.log('actual:', lastTrainingData.output);
-            });
-    })
-    // // Load from saved training
-    // .then(trainingData => {
-    //     return app
-    //         .continueTraining(trainingData)
-    //         .then(net => {
-    //             const lastTrainingData = trainingData[trainingData.length - 1];
-    //             console.log('result:', net.run(lastTrainingData.input))
-    //             console.log('actual:', lastTrainingData.output);
-    //         });
-    // })
-    .catch(error => console.log(error));
+    }
+}
