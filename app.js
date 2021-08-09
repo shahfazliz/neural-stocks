@@ -182,7 +182,11 @@ export default class App {
         return this
             .loadTrainedData()
             .then(net => {
-                net.train(trainingData, this._trainingOptions);
+                net.train(
+                    trainingData, 
+                    // this._trainingOptions,
+                    Object.assign(this._trainingOptions, {keepNetworkIntact: true}),
+                );
 
                 return this.saveTraining(net);
             });

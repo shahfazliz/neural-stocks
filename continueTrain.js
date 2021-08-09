@@ -54,13 +54,13 @@ Promise
         });
         return accumulator;
     })
-    // Create new training
+    // Load from saved training
     .then(trainingData => {
         return app
-            .startTraining(trainingData)
+            .continueTraining(trainingData)
             .then(net => {
                 const lastTrainingData = trainingData[trainingData.length - 1];
-                console.log('result:', net.run(lastTrainingData.input))
+                console.log('result:', net.run(lastTrainingData.input));
                 console.log('actual:', lastTrainingData.output);
             });
     })
