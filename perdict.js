@@ -44,7 +44,6 @@ Promise
         return lastOutput;
     })
     .then(lastOutput => {
-        console.log(lastOutput);
         return app
             .loadTrainedData()
             .then(net => {
