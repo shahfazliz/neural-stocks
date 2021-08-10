@@ -1,36 +1,26 @@
-import moment from 'moment';
 import App from './app.js';
 
 const app = new App();
-const listOfTickers = [
-    'DJIA', 
-    'FXA', 'FXB', 'FXC', 'FXE', 'FXF', 'FXY', 
-    'GLD', 'GOVT', 'GOVZ', 
-    'IEF', 'IEI',
-    'MID',
-    'NDX',
-    'RUT',
-    'SGOV', 'SHY', 'SPX',
-    'TLH', 'TLT',
-    'VIX',
-];
 
 Promise
-    .all(listOfTickers.map(tickerSymbol => app
-        .readFromCSVFileToJson(`./csv_sample/${tickerSymbol}.csv`)
-        .then(jsonData => app.createTrainingData({
-            appendString: tickerSymbol,
-            data: jsonData,
-            numberOfElemet: 10,
-            sortDataFunction: (a, b) => moment(a.Date, 'MM/DD/YYYY').diff(moment(b.Date, 'MM/DD/YYYY')),
-        })
-    )))
+    .all(app
+        .getListOfTickers()
+        .map(tickerSymbol => app
+            .readFromJSONFile(`./data/${tickerSymbol}.json`)
+            .then(data => app.createTrainingData({
+                appendString: tickerSymbol,
+                data,
+                // Sort date ascending
+                // sortDataFunction: (a, b) => moment(a.Timestamp, 'YYYY-MM-DD').diff(moment(b.Timestamp, 'YYYY-MM-DD')),
+            }))
+        )
+    )
     // Combine multiple training data sets
     .then(multipleTrainingData => {
         const accumulator = [];
         multipleTrainingData.forEach(trainingData => {
             trainingData.forEach((trainingSet, index) => {
-                
+
                 // Initialize new training set to be combined
                 if (!accumulator[index]) {
                     accumulator[index] = {
@@ -42,15 +32,15 @@ Promise
                 Object
                     .keys(trainingSet.input)
                     .forEach(key => {
-                        accumulator[index]['input'][key] = trainingSet.input[key]; 
+                        accumulator[index]['input'][key] = trainingSet.input[key];
                     });
-                
+
                 Object
                     .keys(trainingSet.output)
                     .forEach(key => {
-                        accumulator[index]['output'][key] = trainingSet.output[key]; 
+                        accumulator[index]['output'][key] = trainingSet.output[key];
                     });
-            }); 
+            });
         });
         return accumulator;
     })
