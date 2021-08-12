@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const app = new App();
 
-// Perdict for today
+// predict for today
 Promise
     .all(app
         .getListOfTickers()
@@ -44,7 +44,7 @@ Promise
     })
     .catch(error => console.log(error));
 
-// Perdict for tomorrow
+// predict for tomorrow
 Promise
     .all(app
         .getListOfTickers()

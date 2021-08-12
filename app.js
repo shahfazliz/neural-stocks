@@ -6,12 +6,15 @@ export default class App {
     _trainingOptions = {
         activation: 'sigmoid',
         binaryThresh: 0.5,
-        errorThresh: 0.1,
-        hiddenLayers: [840, 840, 840, 840, 840],
+        errorThresh: 0.2,
+        hiddenLayers: [100, 100, 100, 100, 100],
         iterations: 1000000,
         learningRate: 0.3,
         log: true,
     };
+
+    __limitTrainingSet = 1000;
+    __numberOfElement = 40;
 
     __trainedFilePath = './trained.txt';
 
@@ -19,7 +22,7 @@ export default class App {
         'CYB',
         'DIA',
         'EEM',
-        'FXA', 'FXB', 'FXC', 'FXE', 'FXF', 'FXY',
+        'FXA', 'FXB', 'FXC', 'FXE', 'FXF', 'FXY', // FXI ?
         'GDX', 'GDXJ', 'GLD', 'GOVT', // 'GOVZ', // <-- problem, too recent
         'IEF', 'IEI', 'IWM', 'IYT',
         // 'MID', // <-- problem, too recent
@@ -28,7 +31,7 @@ export default class App {
         'TLH', 'TLT',
         'UUP',
         'VXX',
-        'XLE', 'XLF', 'XLI',
+        'XLE', 'XLF', 'XLI', // XLB ?
     ];
 
     getListOfTickers() {
@@ -72,8 +75,8 @@ export default class App {
     createTrainingData({
         appendString = 'N/A',
         data = [],
-        limitTrainingSet = 60,
-        numberOfElement = 30,
+        limitTrainingSet = this.__limitTrainingSet,
+        numberOfElement = this.__numberOfElement,
         sortDataFunction,
     }) {
         return new Promise((resolve, reject) => {
@@ -144,16 +147,16 @@ export default class App {
                             // For debugging, see the dates
                             // subResult[`${appendString}_Timestamp_${replaceDateWithCount}`] = data[j]['Timestamp'];
 
-                            // Calculate difference with today
+                            // Normalize data by calculating difference with today and yesterday
                             subResult[`${appendString}_OpenPrice_${replaceDateWithCount}`] = todayOpenPrice - yesterdayClosePrice;
                             subResult[`${appendString}_ClosePrice_${replaceDateWithCount}`] = todayClosePrice - yesterdayClosePrice;
                             subResult[`${appendString}_Volume_${replaceDateWithCount}`] = todayVolume - yesterdayVolume;
                             subResult[`${appendString}_HighPrice_${replaceDateWithCount}`] = todayOpenPrice <= todayClosePrice
-                                ? todayHighPrice - todayClosePrice
-                                : todayHighPrice - todayOpenPrice;
+                                ? todayHighPrice - todayClosePrice // Bull candle
+                                : todayHighPrice - todayOpenPrice; // Bear candle
                             subResult[`${appendString}_LowPrice_${replaceDateWithCount}`] = todayOpenPrice <= todayClosePrice
-                                ? todayLowPrice - todayOpenPrice
-                                : todayLowPrice - todayClosePrice;
+                                ? todayLowPrice - todayOpenPrice // Bull candle
+                                : todayLowPrice - todayClosePrice; // Bear candle
                         });
                     replaceDateWithCount += 1;
                 }
@@ -246,7 +249,7 @@ export default class App {
     createLastInput({
         appendString = 'N/A',
         data = [],
-        numberOfElement = 30,
+        numberOfElement = this.__numberOfElement,
         sortDataFunction,
     }) {
         return new Promise((resolve, reject) => {
@@ -308,7 +311,7 @@ export default class App {
                         // For debugging, see the dates
                         // result[`${appendString}_Timestamp_${replaceDateWithCount}`] = data[k]['Timestamp'];
 
-                        // Calculate difference with today
+                        // Normalize data by calculating difference with today and yesterday
                         result[`${appendString}_OpenPrice_${replaceDateWithCount}`] = todayOpenPrice - yesterdayClosePrice;
                         result[`${appendString}_ClosePrice_${replaceDateWithCount}`] = todayClosePrice - yesterdayClosePrice;
                         result[`${appendString}_Volume_${replaceDateWithCount}`] = todayVolume - yesterdayVolume;
