@@ -6,18 +6,19 @@ import fs from 'fs/promises';
 export default class App {
     _trainingOptions = {
         activation: 'sigmoid',
-        binaryThresh: 0.01,
+        binaryThresh: 0.5,
         errorThresh: 0.2,
-        hiddenLayers: [5, 5, 5, 5, 5],
+        hiddenLayers: [100, 100, 100],
         iterations: 1000000,
         learningRate: 0.3,
         log: true,
+        logPeriod: 1,
     };
 
     __limitTrainingSet = 1000;
-    __numberOfElement = 50;
+    __numberOfElement = 20;
 
-    __trainedFilePath = './trained.txt';
+    __trainedFilePath = './trained.json';
 
     __listOfTickers = [
         'CYB',
@@ -167,7 +168,7 @@ export default class App {
         return fs
             .writeFile(
                 this.__trainedFilePath,
-                JSON.stringify(model.toJSON())
+                JSON.stringify(model.toJSON(), undefined, 4)
             )
             .then(() => model);
     }
