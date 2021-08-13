@@ -177,46 +177,46 @@ export default class App {
 
     startTraining(trainingData) {
         return new Promise((resolve, reject) => {
-            const net = new brain.NeuralNetwork(this._trainingOptions);
-            net.train(trainingData);
+            const model = new brain.NeuralNetwork(this._trainingOptions);
+            model.train(trainingData);
 
             return this
-                .saveTraining(net)
-                .then(net => resolve(net))
+                .saveTraining(model)
+                .then(model => resolve(model))
                 .catch(error => reject(error));
         });
     }
 
-    saveTraining(net) {
+    saveTraining(model) {
         return fs
             .writeFile(
                 this.__trainedFilePath,
-                JSON.stringify(net.toJSON())
+                JSON.stringify(model.toJSON())
             )
-            .then(() => net);
+            .then(() => model);
     }
 
     loadTrainedData() {
         return fs
             .readFile(this.__trainedFilePath)
             .then(data => {
-                const net = new brain.NeuralNetwork();
-                net.fromJSON(JSON.parse(data));
-                return net;
+                const model = new brain.NeuralNetwork();
+                model.fromJSON(JSON.parse(data));
+                return model;
             });
     }
 
     continueTraining(trainingData) {
         return this
             .loadTrainedData()
-            .then(net => {
-                net.train(
+            .then(model => {
+                model.train(
                     trainingData,
                     // this._trainingOptions,
                     Object.assign(this._trainingOptions, {keepNetworkIntact: true}),
                 );
 
-                return this.saveTraining(net);
+                return this.saveTraining(model);
             });
     }
 

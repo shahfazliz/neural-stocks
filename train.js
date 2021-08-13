@@ -64,13 +64,12 @@ Promise
         return trainingData;
     })
     // Create new training
-    .then(trainingData => {
-        return app
-            .startTraining(trainingData)
-            .then(net => {
-                const lastTrainingData = trainingData[trainingData.length - 1];
-                console.log('result:', net.run(lastTrainingData.input))
-                console.log('actual:', lastTrainingData.output);
-            });
-    })
+    .then(trainingData => app
+        .startTraining(trainingData)
+        .then(model => {
+            const lastTrainingData = trainingData[trainingData.length - 1];
+            console.log('result:', model.run(lastTrainingData.input))
+            console.log('actual:', lastTrainingData.output);
+        })
+    )
     .catch(error => console.log(error));
