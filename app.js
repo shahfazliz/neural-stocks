@@ -222,70 +222,70 @@ export default class App {
 
     createLastInput({
         appendString = 'N/A',
-        data = [],
+        tickerDailyData = [],
         numberOfElement = this.__numberOfElement,
         sortDataFunction,
     }) {
         return new Promise((resolve, reject) => {
-            if (data.length < numberOfElement) {
+            if (tickerDailyData.length < numberOfElement) {
                 return reject(`number of element is less than ${numberOfElement}`);
             }
 
-            data = sortDataFunction !== null
+            tickerDailyData = sortDataFunction !== null
                 && typeof(sortDataFunction) === 'function'
-                ? data.sort(sortDataFunction)
-                : data
+                ? tickerDailyData.sort(sortDataFunction)
+                : tickerDailyData
 
-            data = data.slice(data.length - numberOfElement - 1);
+            tickerDailyData = tickerDailyData.slice(ArrayFn.getLastIndex(tickerDailyData) - numberOfElement);
 
             // Create the last set without output
             let result = {};
             let replaceDateWithCount = 1;
 
-            for (let k = data.length - numberOfElement; k < data.length; k++) {
+            for (let k = tickerDailyData.length - numberOfElement; k < tickerDailyData.length; k++) {
                 Object
-                    .keys(data[k]) // ['OpenPrice', 'ClosePrice', 'HighPrice', 'LowPrice']
+                    .keys(tickerDailyData[k]) // ['OpenPrice', 'ClosePrice', 'HighPrice', 'LowPrice']
                     .forEach(key => {
 
-                        let yesterdayClosePrice = data[k - 1].ClosePrice;
+                        let yesterdayClosePrice = tickerDailyData[k - 1].ClosePrice;
                         yesterdayClosePrice = typeof(yesterdayClosePrice) === 'string'
                             ? parseFloat(yesterdayClosePrice.replace(/,/, ''))
                             : yesterdayClosePrice;
 
-                        let todayOpenPrice = data[k].OpenPrice;
+                        let todayOpenPrice = tickerDailyData[k].OpenPrice;
                         todayOpenPrice = typeof(todayOpenPrice) === 'string'
                             ? parseFloat(todayOpenPrice.replace(/,/, ''))
                             : todayOpenPrice;
 
-                        let todayClosePrice = data[k].ClosePrice;
+                        let todayClosePrice = tickerDailyData[k].ClosePrice;
                         todayClosePrice = typeof(todayClosePrice) === 'string'
                             ? parseFloat(todayClosePrice.replace(/,/, ''))
                             : todayClosePrice;
 
-                        let todayHighPrice = data[k].HighPrice;
+                        let todayHighPrice = tickerDailyData[k].HighPrice;
                         todayHighPrice = typeof(todayHighPrice) === 'string'
                             ? parseFloat(todayHighPrice.replace(/,/, ''))
                             : todayHighPrice;
 
-                        let todayLowPrice = data[k].LowPrice;
+                        let todayLowPrice = tickerDailyData[k].LowPrice;
                         todayLowPrice = typeof(todayLowPrice) === 'string'
                             ? parseFloat(todayLowPrice.replace(/,/, ''))
                             : todayLowPrice;
 
-                        let yesterdayVolume = data[k - 1].Volume;
+                        let yesterdayVolume = tickerDailyData[k - 1].Volume;
                         yesterdayVolume = typeof(yesterdayVolume) === 'string'
                             ? parseFloat(yesterdayVolume.replace(/,/, ''))
                             : yesterdayVolume;
 
-                        let todayVolume = data[k].Volume;
+                        let todayVolume = tickerDailyData[k].Volume;
                         todayVolume = typeof(todayVolume) === 'string'
                             ? parseFloat(todayVolume.replace(/,/, ''))
                             : todayVolume;
 
                         // For debugging, see the dates
-                        // result[`${appendString}_Timestamp_${replaceDateWithCount}`] = data[k]['Timestamp'];
+                        // result[`${appendString}_Timestamp_${replaceDateWithCount}`] = tickerDailyData[k]['Timestamp'];
 
-                        // Normalize data by calculating difference with today and yesterday
+                        // Normalize tickerDailyData by calculating difference with today and yesterday
                         result[`${appendString}_OpenPrice_${replaceDateWithCount}`] = todayOpenPrice - yesterdayClosePrice;
                         result[`${appendString}_ClosePrice_${replaceDateWithCount}`] = todayClosePrice - yesterdayClosePrice;
                         result[`${appendString}_Volume_${replaceDateWithCount}`] = todayVolume - yesterdayVolume;
