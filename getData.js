@@ -1,15 +1,10 @@
-import Alpaca from '@alpacahq/alpaca-trade-api';
 import App from './app.js';
-import fs from 'fs';
+import ArrayFn from './util/ArrayFn.js';
+import axios from 'axios';
+import fs from 'fs/promises';
 import moment from 'moment';
 
 const app = new App();
-
-const alpaca = new Alpaca({
-    keyId: process.env.APCA_API_KEY_ID,
-    secretKey: process.env.APCA_API_SECRET_KEY,
-    usePolygon: false,
-});
 
 Promise
     .all(app
@@ -19,33 +14,57 @@ Promise
             .then(data => ({[`${tickerSymbol}`]: data}))
         )
     )
-    .then(multipleJsonData => multipleJsonData.reduce((accumulator, data) => {
-        return Object.assign(accumulator, data);
+    .then(multipleTickerDailyDataJson => multipleTickerDailyDataJson.reduce((accumulator, tickerDailyDataJson) => {
+        return Object.assign(accumulator, tickerDailyDataJson);
     }, {}))
-    .then(async multipleJsonData => {
-        const tickerSymbols = Object.keys(multipleJsonData);
+    .then(multipleTickerDailyDataJson => {
+        const tickerSymbols = Object.keys(multipleTickerDailyDataJson);
 
-        for await(let tickerSymbol of tickerSymbols) {
-            const jsonData = multipleJsonData[tickerSymbol];
-            const lastDateInJsonFile = moment(jsonData[jsonData.length - 1].Timestamp, 'YYYY-MM-DD');
+        for (let tickerSymbol of tickerSymbols) {
+            let tickerDailyDataJson = multipleTickerDailyDataJson[tickerSymbol];
+            const statDateAfterLastDateInJson = ArrayFn.isEmpty(tickerDailyDataJson)
+                ? moment('2016-08-10', 'YYYY-MM-DD')
+                : moment(ArrayFn.getLastElement(tickerDailyDataJson).Timestamp, 'YYYY-MM-DD').add(1, 'day');
+            const yesterday = moment().subtract(1, 'day');
 
-            let bars = alpaca.getBarsV2(
-                tickerSymbol,
-                {
-                    start: lastDateInJsonFile.add(1, 'day').format(),
-                    end: moment().subtract(1, 'day').format(),
-                    timeframe: '1Day',
-                },
-                alpaca.configuration
-            );
-
-            for await(let b of bars) {
-                jsonData.push(b);
+            if (statDateAfterLastDateInJson.isAfter(yesterday)) {
+                break;
             }
 
-            fs.writeFileSync(`./data/${tickerSymbol}.json`, JSON.stringify(jsonData));
-
-            multipleJsonData[tickerSymbol] = jsonData;
+            axios
+                .get(`https://data.alpaca.markets/v2/stocks/${tickerSymbol}/bars`, {
+                    headers: {
+                        'APCA-API-KEY-ID': process.env.APCA_API_KEY_ID,
+                        'APCA-API-SECRET-KEY': process.env.APCA_API_SECRET_KEY,
+                    },
+                    params: {
+                        start: statDateAfterLastDateInJson.format(),
+                        end: yesterday.format(),
+                        timeframe: '1Day',
+                    },
+                })
+                // Rename keys
+                .then(response => response
+                    .data
+                    .bars
+                    .map(obj => ({
+                        Timestamp: obj.t,
+                        OpenPrice: obj.o,
+                        ClosePrice: obj.c,
+                        HighPrice: obj.h,
+                        LowPrice: obj.l,
+                        Volume: obj.v,
+                        n: obj.n,
+                        vw: obj.vw,
+                    }))
+                )
+                .then(responseDataJson => {
+                    tickerDailyDataJson = [...tickerDailyDataJson, ...responseDataJson];
+                    return fs.writeFile(
+                        `./data/${tickerSymbol}.json`,
+                        JSON.stringify(tickerDailyDataJson, undefined, 4)
+                    );
+                });
         }
     })
-    .catch(error => console.log(error));
+    .catch(error => console.log(`Error: ${error}`));
