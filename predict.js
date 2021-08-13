@@ -18,11 +18,11 @@ Promise
         )
     )
     // Combine multiple ticker training data sets
-    .then(multipleTickerLastData => multipleTickerLastData.reduce((accumulator, lastSet) => {
+    .then(multipleTickerLastDataSet => multipleTickerLastDataSet.reduce((accumulator, tickerLastDataSet) => {
         Object
-            .keys(lastSet)
+            .keys(tickerLastDataSet)
             .forEach(key => {
-                accumulator[key] = lastSet[key];
+                accumulator[key] = tickerLastDataSet[key];
             });
         return accumulator;
     }, {}))
@@ -69,7 +69,7 @@ Promise
         )
     )
     // Combine multiple ticker training data sets
-    .then(multipleTickerLastData => multipleTickerLastData.reduce((accumulator, tickerLastTrainingSet) => {
+    .then(multipleTickerLastDataSet => multipleTickerLastDataSet.reduce((accumulator, tickerLastTrainingSet) => {
         Object
             .keys(tickerLastTrainingSet)
             .forEach(key => {
