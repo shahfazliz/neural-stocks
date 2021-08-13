@@ -44,6 +44,25 @@ Promise
         });
         return accumulator;
     })
+    // Randomize sequence using Fisher-Yates (aka Knuth) Shuffle
+    .then(trainingData => {
+        let currentIndex = trainingData.length;
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+
+            // Pick a remaining element...
+            let randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            // And swap it with the current element.
+            let temp = trainingData[currentIndex];
+            trainingData[currentIndex] = trainingData[randomIndex];
+            trainingData[randomIndex] = temp;
+        }
+
+        return trainingData;
+    })
     // Create new training
     .then(trainingData => {
         return app
