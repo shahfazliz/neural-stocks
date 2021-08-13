@@ -1,4 +1,5 @@
 import App from './app.js';
+import ArrayFn from './util/ArrayFn.js';
 
 const app = new App();
 
@@ -8,7 +9,7 @@ Promise
         .map(tickerSymbol => app
             .readFromJSONFile(`./data/${tickerSymbol}.json`)
             .then(data => app.createTrainingData({
-                appendString: tickerSymbol,
+                tickerSymbol,
                 data,
                 // Sort date ascending
                 // sortDataFunction: (a, b) => moment(a.Timestamp, 'YYYY-MM-DD').diff(moment(b.Timestamp, 'YYYY-MM-DD')),
@@ -48,9 +49,9 @@ Promise
     .then(trainingData => app
         .continueTraining(trainingData)
         .then(model => {
-            const lastTrainingData = trainingData[trainingData.length - 1];
+            const lastTrainingData = ArrayFn.getLastElement(trainingData);
             console.log('result:', model.run(lastTrainingData.input));
             console.log('actual:', lastTrainingData.output);
         })
     )
-    .catch(error => console.log(error));
+    .catch(error => console.log(`Error: ${error}`));

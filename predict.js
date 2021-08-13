@@ -10,7 +10,7 @@ Promise
         .map(tickerSymbol => app
             .readFromJSONFile(`./data/${tickerSymbol}.json`)
             .then(tickerDailyData => app.createLastInput({
-                appendString: tickerSymbol,
+                tickerSymbol,
                 tickerDailyData,
                 // Sort date ascending
                 // sortDataFunction: (a, b) => moment(a.Timestamp, 'YYYY-MM-DD').diff(moment(b.Timestamp, 'YYYY-MM-DD')),
@@ -30,7 +30,7 @@ Promise
         .loadTrainedData()
         .then(model => console.log("Today's result:", model.run(lastInput)))
     )
-    .catch(error => console.log(error));
+    .catch(error => console.log(`Error: ${error}`));
 
 // Predict for tomorrow
 Promise
@@ -61,7 +61,7 @@ Promise
                 })
             )
             .then(tickerDailyData => app.createLastInput({
-                appendString: tickerSymbol,
+                tickerSymbol,
                 tickerDailyData,
                 // Sort date ascending
                 // sortDataFunction: (a, b) => moment(a.Timestamp, 'YYYY-MM-DD').diff(moment(b.Timestamp, 'YYYY-MM-DD')),
@@ -83,4 +83,4 @@ Promise
             console.log("Tomorrow's result:", model.run(lastInput));
         })
     )
-    .catch(error => console.log(error));
+    .catch(error => console.log(`Error: ${error}`));

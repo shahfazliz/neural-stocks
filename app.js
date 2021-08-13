@@ -1,13 +1,14 @@
 import { csvToJson } from './util/AdaptorCSV2JSON.js';
+import ArrayFn from './util/ArrayFn.js';
 import brain from 'brain.js';
 import fs from 'fs/promises';
 
 export default class App {
     _trainingOptions = {
         activation: 'sigmoid',
-        binaryThresh: 0.5,
+        binaryThresh: 0.01,
         errorThresh: 0.2,
-        hiddenLayers: [100, 100, 100, 100, 100],
+        hiddenLayers: [5, 5, 5, 5, 5],
         iterations: 1000000,
         learningRate: 0.3,
         log: true,
@@ -51,6 +52,7 @@ export default class App {
      * Read json file
      */
     readFromJSONFile(jsonfilepath) {
+        console.log(`Reading ${jsonfilepath}`);
         return fs
             .readFile(jsonfilepath)
             .then(data => JSON.parse(data));
@@ -60,28 +62,40 @@ export default class App {
      * Create training data with output
      */
     createTrainingData({
-        appendString = 'N/A',
+        tickerSymbol = 'N/A',
         data = [],
         limitTrainingSet = this.__limitTrainingSet,
         numberOfElement = this.__numberOfElement,
         sortDataFunction,
     }) {
+        console.log(`Create training data set for ticker ${tickerSymbol}`);
         return new Promise((resolve, reject) => {
-            if (data.length - 2 < numberOfElement) {
-                return reject(`number of element is less than ${numberOfElement + 2}`);
-            }
-
             data = sortDataFunction !== null
                 && typeof(sortDataFunction) === 'function'
                 ? data.sort(sortDataFunction)
                 : data
 
-            data = limitTrainingSet
-                ? data.slice(data.length - limitTrainingSet - 3)
-                : data;
+            const numberOfElementBeforeFirstSet = 1; // We need previous day closing price to calculate difference with today
+            const numberOfElementAfterLastSet = 1; // We need tomorrow's closing price to calculate to long/short
 
-            const startIndex = 1;
-            const maxIndexToIterate = data.length - numberOfElement - 1;
+            // Slice the sample data by limitTrainingSet
+            if (limitTrainingSet) {
+                const startIndexToSlice = ArrayFn.getLastIndex(data)
+                    - numberOfElementBeforeFirstSet
+                    - limitTrainingSet
+                    - numberOfElementAfterLastSet;
+
+                data = data.slice(startIndexToSlice);
+            }
+
+            const numberOfElementsLeft = data.length - numberOfElementBeforeFirstSet - numberOfElementAfterLastSet;
+            const numberOfRequiredElement = numberOfElement + numberOfElementBeforeFirstSet + numberOfElementAfterLastSet;
+            if (numberOfElementsLeft < numberOfRequiredElement) {
+                return reject(`number of element left is ${numberOfElementsLeft}, less than required elemnt of ${numberOfRequiredElement}`);
+            }
+
+            const startIndex = 1; // Because index 0 is the previous close that we need to calculate difference with today
+            const maxIndexToIterate = ArrayFn.getLastIndex(data) - numberOfElement;
 
             let result = [];
 
@@ -92,81 +106,41 @@ export default class App {
 
                 // Group data from i to numberOfElements into an object
                 for (let j = i; j < i + numberOfElement; j++) {
-                    Object
-                        .keys(data[j]) // ['OpenPrice', 'ClosePrice', 'HighPrice', 'LowPrice', 'Volume']
-                        .forEach(key => {
+                    const yesterdayClosePrice = data[j - 1].ClosePrice;
+                    const todayOpenPrice = data[j].OpenPrice;
+                    const todayClosePrice = data[j].ClosePrice;
+                    const todayHighPrice = data[j].HighPrice;
+                    const todayLowPrice = data[j].LowPrice;
+                    const yesterdayVolume = data[j - 1].Volume;
+                    const todayVolume = data[j].Volume;
 
-                            let yesterdayClosePrice = data[j - 1].ClosePrice;
-                            yesterdayClosePrice = typeof(yesterdayClosePrice) === 'string'
-                                ? parseFloat(yesterdayClosePrice.replace(/,/, ''))
-                                : yesterdayClosePrice;
+                    // For debugging, see the dates
+                    // subResult[`${tickerSymbol}_Timestamp_${replaceDateWithCount}`] = data[j]['Timestamp'];
 
-                            let todayOpenPrice = data[j].OpenPrice;
-                            todayOpenPrice = typeof(todayOpenPrice) === 'string'
-                                ? parseFloat(todayOpenPrice.replace(/,/, ''))
-                                : todayOpenPrice;
-
-                            let todayClosePrice = data[j].ClosePrice;
-                            todayClosePrice = typeof(todayClosePrice) === 'string'
-                                ? parseFloat(todayClosePrice.replace(/,/, ''))
-                                : todayClosePrice;
-
-                            let todayHighPrice = data[j].HighPrice;
-                            todayHighPrice = typeof(todayHighPrice) === 'string'
-                                ? parseFloat(todayHighPrice.replace(/,/, ''))
-                                : todayHighPrice;
-
-                            let todayLowPrice = data[j].LowPrice;
-                            todayLowPrice = typeof(todayLowPrice) === 'string'
-                                ? parseFloat(todayLowPrice.replace(/,/, ''))
-                                : todayLowPrice;
-
-                            let yesterdayVolume = data[j - 1].Volume;
-                            yesterdayVolume = typeof(yesterdayVolume) === 'string'
-                                ? parseFloat(yesterdayVolume.replace(/,/, ''))
-                                : yesterdayVolume;
-
-                            let todayVolume = data[j].Volume;
-                            todayVolume = typeof(todayVolume) === 'string'
-                                ? parseFloat(todayVolume.replace(/,/, ''))
-                                : todayVolume;
-
-                            // For debugging, see the dates
-                            // subResult[`${appendString}_Timestamp_${replaceDateWithCount}`] = data[j]['Timestamp'];
-
-                            // Normalize data by calculating difference with today and yesterday
-                            subResult[`${appendString}_OpenPrice_${replaceDateWithCount}`] = todayOpenPrice - yesterdayClosePrice;
-                            subResult[`${appendString}_ClosePrice_${replaceDateWithCount}`] = todayClosePrice - yesterdayClosePrice;
-                            subResult[`${appendString}_Volume_${replaceDateWithCount}`] = todayVolume - yesterdayVolume;
-                            subResult[`${appendString}_HighPrice_${replaceDateWithCount}`] = todayOpenPrice <= todayClosePrice
-                                ? todayHighPrice - todayClosePrice // Bull candle
-                                : todayHighPrice - todayOpenPrice; // Bear candle
-                            subResult[`${appendString}_LowPrice_${replaceDateWithCount}`] = todayOpenPrice <= todayClosePrice
-                                ? todayLowPrice - todayOpenPrice // Bull candle
-                                : todayLowPrice - todayClosePrice; // Bear candle
-                        });
+                    // Normalize data by calculating difference with today and yesterday
+                    subResult[`${tickerSymbol}_OpenPrice_${replaceDateWithCount}`] = todayOpenPrice - yesterdayClosePrice;
+                    subResult[`${tickerSymbol}_ClosePrice_${replaceDateWithCount}`] = todayClosePrice - yesterdayClosePrice;
+                    subResult[`${tickerSymbol}_Volume_${replaceDateWithCount}`] = todayVolume - yesterdayVolume;
+                    subResult[`${tickerSymbol}_HighPrice_${replaceDateWithCount}`] = todayOpenPrice <= todayClosePrice
+                        ? todayHighPrice - todayClosePrice // Bull candle
+                        : todayHighPrice - todayOpenPrice; // Bear candle
+                    subResult[`${tickerSymbol}_LowPrice_${replaceDateWithCount}`] = todayOpenPrice <= todayClosePrice
+                        ? todayLowPrice - todayOpenPrice // Bull candle
+                        : todayLowPrice - todayClosePrice; // Bear candle
                     replaceDateWithCount += 1;
                 }
 
                 // To long or to short
-                let lastDayPlusOneClosePrice =  data[i + numberOfElement].ClosePrice;
-                lastDayPlusOneClosePrice = typeof(lastDayPlusOneClosePrice) === 'string'
-                    ? parseFloat(lastDayPlusOneClosePrice.replace(/,/, ''))
-                    : lastDayPlusOneClosePrice;
-
-                let lastDayClosePrice =  data[i + numberOfElement - 1].ClosePrice;
-                lastDayClosePrice = typeof(lastDayClosePrice) === 'string'
-                    ? parseFloat(lastDayClosePrice.replace(/,/, ''))
-                    : lastDayClosePrice;
-
+                const lastDayPlusOneClosePrice =  data[i + numberOfElement].ClosePrice;
+                const lastDayClosePrice =  data[i + numberOfElement - 1].ClosePrice;
                 const outputValue = lastDayPlusOneClosePrice - lastDayClosePrice;
 
                 // Push the input and output objects for training
                 result.push({
                     input: subResult,
                     output: {
-                        [`${appendString}_Long`]: outputValue >= 0 ? 1 : 0,
-                        [`${appendString}_Short`]: outputValue <= 0 ? 1 : 0,
+                        [`${tickerSymbol}_Long`]: outputValue >= 0 ? 1 : 0,
+                        [`${tickerSymbol}_Short`]: outputValue <= 0 ? 1 : 0,
                     },
                 });
             }
@@ -176,6 +150,7 @@ export default class App {
     }
 
     startTraining(trainingData) {
+        console.log(`Start training`);
         return new Promise((resolve, reject) => {
             const model = new brain.NeuralNetwork(this._trainingOptions);
             model.train(trainingData);
@@ -188,6 +163,7 @@ export default class App {
     }
 
     saveTraining(model) {
+        console.log(`Save training model to ${this.__trainedFilePath}`);
         return fs
             .writeFile(
                 this.__trainedFilePath,
@@ -197,6 +173,7 @@ export default class App {
     }
 
     loadTrainedData() {
+        console.log(`Load training model from ${this.__trainedFilePath}`);
         return fs
             .readFile(this.__trainedFilePath)
             .then(data => {
@@ -207,12 +184,12 @@ export default class App {
     }
 
     continueTraining(trainingData) {
+        console.log(`Continue training`);
         return this
             .loadTrainedData()
             .then(model => {
                 model.train(
                     trainingData,
-                    // this._trainingOptions,
                     Object.assign(this._trainingOptions, {keepNetworkIntact: true}),
                 );
 
@@ -221,16 +198,13 @@ export default class App {
     }
 
     createLastInput({
-        appendString = 'N/A',
+        tickerSymbol = 'N/A',
         tickerDailyData = [],
         numberOfElement = this.__numberOfElement,
         sortDataFunction,
     }) {
+        console.log(`Create last training data set for ticker ${tickerSymbol}`);
         return new Promise((resolve, reject) => {
-            if (tickerDailyData.length < numberOfElement) {
-                return reject(`number of element is less than ${numberOfElement}`);
-            }
-
             tickerDailyData = sortDataFunction !== null
                 && typeof(sortDataFunction) === 'function'
                 ? tickerDailyData.sort(sortDataFunction)
@@ -238,66 +212,38 @@ export default class App {
 
             tickerDailyData = tickerDailyData.slice(ArrayFn.getLastIndex(tickerDailyData) - numberOfElement);
 
+            if (tickerDailyData.length < numberOfElement) {
+                return reject(`number of elements left is ${tickerDailyData.length} is less than required of ${numberOfElement}`);
+            }
+
             // Create the last set without output
             let result = {};
             let replaceDateWithCount = 1;
 
             for (let k = tickerDailyData.length - numberOfElement; k < tickerDailyData.length; k++) {
-                Object
-                    .keys(tickerDailyData[k]) // ['OpenPrice', 'ClosePrice', 'HighPrice', 'LowPrice']
-                    .forEach(key => {
+                const yesterdayClosePrice = tickerDailyData[k - 1].ClosePrice;
+                const todayOpenPrice = tickerDailyData[k].OpenPrice;
+                const todayClosePrice = tickerDailyData[k].ClosePrice;
+                const todayHighPrice = tickerDailyData[k].HighPrice;
+                const todayLowPrice = tickerDailyData[k].LowPrice;
+                const yesterdayVolume = tickerDailyData[k - 1].Volume;
+                const todayVolume = tickerDailyData[k].Volume;
 
-                        let yesterdayClosePrice = tickerDailyData[k - 1].ClosePrice;
-                        yesterdayClosePrice = typeof(yesterdayClosePrice) === 'string'
-                            ? parseFloat(yesterdayClosePrice.replace(/,/, ''))
-                            : yesterdayClosePrice;
+                // For debugging, see the dates
+                // result[`${tickerSymbol}_Timestamp_${replaceDateWithCount}`] = tickerDailyData[k]['Timestamp'];
 
-                        let todayOpenPrice = tickerDailyData[k].OpenPrice;
-                        todayOpenPrice = typeof(todayOpenPrice) === 'string'
-                            ? parseFloat(todayOpenPrice.replace(/,/, ''))
-                            : todayOpenPrice;
+                // Normalize tickerDailyData by calculating difference with today and yesterday
+                result[`${tickerSymbol}_OpenPrice_${replaceDateWithCount}`] = todayOpenPrice - yesterdayClosePrice;
+                result[`${tickerSymbol}_ClosePrice_${replaceDateWithCount}`] = todayClosePrice - yesterdayClosePrice;
+                result[`${tickerSymbol}_Volume_${replaceDateWithCount}`] = todayVolume - yesterdayVolume;
+                result[`${tickerSymbol}_HighPrice_${replaceDateWithCount}`] = todayOpenPrice <= todayClosePrice
+                    ? todayHighPrice - todayClosePrice
+                    : todayHighPrice - todayOpenPrice;
+                result[`${tickerSymbol}_LowPrice_${replaceDateWithCount}`] = todayOpenPrice <= todayClosePrice
+                    ? todayLowPrice - todayOpenPrice
+                    : todayLowPrice - todayClosePrice;
 
-                        let todayClosePrice = tickerDailyData[k].ClosePrice;
-                        todayClosePrice = typeof(todayClosePrice) === 'string'
-                            ? parseFloat(todayClosePrice.replace(/,/, ''))
-                            : todayClosePrice;
-
-                        let todayHighPrice = tickerDailyData[k].HighPrice;
-                        todayHighPrice = typeof(todayHighPrice) === 'string'
-                            ? parseFloat(todayHighPrice.replace(/,/, ''))
-                            : todayHighPrice;
-
-                        let todayLowPrice = tickerDailyData[k].LowPrice;
-                        todayLowPrice = typeof(todayLowPrice) === 'string'
-                            ? parseFloat(todayLowPrice.replace(/,/, ''))
-                            : todayLowPrice;
-
-                        let yesterdayVolume = tickerDailyData[k - 1].Volume;
-                        yesterdayVolume = typeof(yesterdayVolume) === 'string'
-                            ? parseFloat(yesterdayVolume.replace(/,/, ''))
-                            : yesterdayVolume;
-
-                        let todayVolume = tickerDailyData[k].Volume;
-                        todayVolume = typeof(todayVolume) === 'string'
-                            ? parseFloat(todayVolume.replace(/,/, ''))
-                            : todayVolume;
-
-                        // For debugging, see the dates
-                        // result[`${appendString}_Timestamp_${replaceDateWithCount}`] = tickerDailyData[k]['Timestamp'];
-
-                        // Normalize tickerDailyData by calculating difference with today and yesterday
-                        result[`${appendString}_OpenPrice_${replaceDateWithCount}`] = todayOpenPrice - yesterdayClosePrice;
-                        result[`${appendString}_ClosePrice_${replaceDateWithCount}`] = todayClosePrice - yesterdayClosePrice;
-                        result[`${appendString}_Volume_${replaceDateWithCount}`] = todayVolume - yesterdayVolume;
-                        result[`${appendString}_HighPrice_${replaceDateWithCount}`] = todayOpenPrice <= todayClosePrice
-                            ? todayHighPrice - todayClosePrice
-                            : todayHighPrice - todayOpenPrice;
-                        result[`${appendString}_LowPrice_${replaceDateWithCount}`] = todayOpenPrice <= todayClosePrice
-                            ? todayLowPrice - todayOpenPrice
-                            : todayLowPrice - todayClosePrice;
-                    });
-
-                    replaceDateWithCount += 1;
+                replaceDateWithCount += 1;
             }
 
             return resolve(result);
