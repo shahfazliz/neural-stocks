@@ -14,7 +14,7 @@ export default class App {
     };
 
     __limitTrainingSet = 1000;
-    __numberOfElement = 40;
+    __numberOfElement = 50;
 
     __trainedFilePath = './trained.txt';
 
@@ -22,16 +22,16 @@ export default class App {
         'CYB',
         'DIA',
         'EEM',
-        'FXA', 'FXB', 'FXC', 'FXE', 'FXF', 'FXY', // FXI ?
+        'FXA', 'FXB', 'FXC', 'FXE', 'FXF', 'FXI', 'FXY',
         'GDX', 'GDXJ', 'GLD', 'GOVT', // 'GOVZ', // <-- problem, too recent
         'IEF', 'IEI', 'IWM', 'IYT',
         // 'MID', // <-- problem, too recent
         'QQQ',
         'SHY', 'SPY', // 'SGOV',  // <-- problem, too recent
-        'TLH', 'TLT',
+        'TIP', 'TLH', 'TLT',
         'UUP',
         'VXX',
-        'XLE', 'XLF', 'XLI', // XLB ?
+        'XLB', 'XLE', 'XLF', 'XLI',
     ];
 
     getListOfTickers() {
