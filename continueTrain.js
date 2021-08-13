@@ -45,6 +45,8 @@ Promise
         });
         return accumulator;
     })
+    // Randomize sequence using Fisher-Yates (aka Knuth) Shuffle
+    .then(trainingData => ArrayFn.randomize(trainingData))
     // Load from saved training
     .then(trainingData => app
         .continueTraining(trainingData)

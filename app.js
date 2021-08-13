@@ -6,17 +6,17 @@ import fs from 'fs/promises';
 export default class App {
     _trainingOptions = {
         activation: 'sigmoid',
-        binaryThresh: 0.5,
-        errorThresh: 0.2,
-        hiddenLayers: [100, 100, 100],
-        iterations: 1000000,
+        binaryThresh: 0.4,
+        errorThresh: 0.20,
+        hiddenLayers: [100, 100, 100, 100],
+        iterations: 1000,
         learningRate: 0.3,
         log: true,
         logPeriod: 1,
     };
 
-    __limitTrainingSet = 1000;
-    __numberOfElement = 20;
+    __limitTrainingSet = 1100; // 1100 working days is slightly more than 4 years
+    __numberOfElement = 30;
 
     __trainedFilePath = './trained.json';
 
