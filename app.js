@@ -1,6 +1,6 @@
 import { csvToJson } from './util/AdaptorCSV2JSON.js';
 import brain from 'brain.js';
-import fs from 'fs';
+import fs from 'fs/promises';
 
 export default class App {
     _trainingOptions = {
@@ -42,31 +42,18 @@ export default class App {
      * Read csv file then convert into json.
      */
     readFromCSVFileToJson(csvfilepath) {
-        return new Promise((resolve, reject) => {
-            fs.readFile(
-                csvfilepath,
-                'utf8',
-                (error, data) => {
-                    return error
-                        ? reject(error)
-                        : resolve(csvToJson(data));
-                });
-        });
+        return fs
+            .readFile(csvfilepath)
+            .then(data => csvToJson(data));
     }
 
     /**
      * Read json file
      */
     readFromJSONFile(jsonfilepath) {
-        return new Promise((resolve, reject) => {
-            fs.readFile(
-                jsonfilepath,
-                (error, data) => {
-                    return error
-                        ? reject(error)
-                        : resolve(JSON.parse(data));
-                });
-        });
+        return fs
+            .readFile(jsonfilepath)
+            .then(data => JSON.parse(data));
     }
 
     /**
@@ -201,35 +188,22 @@ export default class App {
     }
 
     saveTraining(net) {
-        return new Promise((resolve, reject) => {
-            fs.writeFile(
+        return fs
+            .writeFile(
                 this.__trainedFilePath,
-                JSON.stringify(net.toJSON()),
-                error => {
-                    if (error) {
-                        return reject(error);
-                    }
-                });
-
-            return resolve(net);
-        });
+                JSON.stringify(net.toJSON())
+            )
+            .then(() => net);
     }
 
     loadTrainedData() {
-        return new Promise((resolve, reject) => {
-            fs.readFile(
-                this.__trainedFilePath,
-                'utf8',
-                (error, data) => {
-                    if (error) {
-                        return reject(error);
-                    }
-
-                    const net = new brain.NeuralNetwork();
-                    net.fromJSON(JSON.parse(data));
-                    return resolve(net);
-                });
-        });
+        return fs
+            .readFile(this.__trainedFilePath)
+            .then(data => {
+                const net = new brain.NeuralNetwork();
+                net.fromJSON(JSON.parse(data));
+                return net;
+            });
     }
 
     continueTraining(trainingData) {
