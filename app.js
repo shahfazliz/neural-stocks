@@ -7,7 +7,7 @@ export default class App {
     _trainingOptions = {
         activation: 'sigmoid',
         binaryThresh: 0.3,
-        errorThresh: 0.20,
+        errorThresh: 0.18,
         hiddenLayers: [100, 100, 100, 100],
         iterations: 1000,
         learningRate: 0.3,
@@ -25,15 +25,14 @@ export default class App {
         'DIA',
         'EEM',
         'FXA', 'FXB', 'FXC', 'FXE', 'FXF', 'FXI', 'FXY',
-        'GDX', 'GDXJ', 'GLD', 'GOVT', // 'GOVZ', // <-- problem, too recent
+        'GDX', 'GDXJ', 'GLD', 'GOVT',
         'IEF', 'IEI', 'IWM', 'IYT',
-        // 'MID', // <-- problem, too recent
         'QQQ',
-        'SHY', 'SPY', // 'SGOV',  // <-- problem, too recent
+        'SHY', 'SPY',
         'TIP', 'TLH', 'TLT',
         'UUP',
         'VXX',
-        'XLB', 'XLE', 'XLF', 'XLI',
+        'XHB', 'XLB', 'XLE', 'XLF', 'XLI',
     ];
 
     getListOfTickers() {

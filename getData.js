@@ -28,7 +28,7 @@ Promise
             const yesterday = moment().subtract(1, 'day');
 
             if (statDateAfterLastDateInJson.isAfter(yesterday)) {
-                break;
+                continue;
             }
 
             axios
