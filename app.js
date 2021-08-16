@@ -15,7 +15,6 @@ export default class App {
         logPeriod: 1,
     };
 
-    __limitTrainingSet = 1255; // 1100 working days is slightly more than 4 years
     __numberOfElement = 50;
 
     __trainedFilePath = './trained.json';
@@ -159,7 +158,7 @@ export default class App {
             .then(() => model);
     }
 
-    loadTrainedData() {
+    loadTrainedModel() {
         console.log(`Load training model from ${this.__trainedFilePath}`);
         return fs
             .readFile(this.__trainedFilePath)
@@ -173,7 +172,7 @@ export default class App {
     continueTraining(trainingData) {
         console.log(`Continue training`);
         return this
-            .loadTrainedData()
+            .loadTrainedModel()
             .then(model => {
                 model.train(
                     trainingData,

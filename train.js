@@ -18,8 +18,8 @@ Promise
     .then(multipleTrainingData => {
         console.log(`Combine multiple ticker training data sets`);
         const accumulator = [];
-        multipleTrainingData.forEach(trainingData => {
-            trainingData.forEach((trainingSet, index) => {
+        multipleTrainingData.forEach(trainingDataSet => {
+            trainingDataSet.forEach((trainingSet, index) => {
 
                 // Initialize new training set to be combined
                 if (!accumulator[index]) {
@@ -47,12 +47,12 @@ Promise
         return accumulator;
     })
     // Randomize sequence using Fisher-Yates (aka Knuth) Shuffle
-    .then(trainingData => ArrayFn.randomize(trainingData))
+    .then(trainingDataSet => ArrayFn.randomize(trainingDataSet))
     // Create new training
-    .then(trainingData => app
-        .startTraining(trainingData)
+    .then(trainingDataSet => app
+        .startTraining(trainingDataSet)
         .then(model => {
-            const lastTrainingData = ArrayFn.getLastElement(trainingData);
+            const lastTrainingData = ArrayFn.getLastElement(trainingDataSet);
             console.log('result:', model.run(lastTrainingData.input))
             console.log('actual:', lastTrainingData.output);
         })

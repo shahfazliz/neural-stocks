@@ -26,7 +26,7 @@ Promise
         return accumulator;
     }, {}))
     .then(lastInput => app
-        .loadTrainedData()
+        .loadTrainedModel()
         .then(model => console.log("Today's result:", model.run(lastInput)))
     )
     .catch(error => console.log(`Error: ${error}`));
@@ -45,8 +45,9 @@ Promise
                         'APCA-API-SECRET-KEY': process.env.APCA_API_SECRET_KEY,
                     }
                 })
-                .then(response => {
-                    candlestickCollection.push(new Candlestick({
+                .then(response => candlestickCollection
+                    .clone()
+                    .push(new Candlestick({
                         timestamp: response.data.dailyBar.t,
                         open: response.data.dailyBar.o,
                         close: response.data.dailyBar.c,
@@ -55,9 +56,8 @@ Promise
                         volume: response.data.dailyBar.v,
                         n: response.data.dailyBar.n,
                         vw: response.data.dailyBar.vw,
-                    }));
-                    return candlestickCollection;
-                })
+                    }))
+                )
             )
             .then(candlestickCollection => app.createLastInput({
                 tickerSymbol,
@@ -75,7 +75,7 @@ Promise
         return accumulator;
     }, {}))
     .then(lastInput => app
-        .loadTrainedData()
+        .loadTrainedModel()
         .then(model => {
             console.log("Tomorrow's result:", model.run(lastInput));
         })

@@ -11,36 +11,14 @@ export default class CandlestickCollection {
 
         // Initialize each data into Candlestick object, then add into collection array
         rawCandlestickArrayOfObj
-            .forEach(rawCandleStickObj => {
-                const candlestick = new Candlestick({
-                    timestamp: rawCandleStickObj.Timestamp,
-                    open: rawCandleStickObj.OpenPrice,
-                    close: rawCandleStickObj.ClosePrice,
-                    high: rawCandleStickObj.HighPrice,
-                    low: rawCandleStickObj.LowPrice,
-                    volume: rawCandleStickObj.Volume,
-                });
-
-                // The first candlestick will not have diff because there is no previous candlestick
-                if (!ArrayFn.isEmpty(this.__collection)) {
-                    const previousCandlestick = ArrayFn.getLastElement(this.__collection);
-
-                    candlestick.setOpenDiff(candlestick.getOpen() - previousCandlestick.getClose());
-                    candlestick.setCloseDiff(candlestick.getClose() - previousCandlestick.getClose());
-                    candlestick.setHighDiff(candlestick.isBullCandle()
-                        ? candlestick.getHigh() - previousCandlestick.getClose()
-                        : candlestick.getHigh() - previousCandlestick.getOpen());
-                    candlestick.setLowDiff(candlestick.isBullCandle()
-                        ? candlestick.getLow() - previousCandlestick.getOpen()
-                        : candlestick.getLow() - previousCandlestick.getClose());
-                    candlestick.setVolumeDiff(candlestick.getVolume() - previousCandlestick.getVolume());
-
-                    candlestick.setLong(candlestick.getClose() - previousCandlestick.getClose() >= 0);
-                    candlestick.setShort(candlestick.getClose() - previousCandlestick.getClose() <= 0);
-                }
-
-                this.__collection.push(candlestick);
-            });
+            .forEach(rawCandleStickObj => this.push(new Candlestick({
+                timestamp: rawCandleStickObj.Timestamp,
+                open: rawCandleStickObj.OpenPrice,
+                close: rawCandleStickObj.ClosePrice,
+                high: rawCandleStickObj.HighPrice,
+                low: rawCandleStickObj.LowPrice,
+                volume: rawCandleStickObj.Volume,
+            })));
     }
 
     getIndex(index) {
@@ -56,6 +34,24 @@ export default class CandlestickCollection {
     }
 
     push(candlestick) {
+        // The first candlestick will not have diff because there is no previous candlestick
+        if (!ArrayFn.isEmpty(this.__collection)) {
+            const previousCandlestick = ArrayFn.getLastElement(this.__collection);
+
+            candlestick.setOpenDiff(candlestick.getOpen() - previousCandlestick.getClose());
+            candlestick.setCloseDiff(candlestick.getClose() - previousCandlestick.getClose());
+            candlestick.setHighDiff(candlestick.isBullCandle()
+                ? candlestick.getHigh() - previousCandlestick.getClose()
+                : candlestick.getHigh() - previousCandlestick.getOpen());
+            candlestick.setLowDiff(candlestick.isBullCandle()
+                ? candlestick.getLow() - previousCandlestick.getOpen()
+                : candlestick.getLow() - previousCandlestick.getClose());
+            candlestick.setVolumeDiff(candlestick.getVolume() - previousCandlestick.getVolume());
+
+            candlestick.setLong(candlestick.getClose() - previousCandlestick.getClose() >= 0);
+            candlestick.setShort(candlestick.getClose() - previousCandlestick.getClose() <= 0);
+        }
+
         this
             .__collection
             .push(candlestick);
@@ -81,5 +77,9 @@ export default class CandlestickCollection {
             undefined,
             4
         );
+    }
+
+    clone() {
+        return new CandlestickCollection(JSON.parse(this.stringify()));
     }
 }
