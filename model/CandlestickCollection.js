@@ -1,23 +1,28 @@
 import ArrayFn from '../util/ArrayFn.js';
 import Candlestick from './Candlestick.js';
-import moment from 'moment';
+import MomentAdaptor from '../util/MomentAdaptor.js';
 
 export default class CandlestickCollection {
     __collection = [];
 
     constructor(rawCandlestickArrayOfObj) {
         // Sort the data by date ascending (older first, newer last)
-        rawCandlestickArrayOfObj.sort((a, b) => moment(a.Timestamp, 'YYYY-MM-DD').diff(moment(b.Timestamp, 'YYYY-MM-DD')));
+        rawCandlestickArrayOfObj.sort((a, b) => new MomentAdaptor(a.Timestamp, 'YYYY-MM-DD')
+            .isSameOrBefore(new MomentAdaptor(b.Timestamp, 'YYYY-MM-DD')))
+            ? -1
+            : 1;
 
         // Initialize each data into Candlestick object, then add into collection array
         rawCandlestickArrayOfObj
             .forEach(rawCandleStickObj => this.push(new Candlestick({
-                timestamp: rawCandleStickObj.Timestamp,
-                open: rawCandleStickObj.OpenPrice,
                 close: rawCandleStickObj.ClosePrice,
                 high: rawCandleStickObj.HighPrice,
                 low: rawCandleStickObj.LowPrice,
+                n: rawCandleStickObj.n,
+                open: rawCandleStickObj.OpenPrice,
+                timestamp: rawCandleStickObj.Timestamp,
                 volume: rawCandleStickObj.Volume,
+                vw: rawCandleStickObj.vw,
             })));
     }
 

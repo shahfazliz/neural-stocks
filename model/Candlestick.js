@@ -31,14 +31,14 @@ export default class Candlestick {
 
     getRawObject() {
         return {
-            Timestamp: this.__timestamp,
-            OpenPrice: this.__open,
             ClosePrice: this.__close,
             HighPrice: this.__high,
             LowPrice: this.__low,
+            n: this.__n,
+            OpenPrice: this.__open,
+            Timestamp: this.__timestamp,
             Volume: this.__volume,
             vw: this.__vw,
-            n: this.__n,
         };
     }
 
