@@ -8,12 +8,10 @@ Promise
         .getListOfTickers()
         .map(tickerSymbol => app
             .readFromJSONFile(`./data/${tickerSymbol}.json`)
-            .then(data => app.createTrainingData({
+            .then(candlestickCollection => app.createTrainingData({
                 tickerSymbol,
-                data,
-                // Sort date ascending
-                // sortDataFunction: (a, b) => moment(a.Timestamp, 'YYYY-MM-DD').diff(moment(b.Timestamp, 'YYYY-MM-DD')),
-            }))
+                candlestickCollection,
+           }))
         )
     )
     // Combine multiple training data sets

@@ -1,5 +1,6 @@
 import App from './app.js';
 import axios from 'axios';
+import Candlestick from './model/Candlestick.js';
 
 const app = new App();
 
@@ -9,11 +10,9 @@ Promise
         .getListOfTickers()
         .map(tickerSymbol => app
             .readFromJSONFile(`./data/${tickerSymbol}.json`)
-            .then(tickerDailyData => app.createLastInput({
+            .then(candlestickCollection => app.createLastInput({
                 tickerSymbol,
-                tickerDailyData,
-                // Sort date ascending
-                // sortDataFunction: (a, b) => moment(a.Timestamp, 'YYYY-MM-DD').diff(moment(b.Timestamp, 'YYYY-MM-DD')),
+                candlestickCollection,
             }))
         )
     )
@@ -39,7 +38,7 @@ Promise
         .map(tickerSymbol => app
             .readFromJSONFile(`./data/${tickerSymbol}.json`)
             // Hijack data by adding today's daily quote
-            .then(tickerDailyData => axios
+            .then(candlestickCollection => axios
                 .get(`https://data.alpaca.markets/v2/stocks/${tickerSymbol}/snapshot`, {
                     headers: {
                         'APCA-API-KEY-ID': process.env.APCA_API_KEY_ID,
@@ -47,24 +46,22 @@ Promise
                     }
                 })
                 .then(response => {
-                    tickerDailyData.push({
-                        Timestamp: response.data.dailyBar.t,
-                        OpenPrice: response.data.dailyBar.o,
-                        ClosePrice: response.data.dailyBar.c,
-                        HighPrice: response.data.dailyBar.h,
-                        LowPrice: response.data.dailyBar.l,
-                        Volume: response.data.dailyBar.v,
+                    candlestickCollection.push(new Candlestick({
+                        timestamp: response.data.dailyBar.t,
+                        open: response.data.dailyBar.o,
+                        close: response.data.dailyBar.c,
+                        high: response.data.dailyBar.h,
+                        low: response.data.dailyBar.l,
+                        volume: response.data.dailyBar.v,
                         n: response.data.dailyBar.n,
                         vw: response.data.dailyBar.vw,
-                    });
-                    return tickerDailyData;
+                    }));
+                    return candlestickCollection;
                 })
             )
-            .then(tickerDailyData => app.createLastInput({
+            .then(candlestickCollection => app.createLastInput({
                 tickerSymbol,
-                tickerDailyData,
-                // Sort date ascending
-                // sortDataFunction: (a, b) => moment(a.Timestamp, 'YYYY-MM-DD').diff(moment(b.Timestamp, 'YYYY-MM-DD')),
+                candlestickCollection,
             }))
         )
     )

@@ -1,6 +1,6 @@
 import App from './app.js';
-import ArrayFn from './util/ArrayFn.js';
 import axios from 'axios';
+import Candlestick from './model/Candlestick.js';
 import fs from 'fs/promises';
 import moment from 'moment';
 
@@ -11,25 +11,28 @@ Promise
         .getListOfTickers()
         .map(tickerSymbol => app
             .readFromJSONFile(`./data/${tickerSymbol}.json`)
-            .then(data => ({[`${tickerSymbol}`]: data}))
+            .then(candlestickCollection => ({[`${tickerSymbol}`]: candlestickCollection}))
         )
     )
-    .then(multipleTickerDailyDataJson => multipleTickerDailyDataJson.reduce((accumulator, tickerDailyDataJson) => {
-        return Object.assign(accumulator, tickerDailyDataJson);
+    .then(multipleTickerCandlestickCollection => multipleTickerCandlestickCollection.reduce((accumulator, candlestickCollection) => {
+        return Object.assign(accumulator, candlestickCollection);
     }, {}))
-    .then(multipleTickerDailyDataJson => {
-        const tickerSymbols = Object.keys(multipleTickerDailyDataJson);
+    .then(multipleTickerCandlestickCollection => {
+        const tickerSymbols = Object.keys(multipleTickerCandlestickCollection);
 
         for (let tickerSymbol of tickerSymbols) {
-            let tickerDailyDataJson = multipleTickerDailyDataJson[tickerSymbol];
-            const statDateAfterLastDateInJson = ArrayFn.isEmpty(tickerDailyDataJson)
+            let candlestickCollection = multipleTickerCandlestickCollection[tickerSymbol];
+            const statDateAfterLastDateInCollection = candlestickCollection.isEmpty()
                 ? moment('2016-08-10', 'YYYY-MM-DD')
-                : moment(ArrayFn.getLastElement(tickerDailyDataJson).Timestamp, 'YYYY-MM-DD').add(1, 'day');
+                : moment(candlestickCollection.getLastElement().getTimestamp(), 'YYYY-MM-DD').add(1, 'day');
             const yesterday = moment().subtract(1, 'day');
 
-            if (statDateAfterLastDateInJson.isAfter(yesterday)) {
+            if (statDateAfterLastDateInCollection.isAfter(yesterday)) {
                 continue;
             }
+
+            console.log(statDateAfterLastDateInCollection.format());
+            console.log(yesterday.format());
 
             axios
                 .get(`https://data.alpaca.markets/v2/stocks/${tickerSymbol}/bars`, {
@@ -38,7 +41,7 @@ Promise
                         'APCA-API-SECRET-KEY': process.env.APCA_API_SECRET_KEY,
                     },
                     params: {
-                        start: statDateAfterLastDateInJson.format(),
+                        start: statDateAfterLastDateInCollection.format(),
                         end: yesterday.format(),
                         timeframe: '1Day',
                     },
@@ -47,22 +50,22 @@ Promise
                 .then(response => response
                     .data
                     .bars
-                    .map(obj => ({
-                        Timestamp: obj.t,
-                        OpenPrice: obj.o,
-                        ClosePrice: obj.c,
-                        HighPrice: obj.h,
-                        LowPrice: obj.l,
-                        Volume: obj.v,
+                    .map(obj => new Candlestick({
+                        timestamp: obj.t,
+                        open: obj.o,
+                        close: obj.c,
+                        high: obj.h,
+                        low: obj.l,
+                        volume: obj.v,
                         n: obj.n,
                         vw: obj.vw,
                     }))
                 )
-                .then(responseDataJson => {
-                    tickerDailyDataJson = [...tickerDailyDataJson, ...responseDataJson];
+                .then(candlesticks => {
+                    candlesticks.forEach(candlestick => candlestickCollection.push(candlestick));
                     return fs.writeFile(
                         `./data/${tickerSymbol}.json`,
-                        JSON.stringify(tickerDailyDataJson, undefined, 4)
+                        candlestickCollection.stringify()
                     );
                 });
         }

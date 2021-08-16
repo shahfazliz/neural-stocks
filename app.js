@@ -1,22 +1,22 @@
 import { csvToJson } from './util/AdaptorCSV2JSON.js';
-import ArrayFn from './util/ArrayFn.js';
 import brain from 'brain.js';
+import CandlestickCollection from './model/CandlestickCollection.js';
 import fs from 'fs/promises';
 
 export default class App {
     _trainingOptions = {
         activation: 'sigmoid',
         binaryThresh: 0.3,
-        errorThresh: 0.18,
+        errorThresh: 0.1,
         hiddenLayers: [100, 100, 100, 100],
-        iterations: 1000,
-        learningRate: 0.3,
+        iterations: 3000,
+        learningRate: 0.2,
         log: true,
         logPeriod: 1,
     };
 
-    __limitTrainingSet = 1100; // 1100 working days is slightly more than 4 years
-    __numberOfElement = 35;
+    __limitTrainingSet = 1255; // 1100 working days is slightly more than 4 years
+    __numberOfElement = 50;
 
     __trainedFilePath = './trained.json';
 
@@ -32,7 +32,7 @@ export default class App {
         'TIP', 'TLH', 'TLT',
         'UUP',
         'VXX',
-        'XHB', 'XLB', 'XLE', 'XLF', 'XLI',
+        'XHB', 'XLB', 'XLE', 'XLF', 'XLI', 'XLU', 'XLV',
     ];
 
     getListOfTickers() {
@@ -55,7 +55,7 @@ export default class App {
         console.log(`Reading ${jsonfilepath}`);
         return fs
             .readFile(jsonfilepath)
-            .then(data => JSON.parse(data));
+            .then(rawJson => new CandlestickCollection(JSON.parse(rawJson)));
     }
 
     /**
@@ -63,84 +63,71 @@ export default class App {
      */
     createTrainingData({
         tickerSymbol = 'N/A',
-        data = [],
-        limitTrainingSet = this.__limitTrainingSet,
+        candlestickCollection,
         numberOfElement = this.__numberOfElement,
-        sortDataFunction,
     }) {
         console.log(`Create training data set for ticker ${tickerSymbol}`);
         return new Promise((resolve, reject) => {
-            data = sortDataFunction !== null
-                && typeof(sortDataFunction) === 'function'
-                ? data.sort(sortDataFunction)
-                : data
 
             const numberOfElementBeforeFirstSet = 1; // We need previous day closing price to calculate difference with today
             const numberOfElementAfterLastSet = 1; // We need tomorrow's closing price to calculate to long/short
 
-            // Slice the sample data by limitTrainingSet
-            if (limitTrainingSet) {
-                const startIndexToSlice = ArrayFn.getLastIndex(data)
-                    - numberOfElementBeforeFirstSet
-                    - limitTrainingSet
-                    - numberOfElementAfterLastSet;
-
-                data = data.slice(startIndexToSlice);
-            }
-
-            const numberOfElementsLeft = data.length - numberOfElementBeforeFirstSet - numberOfElementAfterLastSet;
-            const numberOfRequiredElement = numberOfElement + numberOfElementBeforeFirstSet + numberOfElementAfterLastSet;
-            if (numberOfElementsLeft < numberOfRequiredElement) {
-                return reject(`number of element left is ${numberOfElementsLeft}, less than required elemnt of ${numberOfRequiredElement}`);
+            // Test for the minimum amount of required candles
+            const totalCandlestick = candlestickCollection.length();
+            const numberOfRequiredCandle = numberOfElementBeforeFirstSet
+                + numberOfElement
+                + numberOfElementAfterLastSet;
+            if (totalCandlestick < numberOfRequiredCandle) {
+                return reject(`number of candle is ${totalCandlestick}, less than required candle of ${numberOfRequiredCandle}`);
             }
 
             const startIndex = 1; // Because index 0 is the previous close that we need to calculate difference with today
-            const maxIndexToIterate = ArrayFn.getLastIndex(data) - numberOfElement;
+            const maxIndexToIterate = candlestickCollection.getLastIndex() - numberOfElement;
 
             let result = [];
 
-            // For each data, iterate until maxIndexToIterate
+            // For each candlestickCollection, iterate until maxIndexToIterate
             for (let i = startIndex; i <= maxIndexToIterate; i++) {
                 let subResult = {};
                 let replaceDateWithCount = 1;
 
-                // Group data from i to numberOfElements into an object
+                // Group candlestickCollection from i to numberOfElements into an object
                 for (let j = i; j < i + numberOfElement; j++) {
-                    const yesterdayClosePrice = data[j - 1].ClosePrice;
-                    const todayOpenPrice = data[j].OpenPrice;
-                    const todayClosePrice = data[j].ClosePrice;
-                    const todayHighPrice = data[j].HighPrice;
-                    const todayLowPrice = data[j].LowPrice;
-                    const yesterdayVolume = data[j - 1].Volume;
-                    const todayVolume = data[j].Volume;
-
                     // For debugging, see the dates
-                    // subResult[`${tickerSymbol}_Timestamp_${replaceDateWithCount}`] = data[j]['Timestamp'];
+                    // subResult[`${tickerSymbol}_Timestamp_${replaceDateWithCount}`] = candlestickCollection
+                    //     .getIndex(j)
+                    //     .getTimestamp();
 
-                    // Normalize data by calculating difference with today and yesterday
-                    subResult[`${tickerSymbol}_OpenPrice_${replaceDateWithCount}`] = todayOpenPrice - yesterdayClosePrice;
-                    subResult[`${tickerSymbol}_ClosePrice_${replaceDateWithCount}`] = todayClosePrice - yesterdayClosePrice;
-                    subResult[`${tickerSymbol}_Volume_${replaceDateWithCount}`] = todayVolume - yesterdayVolume;
-                    subResult[`${tickerSymbol}_HighPrice_${replaceDateWithCount}`] = todayOpenPrice <= todayClosePrice
-                        ? todayHighPrice - todayClosePrice // Bull candle
-                        : todayHighPrice - todayOpenPrice; // Bear candle
-                    subResult[`${tickerSymbol}_LowPrice_${replaceDateWithCount}`] = todayOpenPrice <= todayClosePrice
-                        ? todayLowPrice - todayOpenPrice // Bull candle
-                        : todayLowPrice - todayClosePrice; // Bear candle
+                    // Normalize candlestickCollectionArray by calculating difference with today and yesterday
+                    subResult[`${tickerSymbol}_OpenPrice_${replaceDateWithCount}`] = candlestickCollection
+                        .getIndex(j)
+                        .getOpenDiff();
+                    subResult[`${tickerSymbol}_ClosePrice_${replaceDateWithCount}`] = candlestickCollection
+                        .getIndex(j)
+                        .getCloseDiff();
+                    subResult[`${tickerSymbol}_Volume_${replaceDateWithCount}`] = candlestickCollection
+                        .getIndex(j)
+                        .getVolumeDiff();
+                    subResult[`${tickerSymbol}_HighPrice_${replaceDateWithCount}`] = candlestickCollection
+                        .getIndex(j)
+                        .getHighDiff();
+                    subResult[`${tickerSymbol}_LowPrice_${replaceDateWithCount}`] = candlestickCollection
+                        .getIndex(j)
+                        .getLowDiff();
+
                     replaceDateWithCount += 1;
                 }
-
-                // To long or to short
-                const lastDayPlusOneClosePrice =  data[i + numberOfElement].ClosePrice;
-                const lastDayClosePrice =  data[i + numberOfElement - 1].ClosePrice;
-                const outputValue = lastDayPlusOneClosePrice - lastDayClosePrice;
 
                 // Push the input and output objects for training
                 result.push({
                     input: subResult,
                     output: {
-                        [`${tickerSymbol}_Long`]: outputValue >= 0 ? 1 : 0,
-                        [`${tickerSymbol}_Short`]: outputValue <= 0 ? 1 : 0,
+                        [`${tickerSymbol}_Long`]: candlestickCollection
+                            .getIndex(i + numberOfElement)
+                            .getLong() ? 1 : 0,
+                        [`${tickerSymbol}_Short`]: candlestickCollection
+                            .getIndex(i + numberOfElement)
+                            .getShort() ? 1 : 0,
                     },
                 });
             }
@@ -199,49 +186,44 @@ export default class App {
 
     createLastInput({
         tickerSymbol = 'N/A',
-        tickerDailyData = [],
+        candlestickCollection,
         numberOfElement = this.__numberOfElement,
-        sortDataFunction,
     }) {
         console.log(`Create last training data set for ticker ${tickerSymbol}`);
         return new Promise((resolve, reject) => {
-            tickerDailyData = sortDataFunction !== null
-                && typeof(sortDataFunction) === 'function'
-                ? tickerDailyData.sort(sortDataFunction)
-                : tickerDailyData
 
-            tickerDailyData = tickerDailyData.slice(ArrayFn.getLastIndex(tickerDailyData) - numberOfElement);
-
-            if (tickerDailyData.length < numberOfElement) {
-                return reject(`number of elements left is ${tickerDailyData.length} is less than required of ${numberOfElement}`);
+            // Test the minimum amount of required candles
+            const totalCandlestick = candlestickCollection.length()
+            if (totalCandlestick < numberOfElement) {
+                return reject(`number of candle is ${totalCandlestick} is less than required candle of ${numberOfElement}`);
             }
 
             // Create the last set without output
             let result = {};
             let replaceDateWithCount = 1;
 
-            for (let k = tickerDailyData.length - numberOfElement; k < tickerDailyData.length; k++) {
-                const yesterdayClosePrice = tickerDailyData[k - 1].ClosePrice;
-                const todayOpenPrice = tickerDailyData[k].OpenPrice;
-                const todayClosePrice = tickerDailyData[k].ClosePrice;
-                const todayHighPrice = tickerDailyData[k].HighPrice;
-                const todayLowPrice = tickerDailyData[k].LowPrice;
-                const yesterdayVolume = tickerDailyData[k - 1].Volume;
-                const todayVolume = tickerDailyData[k].Volume;
-
+            for (let k = totalCandlestick - numberOfElement; k < totalCandlestick; k++) {
                 // For debugging, see the dates
-                // result[`${tickerSymbol}_Timestamp_${replaceDateWithCount}`] = tickerDailyData[k]['Timestamp'];
+                // result[`${tickerSymbol}_Timestamp_${replaceDateWithCount}`] = candlestickCollection
+                //     .getIndex(k)
+                //     .getTimestamp();
 
                 // Normalize tickerDailyData by calculating difference with today and yesterday
-                result[`${tickerSymbol}_OpenPrice_${replaceDateWithCount}`] = todayOpenPrice - yesterdayClosePrice;
-                result[`${tickerSymbol}_ClosePrice_${replaceDateWithCount}`] = todayClosePrice - yesterdayClosePrice;
-                result[`${tickerSymbol}_Volume_${replaceDateWithCount}`] = todayVolume - yesterdayVolume;
-                result[`${tickerSymbol}_HighPrice_${replaceDateWithCount}`] = todayOpenPrice <= todayClosePrice
-                    ? todayHighPrice - todayClosePrice
-                    : todayHighPrice - todayOpenPrice;
-                result[`${tickerSymbol}_LowPrice_${replaceDateWithCount}`] = todayOpenPrice <= todayClosePrice
-                    ? todayLowPrice - todayOpenPrice
-                    : todayLowPrice - todayClosePrice;
+                result[`${tickerSymbol}_OpenPrice_${replaceDateWithCount}`] = candlestickCollection
+                    .getIndex(k)
+                    .getOpenDiff();
+                result[`${tickerSymbol}_ClosePrice_${replaceDateWithCount}`] = candlestickCollection
+                    .getIndex(k)
+                    .getCloseDiff();
+                result[`${tickerSymbol}_Volume_${replaceDateWithCount}`] = candlestickCollection
+                    .getIndex(k)
+                    .getVolumeDiff();
+                result[`${tickerSymbol}_HighPrice_${replaceDateWithCount}`] = candlestickCollection
+                    .getIndex(k)
+                    .getHighDiff();
+                result[`${tickerSymbol}_LowPrice_${replaceDateWithCount}`] = candlestickCollection
+                    .getIndex(k)
+                    .getLowDiff();
 
                 replaceDateWithCount += 1;
             }
