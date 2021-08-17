@@ -61,32 +61,46 @@ Promise
             },
         };
 
+        const treshold = 0.6;
+
         app
             .loadTrainedModel()
             .then(model => {
                 trainingDataSet.forEach(dataSet => {
-                    const result = model.run(dataSet.input);
+                    const trainingResult = model.run(dataSet.input);
 
                     ['SPY', 'QQQ', 'IWM'].forEach(tickerSymbol => {
                         // Take scores
-                        if (dataSet.output[`${tickerSymbol}_Long`] === 1) {
-                            testResult[tickerSymbol].correct += result[`${tickerSymbol}_Long`] >= 0.7 ? 1 : 0;
-                            testResult[tickerSymbol].error += result[`${tickerSymbol}_Long`] < 0.7 ? 1 : 0;
+                        if (trainingResult[`${tickerSymbol}_Long`] >= treshold) {
+                            if (dataSet.output[`${tickerSymbol}_Long`] === 1) {
+                                testResult[tickerSymbol].correct += 1;
+                            } else {
+                                testResult[tickerSymbol].error += 1;
+                            }
                         }
 
-                        if (dataSet.output[`${tickerSymbol}_Long`] === 0) {
-                            testResult[tickerSymbol].correct += result[`${tickerSymbol}_Long`] < 0.7 ? 1 : 0;
-                            testResult[tickerSymbol].error += result[`${tickerSymbol}_Long`] >= 0.7 ? 1 : 0;
+                        if (trainingResult[`${tickerSymbol}_Long`] < treshold) {
+                            if (dataSet.output[`${tickerSymbol}_Long`] === 0) {
+                                testResult[tickerSymbol].correct += 1;
+                            } else {
+                                testResult[tickerSymbol].error += 1;
+                            }
                         }
 
-                        if (dataSet.output[`${tickerSymbol}_Short`] === 1) {
-                            testResult[tickerSymbol].correct += result[`${tickerSymbol}_Short`] >= 0.7 ? 1 : 0;
-                            testResult[tickerSymbol].error += result[`${tickerSymbol}_Short`] < 0.7 ? 1 : 0;
+                        if (trainingResult[`${tickerSymbol}_Short`] >= treshold) {
+                            if (dataSet.output[`${tickerSymbol}_Short`] === 1) {
+                                testResult[tickerSymbol].correct += 1;
+                            } else {
+                                testResult[tickerSymbol].error += 1;
+                            }
                         }
 
-                        if (dataSet.output[`${tickerSymbol}_Short`] === 0) {
-                            testResult[tickerSymbol].correct += result[`${tickerSymbol}_Short`] < 0.7 ? 1 : 0;
-                            testResult[tickerSymbol].error += result[`${tickerSymbol}_Short`] >= 0.7 ? 1 : 0;
+                        if (trainingResult[`${tickerSymbol}_Short`] < treshold) {
+                            if (dataSet.output[`${tickerSymbol}_Short`] === 0) {
+                                testResult[tickerSymbol].correct += 1;
+                            } else {
+                                testResult[tickerSymbol].error += 1;
+                            }
                         }
                     });
                 });
@@ -94,7 +108,7 @@ Promise
                 ['SPY', 'QQQ', 'IWM'].forEach(tickerSymbol => {
                     console.log(`${tickerSymbol} correct: ${testResult[tickerSymbol].correct}`);
                     console.log(`${tickerSymbol} error: ${testResult[tickerSymbol].error}`);
-                    console.log(`${tickerSymbol} % error: ${testResult[tickerSymbol].error / testResult[tickerSymbol].correct * 100}%`);
+                    console.log(`${tickerSymbol} % error: ${testResult[tickerSymbol].error / testResult[tickerSymbol].correct * 100} %`);
                 });
             });
     })
