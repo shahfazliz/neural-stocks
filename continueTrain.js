@@ -30,13 +30,13 @@ Promise
 
                 Object
                     .keys(trainingSet.input)
-                    .forEach(key => {
+                    .forEach(key => { // eg. key: SPY_OpenPrice_1
                         accumulator[index]['input'][key] = trainingSet.input[key];
                     });
 
                 Object
                     .keys(trainingSet.output)
-                    .forEach(key => {
+                    .forEach(key => { // eg. key: SPY_Long
                         accumulator[index]['output'][key] = trainingSet.output[key];
                     });
             });

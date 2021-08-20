@@ -18,7 +18,7 @@ Promise
         return Object.assign(accumulator, candlestickCollection);
     }, {}))
     .then(multipleTickerCandlestickCollection => {
-        const tickerSymbols = Object.keys(multipleTickerCandlestickCollection);
+        const tickerSymbols = Object.keys(multipleTickerCandlestickCollection); // eg. keys: ['SPY', 'QQQ', 'IWM']
 
         for (let tickerSymbol of tickerSymbols) {
             let candlestickCollection = multipleTickerCandlestickCollection[tickerSymbol];

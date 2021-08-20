@@ -20,7 +20,7 @@ Promise
     .then(multipleTickerLastDataSet => multipleTickerLastDataSet.reduce((accumulator, tickerLastDataSet) => {
         Object
             .keys(tickerLastDataSet)
-            .forEach(key => {
+            .forEach(key => { // eg. key: SPX_OpenPrice_1
                 accumulator[key] = tickerLastDataSet[key];
             });
         return accumulator;
@@ -69,7 +69,7 @@ Promise
     .then(multipleTickerLastDataSet => multipleTickerLastDataSet.reduce((accumulator, tickerLastTrainingSet) => {
         Object
             .keys(tickerLastTrainingSet)
-            .forEach(key => {
+            .forEach(key => { // eg. key: SPY_OpenPrice_1
                 accumulator[key] = tickerLastTrainingSet[key];
             });
         return accumulator;
