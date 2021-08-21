@@ -7,7 +7,7 @@ export default class App {
     _trainingOptions = {
         activation: 'sigmoid',
         binaryThresh: 0.3,
-        errorThresh: 0.1,
+        errorThresh: 0.05,
         hiddenLayers: [100, 100, 100, 100],
         iterations: 3000,
         learningRate: 0.2,
@@ -31,7 +31,7 @@ export default class App {
         'TIP', 'TLH', 'TLT',
         'UUP',
         'VXX',
-        'XHB', 'XLB', 'XLE', 'XLF', 'XLI', 'XLU', 'XLV',
+        'XHB', 'XLB', 'XLE', 'XLF', 'XLI', 'XLP', 'XLU', 'XLV',
     ];
 
     getListOfTickers() {
@@ -176,7 +176,7 @@ export default class App {
             .then(model => {
                 model.train(
                     trainingData,
-                    Object.assign(this._trainingOptions, {keepNetworkIntact: true}),
+                    this._trainingOptions
                 );
 
                 return this.saveTraining(model);
