@@ -6,11 +6,11 @@ import fs from 'fs/promises';
 export default class App {
     _trainingOptions = {
         activation: 'sigmoid',
-        binaryThresh: 0.3,
+        binaryThresh: 0.2,
         errorThresh: 0.05,
         hiddenLayers: [100, 100, 100, 100],
         iterations: 3000,
-        learningRate: 0.2,
+        learningRate: 0.15,
         log: true,
         logPeriod: 1,
     };
@@ -31,7 +31,7 @@ export default class App {
         'TIP', 'TLH', 'TLT',
         'UUP',
         'VXX',
-        'XHB', 'XLB', 'XLE', 'XLF', 'XLI', 'XLP', 'XLU', 'XLV',
+        'XHB', 'XLB', 'XLE', 'XLF', 'XLI', 'XLK', 'XLP', 'XLU', 'XLV', 'XRT', 'XTL', 'XTN',
     ];
 
     getListOfTickers() {
@@ -176,7 +176,7 @@ export default class App {
             .then(model => {
                 model.train(
                     trainingData,
-                    this._trainingOptions
+                    Object.assign(this._trainingOptions, {keepNetworkIntact: true}),
                 );
 
                 return this.saveTraining(model);
