@@ -46,20 +46,16 @@ Promise
         return accumulator;
     })
     .then(trainingDataSet => {
-        const testResult = {
-            SPY: {
-                correct: 0,
-                error: 0,
-            },
-            QQQ: {
-                correct: 0,
-                error: 0,
-            },
-            IWM: {
-                correct: 0,
-                error: 0,
-            },
-        };
+        // Initialize test result
+        const testResult = app
+            .getListOfTickers()
+            .reduce((accumulator, tickerSymbol) => {
+                accumulator[tickerSymbol] = {
+                    correct: 0,
+                    error: 0,
+                };
+                return accumulator;
+            }, {});
 
         const treshold = 0.6;
 
@@ -67,48 +63,59 @@ Promise
             .loadTrainedModel()
             .then(model => {
                 trainingDataSet.forEach(dataSet => {
+                    // Run trained model against all ticker data in json files
                     const trainingResult = model.run(dataSet.input);
 
-                    ['SPY', 'QQQ', 'IWM'].forEach(tickerSymbol => {
-                        // Take scores
-                        if (trainingResult[`${tickerSymbol}_Long`] >= treshold) {
-                            if (dataSet.output[`${tickerSymbol}_Long`] === 1) {
-                                testResult[tickerSymbol].correct += 1;
-                            } else {
-                                testResult[tickerSymbol].error += 1;
-                            }
-                        }
+                    // Take scores
+                    app
+                        .getListOfTickers()
+                        .forEach(tickerSymbol => {
 
-                        if (trainingResult[`${tickerSymbol}_Long`] < treshold) {
-                            if (dataSet.output[`${tickerSymbol}_Long`] === 0) {
-                                testResult[tickerSymbol].correct += 1;
-                            } else {
-                                testResult[tickerSymbol].error += 1;
+                            if (trainingResult[`${tickerSymbol}_Long`] >= treshold) {
+                                if (dataSet.output[`${tickerSymbol}_Long`] === 1) {
+                                    testResult[tickerSymbol].correct += 1;
+                                } else {
+                                    testResult[tickerSymbol].error += 1;
+                                }
                             }
-                        }
 
-                        if (trainingResult[`${tickerSymbol}_Short`] >= treshold) {
-                            if (dataSet.output[`${tickerSymbol}_Short`] === 1) {
-                                testResult[tickerSymbol].correct += 1;
-                            } else {
-                                testResult[tickerSymbol].error += 1;
+                            if (trainingResult[`${tickerSymbol}_Long`] < treshold) {
+                                if (dataSet.output[`${tickerSymbol}_Long`] === 0) {
+                                    testResult[tickerSymbol].correct += 1;
+                                } else {
+                                    testResult[tickerSymbol].error += 1;
+                                }
                             }
-                        }
 
-                        if (trainingResult[`${tickerSymbol}_Short`] < treshold) {
-                            if (dataSet.output[`${tickerSymbol}_Short`] === 0) {
-                                testResult[tickerSymbol].correct += 1;
-                            } else {
-                                testResult[tickerSymbol].error += 1;
+                            if (trainingResult[`${tickerSymbol}_Short`] >= treshold) {
+                                if (dataSet.output[`${tickerSymbol}_Short`] === 1) {
+                                    testResult[tickerSymbol].correct += 1;
+                                } else {
+                                    testResult[tickerSymbol].error += 1;
+                                }
                             }
-                        }
+
+                            if (trainingResult[`${tickerSymbol}_Short`] < treshold) {
+                                if (dataSet.output[`${tickerSymbol}_Short`] === 0) {
+                                    testResult[tickerSymbol].correct += 1;
+                                } else {
+                                    testResult[tickerSymbol].error += 1;
+                                }
+                            }
+                        });
+                });
+
+                // Print scores
+                app
+                    .getListOfTickers()
+                    .forEach(tickerSymbol => {
+                        const predictedCorrectly = testResult[tickerSymbol].correct;
+                        const predictedWrongly = testResult[tickerSymbol].error;
+                        const totalTrades = predictedCorrectly + predictedWrongly;
+
+                        console.log(`${tickerSymbol} correct: ${predictedCorrectly}`);
+                        console.log(`${tickerSymbol} error: ${predictedWrongly}`);
+                        console.log(`${tickerSymbol} % error: ${predictedWrongly / totalTrades * 100} %`);
                     });
-                });
-
-                ['SPY', 'QQQ', 'IWM'].forEach(tickerSymbol => {
-                    console.log(`${tickerSymbol} correct: ${testResult[tickerSymbol].correct}`);
-                    console.log(`${tickerSymbol} error: ${testResult[tickerSymbol].error}`);
-                    console.log(`${tickerSymbol} % error: ${testResult[tickerSymbol].error / testResult[tickerSymbol].correct * 100} %`);
-                });
             });
     })
