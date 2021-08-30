@@ -106,8 +106,9 @@ Promise
                 });
 
                 // Print scores
-                app
-                    .getListOfTickers()
+                // app
+                //     .getListOfTickers()
+                ['SPY', 'QQQ', 'IWM'] // I'm only interested in SPY, QQQ, and IWM
                     .forEach(tickerSymbol => {
                         const predictedCorrectly = testResult[tickerSymbol].correct;
                         const predictedWrongly = testResult[tickerSymbol].error;
@@ -118,4 +119,4 @@ Promise
                         console.log(`${tickerSymbol} % error: ${predictedWrongly / totalTrades * 100} %`);
                     });
             });
-    })
+    });
