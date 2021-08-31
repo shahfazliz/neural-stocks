@@ -46,15 +46,15 @@ export default class CandlestickCollection {
             candlestick.setOpenDiff(candlestick.getOpen() - previousCandlestick.getClose());
             candlestick.setCloseDiff(candlestick.getClose() - previousCandlestick.getClose());
             candlestick.setHighDiff(candlestick.isBullCandle()
-                ? candlestick.getHigh() - previousCandlestick.getClose()
-                : candlestick.getHigh() - previousCandlestick.getOpen());
+                ? candlestick.getHigh() - candlestick.getClose()
+                : candlestick.getHigh() - candlestick.getOpen());
             candlestick.setLowDiff(candlestick.isBullCandle()
-                ? candlestick.getLow() - previousCandlestick.getOpen()
-                : candlestick.getLow() - previousCandlestick.getClose());
+                ? candlestick.getLow() - candlestick.getOpen()
+                : candlestick.getLow() - candlestick.getClose());
             candlestick.setVolumeDiff(candlestick.getVolume() - previousCandlestick.getVolume());
 
-            candlestick.setLong(candlestick.getClose() - previousCandlestick.getClose() >= 0);
-            candlestick.setShort(candlestick.getClose() - previousCandlestick.getClose() <= 0);
+            candlestick.setLong(candlestick.getClose() - previousCandlestick.getLow() >= 0);
+            candlestick.setShort(candlestick.getClose() - previousCandlestick.getHigh() <= 0);
         }
 
         this
