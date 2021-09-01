@@ -24,4 +24,7 @@ export default {
 
         return arr;
     },
+    remove: (arrA, arrB) => arrA.filter(arr => !arrB.includes(arr)),
+    sortAscByKey: (arr, key) => arr.sort((a, b) => a[key] < b[key]),
+    sortDescByKey: (arr, key) => arr.sort((a, b) => a[key] < b[key]),
 }

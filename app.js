@@ -42,19 +42,64 @@ export default class App {
      * Read csv file then convert into json.
      */
     readFromCSVFileToJson(csvfilepath) {
+        return csvToJson(csvfilepath);
+    }
+
+    /**
+     * Read from json file as CandlestickCollection
+     */
+    readJSONFileAsCandlestickCollection(jsonfilepath) {
+        console.log(`Reading from ${jsonfilepath}`);
         return fs
-            .readFile(csvfilepath)
-            .then(data => csvToJson(data));
+            .readFile(jsonfilepath)
+            .then(rawJson => new CandlestickCollection(JSON.parse(rawJson)))
+            // If file does not exist, create one
+            .catch(() => this
+                .writeToJSONFile({
+                    jsonfilepath,
+                })
+                .then(() => new CandlestickCollection([]))
+            );
+    }
+
+    /**
+     * Read from json file as object
+     */
+     readJSONFile(jsonfilepath) {
+        console.log(`Reading from ${jsonfilepath}`);
+        return fs
+            .readFile(jsonfilepath)
+            .then(rawJson => JSON.parse(rawJson))
+            // If file does not exist, create one
+            .catch(() => this
+                .writeToJSONFile({
+                    jsonfilepath,
+                    data: [],
+                })
+                .then(data => data)
+            );
     }
 
     /**
      * Read json file
      */
-    readFromJSONFile(jsonfilepath) {
-        console.log(`Reading ${jsonfilepath}`);
+    writeToJSONFile({
+        jsonfilepath,
+        data = [],
+    }) {
+        console.log(`Writing to ${jsonfilepath}`);
         return fs
-            .readFile(jsonfilepath)
-            .then(rawJson => new CandlestickCollection(JSON.parse(rawJson)));
+            .writeFile(
+                jsonfilepath,
+                typeof data === 'string'
+                    ? data
+                    : JSON.stringify(
+                        data,
+                        undefined,
+                        4
+                    )
+            )
+            .then(data);
     }
 
     /**

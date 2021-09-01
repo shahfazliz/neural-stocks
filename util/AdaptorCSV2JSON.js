@@ -1,5 +1,11 @@
-import csv2json from 'csvjson-csv2json';
+import csvtojson from 'csvtojson';
 
-export function csvToJson(strCSV) {
-    return csv2json(strCSV, {parseNumbers: true})
+export function csvToJson(csvfilepath) {
+    return csvtojson({
+            delimiter: ',',
+            noheader: false,
+            parseNumbers: true,
+            quote: '"',
+        })
+        .fromFile(csvfilepath);
 }

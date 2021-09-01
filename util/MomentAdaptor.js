@@ -27,10 +27,10 @@ export default class MomentAdaptor {
             .isSameOrBefore(momentObj);
     }
 
-    isAfter(momentObj) {
+    isSameOrAfter(momentObj) {
         return this
             .__moment
-            .isAfter(momentObj);
+            .isSameOrAfter(momentObj);
     }
 
     format() {

@@ -7,7 +7,7 @@ Promise
     .all(app
         .getListOfTickers()
         .map(tickerSymbol => app
-            .readFromJSONFile(`./data/${tickerSymbol}.json`)
+            .readJSONFileAsCandlestickCollection(`./data/${tickerSymbol}.json`)
             .then(candlestickCollection => app.createTrainingData({
                 tickerSymbol,
                 candlestickCollection,
