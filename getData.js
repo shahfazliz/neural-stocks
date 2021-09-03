@@ -10,10 +10,8 @@ app
     .readFromCSVFileToJson('./csv_sample/cboesymboldirweeklys.csv')
     .then(json => json.map(company => company.StockSymbol))
     .then(tickerSymbols => {
-        getData(tickerSymbols);
+        getData(tickerSymbols.concat(app.getListOfTickers()));
     });
-
-// getData(app.getListOfTickers());
 
 function getData(tickerSymbols) {
     Promise
