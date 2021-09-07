@@ -45,6 +45,12 @@ export default class MomentAdaptor {
             .day();
     }
 
+    month() {
+        return this
+            .__moment
+            .month();
+    }
+
     addBusinessDays(number) {
         const Sunday = 0;
         const Saturday = 6;

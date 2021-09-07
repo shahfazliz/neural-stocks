@@ -1,3 +1,5 @@
+import MomentAdaptor from "../util/MomentAdaptor.js";
+
 export default class Candlestick {
     __openDiff = 'N/A';
     __closeDiff = 'N/A';
@@ -65,6 +67,12 @@ export default class Candlestick {
     }
     getN() {
         return this.__n;
+    }
+    getDay() {
+        return new MomentAdaptor(this.__timestamp, 'YYYY-MM-DD').day();
+    }
+    getMonth() {
+        return new MomentAdaptor(this.__timestamp, 'YYYY-MM-DD').month();
     }
 
     setOpenDiff(openDiff) {

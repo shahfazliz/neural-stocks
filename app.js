@@ -141,6 +141,12 @@ export default class App {
                     // subResult[`${tickerSymbol}_Timestamp_${replaceDateWithCount}`] = candlestickCollection
                     //     .getIndex(j)
                     //     .getTimestamp();
+                    subResult[`${tickerSymbol}_Day_${replaceDateWithCount}`] = candlestickCollection
+                        .getIndex(j)
+                        .getDay();
+                    subResult[`${tickerSymbol}_Month_${replaceDateWithCount}`] = candlestickCollection
+                        .getIndex(j)
+                        .getMonth();
 
                     // Normalize candlestickCollectionArray by calculating difference with today and yesterday
                     subResult[`${tickerSymbol}_OpenPrice_${replaceDateWithCount}`] = candlestickCollection
@@ -251,6 +257,12 @@ export default class App {
                 // result[`${tickerSymbol}_Timestamp_${replaceDateWithCount}`] = candlestickCollection
                 //     .getIndex(k)
                 //     .getTimestamp();
+                result[`${tickerSymbol}_Day_${replaceDateWithCount}`] = candlestickCollection
+                    .getIndex(k)
+                    .getDay();
+                result[`${tickerSymbol}_Month_${replaceDateWithCount}`] = candlestickCollection
+                    .getIndex(k)
+                    .getDay();
 
                 // Normalize tickerDailyData by calculating difference with today and yesterday
                 result[`${tickerSymbol}_OpenPrice_${replaceDateWithCount}`] = candlestickCollection
