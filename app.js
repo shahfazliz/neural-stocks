@@ -7,7 +7,7 @@ export default class App {
     _trainingOptions = {
         activation: 'sigmoid',
         binaryThresh: 0.2,
-        errorThresh: 0.05,
+        errorThresh: 0.025,
         hiddenLayers: [100, 100, 100, 100],
         iterations: 3000,
         learningRate: 0.15,
@@ -20,16 +20,20 @@ export default class App {
     __trainedFilePath = './trained.json';
 
     __listOfTickers = [
+        'BAL',
         'CYB',
-        'DIA',
+        'DBA', 'DIA',
         'EEM',
         'FXA', 'FXB', 'FXC', 'FXE', 'FXF', 'FXI', 'FXY',
         'GDX', 'GDXJ', 'GLD', 'GOVT',
         'IEF', 'IEI', 'IWM', 'IYT',
+        'JJA',
+        'NIB',
+        'RJA', 'RJI',
         'QQQ',
         'SHY', 'SPY',
         'TIP', 'TLH', 'TLT',
-        'UUP',
+        'UNG', 'USO', 'UUP',
         'VXX',
         'XHB', 'XLB', 'XLE', 'XLF', 'XLI', 'XLK', 'XLP', 'XLU', 'XLV', 'XRT', 'XTL', 'XTN',
     ];
