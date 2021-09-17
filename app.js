@@ -35,7 +35,7 @@ export default class App {
         'TIP', 'TLH', 'TLT',
         'UNG', 'USO', 'UUP',
         'VXX',
-        'XHB', 'XLB', 'XLE', 'XLF', 'XLI', 'XLK', 'XLP', 'XLU', 'XLV', 'XRT', 'XTL', 'XTN',
+        'XHB', 'XLB', 'XLE', 'XLF', 'XLI', 'XLK', 'XLP', 'XLRE', 'XLU', 'XLV', 'XRT', 'XTL', 'XTN',
     ];
 
     getListOfTickers() {
