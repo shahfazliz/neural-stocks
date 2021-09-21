@@ -8,7 +8,7 @@ export default class App {
         activation: 'sigmoid',
         binaryThresh: 0.2,
         errorThresh: 0.025,
-        hiddenLayers: [100, 100, 100, 100],
+        hiddenLayers: [25, 25, 25, 25],
         iterations: 3000,
         learningRate: 0.15,
         log: true,
@@ -38,8 +38,20 @@ export default class App {
         'XHB', 'XLB', 'XLE', 'XLF', 'XLI', 'XLK', 'XLP', 'XLRE', 'XLU', 'XLV', 'XRT', 'XTL', 'XTN',
     ];
 
+    __listOfTickersOfInterest = [
+        'IWM',
+        'QQQ',
+        'SPY',
+    ];
+
     getListOfTickers() {
         return this.__listOfTickers;
+    }
+
+    isTickerOfInterest(tickerSymbol) {
+        return this
+            .__listOfTickersOfInterest
+            .includes(tickerSymbol);
     }
 
     /**
@@ -172,17 +184,22 @@ export default class App {
                     replaceDateWithCount += 1;
                 }
 
-                // Push the input and output objects for training
-                result.push({
-                    input: subResult,
-                    output: {
+                // Output Result only for tickers we are interested
+                let outputResult = this.isTickerOfInterest(tickerSymbol)
+                    ? {
                         [`${tickerSymbol}_Long`]: candlestickCollection
                             .getIndex(i + numberOfElement)
                             .getLong() ? 1 : 0,
                         [`${tickerSymbol}_Short`]: candlestickCollection
                             .getIndex(i + numberOfElement)
                             .getShort() ? 1 : 0,
-                    },
+                    }
+                    : {};
+
+                // Push the input and output objects for training
+                result.push({
+                    input: subResult,
+                    output: outputResult,
                 });
             }
 
