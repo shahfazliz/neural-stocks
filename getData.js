@@ -6,14 +6,14 @@ import ArrayFn from './util/ArrayFn.js';
 const app = new App();
 const alpacaAPI = new AlpacaAPI();
 
-app
-    .readFromCSVFileToJson('./csv_sample/cboesymboldirweeklys.csv')
-    .then(json => json.map(company => company.StockSymbol))
-    .then(tickerSymbols => {
-        getData(tickerSymbols.concat(app.getListOfTickers()));
-    });
+// app
+//     .readFromCSVFileToJson('./csv_sample/cboesymboldirweeklys.csv')
+//     .then(json => json.map(company => company.StockSymbol))
+//     .then(tickerSymbols => {
+//         getData(tickerSymbols.concat(app.getListOfTickers()));
+//     });
 
-// getData(app.getListOfTickers());
+getData(app.getListOfTickers());
 
 function getData(tickerSymbols) {
     Promise
