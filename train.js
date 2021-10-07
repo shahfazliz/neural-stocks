@@ -46,6 +46,28 @@ Promise
         });
         return accumulator;
     })
+    // Test to find any set with different number of inputs
+    .then(trainingDataSet => {
+        console.log(`Total trainingDataSet.length = ${trainingDataSet.length}`);
+        for (let i = 0; i < trainingDataSet.length - 1; i++) {
+            const a = JSON.stringify(Object.keys(trainingDataSet[i].input));
+            const b = JSON.stringify(Object.keys(trainingDataSet[i + 1].input));
+
+            const c = JSON.parse(a);
+            const d = JSON.parse(b);
+
+            if (a !== b) {
+                console.log(c.filter(x => !d.includes(x)));
+                break;
+            }
+
+            if (c.length !== d.length) {
+                console.log(`Input size not equal ${c.length} != ${d.length}`);
+                break;
+            }
+        }
+        return trainingDataSet;
+    })
     // Randomize sequence using Fisher-Yates (aka Knuth) Shuffle
     .then(trainingDataSet => ArrayFn.randomize(trainingDataSet))
     // Create new training
