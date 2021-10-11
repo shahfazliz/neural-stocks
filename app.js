@@ -1,10 +1,11 @@
 import { csvToJson } from './util/AdaptorCSV2JSON.js';
+import { polynomial } from 'everpolate';
 import brain from 'brain.js';
 import CandlestickCollection from './model/CandlestickCollection.js';
 import fs from 'fs/promises';
 
 export default class App {
-    _trainingOptions = {
+    __trainingOptions = {
         activation: 'sigmoid',
         binaryThresh: 0.2,
         errorThresh: 0.025,
@@ -148,38 +149,73 @@ export default class App {
 
             // For each candlestickCollection, iterate until maxIndexToIterate
             for (let i = startIndex; i <= maxIndexToIterate; i++) {
-                let subResult = {};
-                let replaceDateWithCount = 1;
+
+                // Build volume profile using polynomial interpolation
+                const volumeProfile = {};
+                const allPriceLevels = [];
+                for (let j = i; j < i + numberOfElement; j++) {
+                    const candlestick = candlestickCollection.getIndex(j);
+
+                    const maxPrice = Math.ceil(candlestick.getHigh());
+                    const minPrice = Math.floor(candlestick.getLow());
+                    const numberOfPriceLevels = (maxPrice - minPrice + 1);
+                    const averageVolume = Math.floor(candlestick.getVolume() / numberOfPriceLevels);
+
+                    for (let h = minPrice; h <= maxPrice; h++) {
+                        volumeProfile[h] = volumeProfile[h] + averageVolume || averageVolume;
+                    }
+
+                    if (!allPriceLevels.includes(candlestick.getClose())) {
+                        allPriceLevels.push(candlestick.getClose());
+                    }
+                }
+
+                const volumeProfileInArray = Object
+                    .keys(volumeProfile) // The price level
+                    .reduce((accumulator, price) => {
+                        accumulator
+                            .prices
+                            .push(price);
+
+                        accumulator
+                            .volume
+                            .push(volumeProfile[price]);
+
+                        return accumulator;
+                    }, {prices: [], volume: []});
+
+                const interpolatedVolumeProfile = polynomial(
+                    allPriceLevels,
+                    volumeProfileInArray.prices,
+                    volumeProfileInArray.volume
+                );
+
+                // Normalize interpolated volume profile
+                const maxVolume = Math.max(...interpolatedVolumeProfile);
+                const minVolume = Math.min(...interpolatedVolumeProfile);
+                const normalizedInterpolatedVolumeProfile = interpolatedVolumeProfile.map(volumeProfile => {
+                    return (volumeProfile - minVolume) / (maxVolume - minVolume) || 0;
+                });
 
                 // Group candlestickCollection from i to numberOfElements into an object
+                let subResult = {};
+                let replaceDateWithCount = 1;
                 for (let j = i; j < i + numberOfElement; j++) {
+                    const candlestick = candlestickCollection.getIndex(j);
                     // For debugging, see the dates
-                    // subResult[`${tickerSymbol}_Timestamp_${replaceDateWithCount}`] = candlestickCollection
-                    //     .getIndex(j)
-                    //     .getTimestamp();
-                    subResult[`${tickerSymbol}_Day_${replaceDateWithCount}`] = candlestickCollection
-                        .getIndex(j)
-                        .getDay();
-                    subResult[`${tickerSymbol}_Month_${replaceDateWithCount}`] = candlestickCollection
-                        .getIndex(j)
-                        .getMonth();
+                    // subResult[`${tickerSymbol}_Timestamp_${replaceDateWithCount}`] = candlestick.getTimestamp();
+                    subResult[`${tickerSymbol}_Day_${replaceDateWithCount}`] = candlestick.getDay();
+                    subResult[`${tickerSymbol}_Month_${replaceDateWithCount}`] = candlestick.getMonth();
 
                     // Normalize candlestickCollectionArray by calculating difference with today and yesterday
-                    subResult[`${tickerSymbol}_OpenPrice_${replaceDateWithCount}`] = candlestickCollection
-                        .getIndex(j)
-                        .getOpenDiff();
-                    subResult[`${tickerSymbol}_ClosePrice_${replaceDateWithCount}`] = candlestickCollection
-                        .getIndex(j)
-                        .getCloseDiff();
-                    subResult[`${tickerSymbol}_Volume_${replaceDateWithCount}`] = candlestickCollection
-                        .getIndex(j)
-                        .getVolumeDiff();
-                    subResult[`${tickerSymbol}_HighPrice_${replaceDateWithCount}`] = candlestickCollection
-                        .getIndex(j)
-                        .getHighDiff();
-                    subResult[`${tickerSymbol}_LowPrice_${replaceDateWithCount}`] = candlestickCollection
-                        .getIndex(j)
-                        .getLowDiff();
+                    subResult[`${tickerSymbol}_OpenPrice_${replaceDateWithCount}`] = candlestick.getOpenDiff();
+                    subResult[`${tickerSymbol}_ClosePrice_${replaceDateWithCount}`] = candlestick.getCloseDiff();
+                    subResult[`${tickerSymbol}_Volume_${replaceDateWithCount}`] = candlestick.getVolumeDiff();
+                    subResult[`${tickerSymbol}_HighPrice_${replaceDateWithCount}`] = candlestick.getHighDiff();
+                    subResult[`${tickerSymbol}_LowPrice_${replaceDateWithCount}`] = candlestick.getLowDiff();
+
+                    // Add volume profile
+                    subResult[`${tickerSymbol}_VolumeProfile_${replaceDateWithCount}`] = normalizedInterpolatedVolumeProfile[allPriceLevels.indexOf(candlestick.getClose())];
 
                     replaceDateWithCount += 1;
                 }
@@ -210,7 +246,7 @@ export default class App {
     startTraining(trainingData) {
         console.log(`Start training`);
         return new Promise((resolve, reject) => {
-            const model = new brain.NeuralNetwork(this._trainingOptions);
+            const model = new brain.NeuralNetwork(this.__trainingOptions);
             model.train(trainingData);
 
             return this
@@ -248,7 +284,7 @@ export default class App {
             .then(model => {
                 model.train(
                     trainingData,
-                    Object.assign(this._trainingOptions, {keepNetworkIntact: true}),
+                    Object.assign(this.__trainingOptions, {keepNetworkIntact: true}),
                 );
 
                 return this.saveTraining(model);
@@ -264,43 +300,77 @@ export default class App {
         return new Promise((resolve, reject) => {
 
             // Test the minimum amount of required candles
-            const totalCandlestick = candlestickCollection.length()
+            const totalCandlestick = candlestickCollection.length();
             if (totalCandlestick < numberOfElement) {
                 return reject(`number of candle is ${totalCandlestick} is less than required candle of ${numberOfElement}`);
             }
 
+            // Build volume profile using polynomial interpolation
+            const volumeProfile = {};
+            const allPriceLevels = [];
+            for (let k = totalCandlestick - numberOfElement; k < totalCandlestick; k++) {
+                const candlestick = candlestickCollection.getIndex(k);
+
+                const maxPrice = Math.ceil(candlestick.getHigh());
+                const minPrice = Math.floor(candlestick.getLow());
+                const numberOfPriceLevels = (maxPrice - minPrice + 1);
+                const averageVolume = Math.floor(candlestick.getVolume() / numberOfPriceLevels);
+
+                for (let h = minPrice; h <= maxPrice; h++) {
+                    volumeProfile[h] = volumeProfile[h] + averageVolume || averageVolume;
+                }
+
+                if (!allPriceLevels.includes(candlestick.getClose())) {
+                    allPriceLevels.push(candlestick.getClose());
+                }
+            }
+
+            const volumeProfileInArray = Object
+                .keys(volumeProfile) // The price level
+                .reduce((accumulator, price) => {
+                    accumulator
+                        .prices
+                        .push(price);
+
+                    accumulator
+                        .volume
+                        .push(volumeProfile[price]);
+
+                    return accumulator;
+                }, {prices: [], volume: []});
+
+            const interpolatedVolumeProfile = polynomial(
+                allPriceLevels,
+                volumeProfileInArray.prices,
+                volumeProfileInArray.volume
+            );
+
+            // Normalize interpolated volume profile
+            const maxVolume = Math.max(...interpolatedVolumeProfile);
+            const minVolume = Math.min(...interpolatedVolumeProfile);
+            const normalizedInterpolatedVolumeProfile = interpolatedVolumeProfile.map(volumeProfile => {
+                return (volumeProfile - minVolume) / (maxVolume - minVolume) || 0;
+            });
+
             // Create the last set without output
             let result = {};
             let replaceDateWithCount = 1;
-
             for (let k = totalCandlestick - numberOfElement; k < totalCandlestick; k++) {
+                const candlestick = candlestickCollection.getIndex(k);
                 // For debugging, see the dates
-                // result[`${tickerSymbol}_Timestamp_${replaceDateWithCount}`] = candlestickCollection
-                //     .getIndex(k)
-                //     .getTimestamp();
-                result[`${tickerSymbol}_Day_${replaceDateWithCount}`] = candlestickCollection
-                    .getIndex(k)
-                    .getDay();
-                result[`${tickerSymbol}_Month_${replaceDateWithCount}`] = candlestickCollection
-                    .getIndex(k)
-                    .getDay();
+                // result[`${tickerSymbol}_Timestamp_${replaceDateWithCount}`] = candlestick.getTimestamp();
+                result[`${tickerSymbol}_Day_${replaceDateWithCount}`] = candlestick.getDay();
+                result[`${tickerSymbol}_Month_${replaceDateWithCount}`] = candlestick.getDay();
 
                 // Normalize tickerDailyData by calculating difference with today and yesterday
-                result[`${tickerSymbol}_OpenPrice_${replaceDateWithCount}`] = candlestickCollection
-                    .getIndex(k)
-                    .getOpenDiff();
-                result[`${tickerSymbol}_ClosePrice_${replaceDateWithCount}`] = candlestickCollection
-                    .getIndex(k)
-                    .getCloseDiff();
-                result[`${tickerSymbol}_Volume_${replaceDateWithCount}`] = candlestickCollection
-                    .getIndex(k)
-                    .getVolumeDiff();
-                result[`${tickerSymbol}_HighPrice_${replaceDateWithCount}`] = candlestickCollection
-                    .getIndex(k)
-                    .getHighDiff();
-                result[`${tickerSymbol}_LowPrice_${replaceDateWithCount}`] = candlestickCollection
-                    .getIndex(k)
-                    .getLowDiff();
+                result[`${tickerSymbol}_OpenPrice_${replaceDateWithCount}`] = candlestick.getOpenDiff();
+                result[`${tickerSymbol}_ClosePrice_${replaceDateWithCount}`] = candlestick.getCloseDiff();
+                result[`${tickerSymbol}_Volume_${replaceDateWithCount}`] = candlestick.getVolumeDiff();
+                result[`${tickerSymbol}_HighPrice_${replaceDateWithCount}`] = candlestick.getHighDiff();
+                result[`${tickerSymbol}_LowPrice_${replaceDateWithCount}`] = candlestick.getLowDiff();
+
+                // Add volume profile
+                result[`${tickerSymbol}_VolumeProfile_${replaceDateWithCount}`] = normalizedInterpolatedVolumeProfile[allPriceLevels.indexOf(candlestick.getClose())];
 
                 replaceDateWithCount += 1;
             }
