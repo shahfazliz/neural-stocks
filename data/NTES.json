@@ -12968,5 +12968,45 @@
         "Timestamp": "2021-10-04T04:00:00Z",
         "Volume": 3246582,
         "vw": 81.868307
+    },
+    {
+        "ClosePrice": 83.18,
+        "HighPrice": 83.97,
+        "LowPrice": 82.21,
+        "n": 30413,
+        "OpenPrice": 82.39,
+        "Timestamp": "2021-10-05T04:00:00Z",
+        "Volume": 2978597,
+        "vw": 83.241743
+    },
+    {
+        "ClosePrice": 88.71,
+        "HighPrice": 88.88,
+        "LowPrice": 82.3,
+        "n": 56826,
+        "OpenPrice": 82.67,
+        "Timestamp": "2021-10-06T04:00:00Z",
+        "Volume": 5905835,
+        "vw": 87.288947
+    },
+    {
+        "ClosePrice": 96.06,
+        "HighPrice": 96.19,
+        "LowPrice": 89.95,
+        "n": 93885,
+        "OpenPrice": 90,
+        "Timestamp": "2021-10-07T04:00:00Z",
+        "Volume": 9065027,
+        "vw": 94.501808
+    },
+    {
+        "ClosePrice": 96.32,
+        "HighPrice": 97.36,
+        "LowPrice": 94.885,
+        "n": 71422,
+        "OpenPrice": 95.74,
+        "Timestamp": "2021-10-08T04:00:00Z",
+        "Volume": 6589266,
+        "vw": 96.131289
     }
 ]
