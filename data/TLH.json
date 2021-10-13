@@ -13008,5 +13008,25 @@
         "Timestamp": "2021-10-08T04:00:00Z",
         "Volume": 37479,
         "vw": 144.996899
+    },
+    {
+        "ClosePrice": 144.34,
+        "HighPrice": 144.9466,
+        "LowPrice": 144.34,
+        "n": 551,
+        "OpenPrice": 144.69,
+        "Timestamp": "2021-10-11T04:00:00Z",
+        "Volume": 28054,
+        "vw": 144.757744
+    },
+    {
+        "ClosePrice": 146.57,
+        "HighPrice": 146.58,
+        "LowPrice": 145.38,
+        "n": 1231,
+        "OpenPrice": 145.44,
+        "Timestamp": "2021-10-12T04:00:00Z",
+        "Volume": 109804,
+        "vw": 146.009424
     }
 ]
