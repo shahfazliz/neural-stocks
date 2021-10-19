@@ -67,8 +67,7 @@ Promise
                     const trainingResult = model.run(dataSet.input);
 
                     // Take scores
-                    app
-                        .getListOfTickers()
+                    ['SPY', 'QQQ', 'IWM'] // I'm only interested in SPY, QQQ, and IWM
                         .forEach(tickerSymbol => {
 
                             if (trainingResult[`${tickerSymbol}_Long`] >= treshold) {
@@ -106,8 +105,6 @@ Promise
                 });
 
                 // Print scores
-                // app
-                //     .getListOfTickers()
                 ['SPY', 'QQQ', 'IWM'] // I'm only interested in SPY, QQQ, and IWM
                     .forEach(tickerSymbol => {
                         const predictedCorrectly = testResult[tickerSymbol].correct;
