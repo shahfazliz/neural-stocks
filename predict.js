@@ -1,4 +1,5 @@
 import App from './app.js';
+import ArrayFn from './util/ArrayFn.js';
 import axios from 'axios';
 import Candlestick from './model/Candlestick.js';
 
@@ -59,25 +60,46 @@ Promise
                     }))
                 )
             )
-            .then(candlestickCollection => app.createLastInput({
+            .then(candlestickCollection => app.createTrainingData({
                 tickerSymbol,
                 candlestickCollection,
             }))
         )
     )
     // Combine multiple ticker training data sets
-    .then(multipleTickerLastDataSet => multipleTickerLastDataSet.reduce((accumulator, tickerLastTrainingSet) => {
-        Object
-            .keys(tickerLastTrainingSet)
-            .forEach(key => { // eg. key: SPY_OpenPrice_1
-                accumulator[key] = tickerLastTrainingSet[key];
+    .then(multipleTrainingData => {
+        const accumulator = [];
+        multipleTrainingData.forEach(trainingData => {
+            trainingData.forEach((trainingSet, index) => {
+
+                // Initialize new training set to be combined
+                if (!accumulator[index]) {
+                    accumulator[index] = {
+                        input: {},
+                        output: {},
+                    };
+                }
+
+                Object
+                    .keys(trainingSet.input)
+                    .forEach(key => { // eg. key: SPY_OpenPrice_1
+                        accumulator[index]['input'][key] = trainingSet.input[key];
+                    });
+
+                Object
+                    .keys(trainingSet.output)
+                    .forEach(key => { // eg. key: SPY_Long
+                        accumulator[index]['output'][key] = trainingSet.output[key];
+                    });
             });
+        });
         return accumulator;
-    }, {}))
-    .then(lastInput => app
-        .loadTrainedModel()
+    })
+    // Load from saved training
+    .then(trainingData => app
+        .continueTraining(trainingData)
         .then(model => {
-            console.log("Tomorrow's result:", model.run(lastInput));
+            console.log("Tomorrow's result:", model.run(ArrayFn.getLastElement(trainingData).input))
         })
     )
     .catch(error => console.log(`Error: ${error}`));

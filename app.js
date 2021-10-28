@@ -290,7 +290,7 @@ export default class App {
                     Object.assign(this.__trainingOptions, {keepNetworkIntact: true}),
                 );
 
-                return this.saveTraining(model);
+                return model;
             });
     }
 
