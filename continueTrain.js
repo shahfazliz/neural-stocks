@@ -48,8 +48,9 @@ Promise
     // Load from saved training
     .then(trainingData => app
         .continueTraining(trainingData)
-        .saveTraining(model)
         .then(model => {
+            app.saveTraining(model);
+
             const lastTrainingData = ArrayFn.getLastElement(trainingData);
             console.log('result:', model.run(lastTrainingData.input));
             console.log('actual:', lastTrainingData.output);
