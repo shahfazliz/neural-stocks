@@ -157,7 +157,7 @@ export default class App {
                 const volumeProfile = {};
                 const allPriceLevels = [];
                 for (let j = i; j < i + numberOfElement; j++) {
-                    const candlestick = candlestickCollection.getIndex(j);
+                    const candlestick = candlestickCollection.getByIndex(j);
 
                     const maxPrice = Math.ceil(candlestick.getHigh());
                     const minPrice = Math.floor(candlestick.getLow());
@@ -204,7 +204,7 @@ export default class App {
                 let subResult = {};
                 let replaceDateWithCount = 1;
                 for (let j = i; j < i + numberOfElement; j++) {
-                    const candlestick = candlestickCollection.getIndex(j);
+                    const candlestick = candlestickCollection.getByIndex(j);
                     // For debugging, see the dates
                     // subResult[`${tickerSymbol}_Timestamp_${replaceDateWithCount}`] = candlestick.getTimestamp();
                     subResult[`${tickerSymbol}_Day_${replaceDateWithCount}`] = candlestick.getDay();
@@ -227,10 +227,10 @@ export default class App {
                 let outputResult = this.isTickerOfInterest(tickerSymbol)
                     ? {
                         [`${tickerSymbol}_Long`]: candlestickCollection
-                            .getIndex(i + numberOfElement)
+                            .getByIndex(i + numberOfElement)
                             .getLong() ? 1 : 0,
                         [`${tickerSymbol}_Short`]: candlestickCollection
-                            .getIndex(i + numberOfElement)
+                            .getByIndex(i + numberOfElement)
                             .getShort() ? 1 : 0,
                     }
                     : {};
@@ -312,7 +312,7 @@ export default class App {
             const volumeProfile = {};
             const allPriceLevels = [];
             for (let k = totalCandlestick - numberOfElement; k < totalCandlestick; k++) {
-                const candlestick = candlestickCollection.getIndex(k);
+                const candlestick = candlestickCollection.getByIndex(k);
 
                 const maxPrice = Math.ceil(candlestick.getHigh());
                 const minPrice = Math.floor(candlestick.getLow());
@@ -359,7 +359,7 @@ export default class App {
             let result = {};
             let replaceDateWithCount = 1;
             for (let k = totalCandlestick - numberOfElement; k < totalCandlestick; k++) {
-                const candlestick = candlestickCollection.getIndex(k);
+                const candlestick = candlestickCollection.getByIndex(k);
                 // For debugging, see the dates
                 // result[`${tickerSymbol}_Timestamp_${replaceDateWithCount}`] = candlestick.getTimestamp();
                 result[`${tickerSymbol}_Day_${replaceDateWithCount}`] = candlestick.getDay();

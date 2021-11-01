@@ -44,6 +44,22 @@ export default class Candlestick {
         };
     }
 
+    setOpen(value) {
+        this.__open = value;
+    }
+    setClose(value) {
+        this.__close = value;
+    }
+    setHigh(value) {
+        this.__high = value;
+    }
+    setLow(value) {
+        this.__low = value;
+    }
+    setVolume(value) {
+        this.__volume = value;
+    }
+
     getTimestamp() {
         return this.__timestamp;
     }

@@ -21,22 +21,40 @@ export default class MomentAdaptor {
         return this;
     }
 
+    isSame(momentObj) {
+        return this
+            .__moment
+            .valueOf() === momentObj.valueOf();
+    }
+
+    isBefore(momentObj) {
+        return this
+            .__moment
+            .valueOf() < momentObj.valueOf();
+    }
+
     isSameOrBefore(momentObj) {
         return this
             .__moment
-            .isSameOrBefore(momentObj);
+            .valueOf() <= momentObj.valueOf();
+    }
+
+    isAfter(momentObj) {
+        return this
+            .__moment
+            .valueOf() > momentObj.valueOf();
     }
 
     isSameOrAfter(momentObj) {
         return this
             .__moment
-            .isSameOrAfter(momentObj);
+            .valueOf() >= momentObj.valueOf();
     }
 
-    format() {
+    format(strFormat) {
         return this
             .__moment
-            .format();
+            .format(strFormat);
     }
 
     day() {
@@ -83,5 +101,11 @@ export default class MomentAdaptor {
         }
 
         return this;
+    }
+
+    valueOf() {
+        return this
+            .__moment
+            .valueOf();
     }
 }

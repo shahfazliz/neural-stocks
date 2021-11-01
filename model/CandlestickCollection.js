@@ -26,7 +26,7 @@ export default class CandlestickCollection {
             })));
     }
 
-    getIndex(index) {
+    getByIndex(index) {
         return this.__collection[index];
     }
 
@@ -82,5 +82,85 @@ export default class CandlestickCollection {
 
     clone() {
         return new CandlestickCollection(JSON.parse(this.stringify()));
+    }
+
+    filter(callbackFunction) {
+        return this
+            .__collection
+            .filter(callbackFunction);
+    }
+
+    getIndexByDate(date) {
+        return this.__binarySearchCollectionByDate({
+            startIndex: 0,
+            endIndex: this.__collection.length - 1,
+            needle: date
+        });
+    }
+
+    __binarySearchCollectionByDate({
+        startIndex,
+        endIndex,
+        needle,
+    }) {
+        let middleIndex = Math.floor(startIndex + (endIndex - startIndex) / 2);
+        // console.log(this.__collection[middleIndex].getTimestamp());
+        let middleIndexCandlestickDate = new MomentAdaptor(
+            this.__collection[middleIndex].getTimestamp(),
+            'YYYY-MM-DD'
+        );
+
+        if (startIndex === endIndex
+            && !middleIndexCandlestickDate.isSame(needle)
+        ) {
+            return -1;
+        }
+        else if (middleIndexCandlestickDate.isSame(needle)) {
+            return middleIndex;
+        }
+        else if (middleIndexCandlestickDate.isAfter(needle)){
+            return this.__binarySearchCollectionByDate({
+                startIndex,
+                endIndex: middleIndex,
+                needle
+            });
+        }
+        else if (middleIndexCandlestickDate.isBefore(needle)) {
+            return this.__binarySearchCollectionByDate({
+                startIndex: middleIndex,
+                endIndex,
+                needle
+            });
+        }
+    }
+
+    updateByIndex(index, {
+        openPrice,
+        closePrice,
+        highPrice,
+        lowPrice,
+        volume,
+    }) {
+        const previousCandlestick = this.__collection[index - 1];
+
+        this.__collection[index].setVolume(volume);
+        this.__collection[index].setVolumeDiff(volume - previousCandlestick.getVolume());
+
+        this.__collection[index].setOpen(openPrice);
+        this.__collection[index].setOpenDiff(openPrice - previousCandlestick.getClose());
+
+        this.__collection[index].setClose(closePrice);
+        this.__collection[index].setCloseDiff(closePrice - previousCandlestick.getClose());
+
+        this.__collection[index].setHigh(highPrice);
+        this.__collection[index].setHighDiff(highPrice - previousCandlestick.getClose());
+
+        this.__collection[index].setLow(lowPrice);
+        this.__collection[index].setLowDiff(lowPrice - previousCandlestick.getClose());
+
+        this.__collection[index].setLong(closePrice - previousCandlestick.getLow() >= 0);
+        this.__collection[index].setShort(closePrice - previousCandlestick.getHigh() <= 0);
+
+        return this;
     }
 }
