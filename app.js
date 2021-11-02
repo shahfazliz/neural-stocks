@@ -11,7 +11,7 @@ export default class App {
         errorThresh: 0.025,
         hiddenLayers: [25, 25, 25, 25],
         iterations: 3000,
-        learningRate: 0.15,
+        learningRate: 0.1,
         log: true,
         logPeriod: 1,
     };

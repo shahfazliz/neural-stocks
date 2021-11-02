@@ -1,7 +1,5 @@
 import axios from 'axios';
 import fs from 'fs';
-import MomentAdaptor from '../util/MomentAdaptor.js';
-
 export default class MarketWatchAPI {
     __ignoreTickerSymbols = [];
 
