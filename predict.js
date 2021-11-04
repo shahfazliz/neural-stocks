@@ -28,7 +28,13 @@ Promise
     }, {}))
     .then(lastInput => app
         .loadTrainedModel()
-        .then(model => console.log("Today's result:", model.run(lastInput)))
+        .then(model => {
+            const result = model.run(lastInput);
+            Object
+                .keys(result)
+                .forEach(key => result[key] = result[key].toFixed(4));
+            console.log("Today's result:", result);
+        })
     )
     .catch(error => console.log(`Error: ${error}`));
 
@@ -99,7 +105,11 @@ Promise
     .then(trainingData => app
         .continueTraining(trainingData)
         .then(model => {
-            console.log("Tomorrow's result:", model.run(ArrayFn.getLastElement(trainingData).input))
+            const result = model.run(ArrayFn.getLastElement(trainingData).input);
+            Object
+                .keys(result)
+                .forEach(key => result[key] = result[key].toFixed(4));
+            console.log("Tomorrow's result:", result);
         })
     )
     .catch(error => console.log(`Error: ${error}`));
