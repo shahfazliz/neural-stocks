@@ -1,3 +1,4 @@
+import App from '../app.js';
 import axios from 'axios';
 import fs from 'fs';
 export default class MarketWatchAPI {
