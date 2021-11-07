@@ -6278,5 +6278,85 @@
         "Timestamp": "2021-10-26T04:00:00Z",
         "Volume": 3597262,
         "vw": 95.137979
+    },
+    {
+        "ClosePrice": 95.59,
+        "HighPrice": 99.44,
+        "LowPrice": 93.64,
+        "n": 52134,
+        "OpenPrice": 94.06,
+        "Timestamp": "2021-10-27T04:00:00Z",
+        "Volume": 3712423,
+        "vw": 97.001233
+    },
+    {
+        "ClosePrice": 100.18,
+        "HighPrice": 100.2,
+        "LowPrice": 94.8,
+        "n": 41694,
+        "OpenPrice": 95.5,
+        "Timestamp": "2021-10-28T04:00:00Z",
+        "Volume": 2609694,
+        "vw": 98.07761
+    },
+    {
+        "ClosePrice": 98.98,
+        "HighPrice": 101.52,
+        "LowPrice": 98.801,
+        "n": 37203,
+        "OpenPrice": 99.46,
+        "Timestamp": "2021-10-29T04:00:00Z",
+        "Volume": 2813835,
+        "vw": 99.971067
+    },
+    {
+        "ClosePrice": 99.57,
+        "HighPrice": 100.07,
+        "LowPrice": 97.81,
+        "n": 34931,
+        "OpenPrice": 99.02,
+        "Timestamp": "2021-11-01T04:00:00Z",
+        "Volume": 1980362,
+        "vw": 99.227501
+    },
+    {
+        "ClosePrice": 99.19,
+        "HighPrice": 100.17,
+        "LowPrice": 97.27,
+        "n": 32626,
+        "OpenPrice": 99.78,
+        "Timestamp": "2021-11-02T04:00:00Z",
+        "Volume": 1877907,
+        "vw": 98.617668
+    },
+    {
+        "ClosePrice": 104.51,
+        "HighPrice": 108.04,
+        "LowPrice": 99.66,
+        "n": 80334,
+        "OpenPrice": 99.69,
+        "Timestamp": "2021-11-03T04:00:00Z",
+        "Volume": 5452095,
+        "vw": 105.054085
+    },
+    {
+        "ClosePrice": 102.52,
+        "HighPrice": 107.2,
+        "LowPrice": 102.5,
+        "n": 38850,
+        "OpenPrice": 104.51,
+        "Timestamp": "2021-11-04T04:00:00Z",
+        "Volume": 2358197,
+        "vw": 104.78519
+    },
+    {
+        "ClosePrice": 99.77,
+        "HighPrice": 102.6,
+        "LowPrice": 99.12,
+        "n": 36731,
+        "OpenPrice": 101.99,
+        "Timestamp": "2021-11-05T04:00:00Z",
+        "Volume": 2242439,
+        "vw": 100.432811
     }
 ]

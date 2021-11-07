@@ -13128,5 +13128,85 @@
         "Timestamp": "2021-10-26T04:00:00Z",
         "Volume": 2916090,
         "vw": 6.666878
+    },
+    {
+        "ClosePrice": 6.5,
+        "HighPrice": 6.65,
+        "LowPrice": 6.49,
+        "n": 12103,
+        "OpenPrice": 6.6,
+        "Timestamp": "2021-10-27T04:00:00Z",
+        "Volume": 2000941,
+        "vw": 6.54975
+    },
+    {
+        "ClosePrice": 6.76,
+        "HighPrice": 7.12,
+        "LowPrice": 6.46,
+        "n": 16099,
+        "OpenPrice": 6.53,
+        "Timestamp": "2021-10-28T04:00:00Z",
+        "Volume": 3151621,
+        "vw": 6.781535
+    },
+    {
+        "ClosePrice": 6.79,
+        "HighPrice": 6.87,
+        "LowPrice": 6.71,
+        "n": 10057,
+        "OpenPrice": 6.75,
+        "Timestamp": "2021-10-29T04:00:00Z",
+        "Volume": 1841936,
+        "vw": 6.794331
+    },
+    {
+        "ClosePrice": 7.04,
+        "HighPrice": 7.07,
+        "LowPrice": 6.75,
+        "n": 12742,
+        "OpenPrice": 6.81,
+        "Timestamp": "2021-11-01T04:00:00Z",
+        "Volume": 2148891,
+        "vw": 6.946186
+    },
+    {
+        "ClosePrice": 7.17,
+        "HighPrice": 7.2199,
+        "LowPrice": 6.98,
+        "n": 11516,
+        "OpenPrice": 7.01,
+        "Timestamp": "2021-11-02T04:00:00Z",
+        "Volume": 2063731,
+        "vw": 7.100722
+    },
+    {
+        "ClosePrice": 7.23,
+        "HighPrice": 7.42,
+        "LowPrice": 7.09,
+        "n": 13979,
+        "OpenPrice": 7.17,
+        "Timestamp": "2021-11-03T04:00:00Z",
+        "Volume": 2673494,
+        "vw": 7.290444
+    },
+    {
+        "ClosePrice": 7.18,
+        "HighPrice": 7.45,
+        "LowPrice": 7.17,
+        "n": 9132,
+        "OpenPrice": 7.19,
+        "Timestamp": "2021-11-04T04:00:00Z",
+        "Volume": 1308239,
+        "vw": 7.306254
+    },
+    {
+        "ClosePrice": 7.02,
+        "HighPrice": 7.27,
+        "LowPrice": 7.02,
+        "n": 8523,
+        "OpenPrice": 7.22,
+        "Timestamp": "2021-11-05T04:00:00Z",
+        "Volume": 1451877,
+        "vw": 7.091422
     }
 ]

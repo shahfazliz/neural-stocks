@@ -13128,5 +13128,85 @@
         "Timestamp": "2021-10-26T04:00:00Z",
         "Volume": 14356963,
         "vw": 8.479174
+    },
+    {
+        "ClosePrice": 8.24,
+        "HighPrice": 8.59,
+        "LowPrice": 8.235,
+        "n": 30934,
+        "OpenPrice": 8.53,
+        "Timestamp": "2021-10-27T04:00:00Z",
+        "Volume": 5976421,
+        "vw": 8.334194
+    },
+    {
+        "ClosePrice": 8.48,
+        "HighPrice": 8.5,
+        "LowPrice": 8.165,
+        "n": 22476,
+        "OpenPrice": 8.26,
+        "Timestamp": "2021-10-28T04:00:00Z",
+        "Volume": 4359901,
+        "vw": 8.409808
+    },
+    {
+        "ClosePrice": 8.48,
+        "HighPrice": 8.6,
+        "LowPrice": 8.32,
+        "n": 22643,
+        "OpenPrice": 8.45,
+        "Timestamp": "2021-10-29T04:00:00Z",
+        "Volume": 4740234,
+        "vw": 8.470113
+    },
+    {
+        "ClosePrice": 8.71,
+        "HighPrice": 8.73,
+        "LowPrice": 8.495,
+        "n": 27262,
+        "OpenPrice": 8.53,
+        "Timestamp": "2021-11-01T04:00:00Z",
+        "Volume": 5537026,
+        "vw": 8.643457
+    },
+    {
+        "ClosePrice": 8.69,
+        "HighPrice": 8.725,
+        "LowPrice": 8.45,
+        "n": 24858,
+        "OpenPrice": 8.64,
+        "Timestamp": "2021-11-02T04:00:00Z",
+        "Volume": 5176963,
+        "vw": 8.659093
+    },
+    {
+        "ClosePrice": 9.1,
+        "HighPrice": 9.18,
+        "LowPrice": 8.69,
+        "n": 42239,
+        "OpenPrice": 8.73,
+        "Timestamp": "2021-11-03T04:00:00Z",
+        "Volume": 8863172,
+        "vw": 9.030963
+    },
+    {
+        "ClosePrice": 9,
+        "HighPrice": 9.22,
+        "LowPrice": 8.88,
+        "n": 42267,
+        "OpenPrice": 9.17,
+        "Timestamp": "2021-11-04T04:00:00Z",
+        "Volume": 9302328,
+        "vw": 9.018441
+    },
+    {
+        "ClosePrice": 9.29,
+        "HighPrice": 9.32,
+        "LowPrice": 9.06,
+        "n": 38698,
+        "OpenPrice": 9.13,
+        "Timestamp": "2021-11-05T04:00:00Z",
+        "Volume": 9143873,
+        "vw": 9.195455
     }
 ]

@@ -13128,5 +13128,85 @@
         "Timestamp": "2021-10-26T04:00:00Z",
         "Volume": 718491,
         "vw": 107.270446
+    },
+    {
+        "ClosePrice": 104.3,
+        "HighPrice": 107.39,
+        "LowPrice": 104.16,
+        "n": 24105,
+        "OpenPrice": 107.25,
+        "Timestamp": "2021-10-27T04:00:00Z",
+        "Volume": 1431239,
+        "vw": 104.845911
+    },
+    {
+        "ClosePrice": 104.71,
+        "HighPrice": 105.69,
+        "LowPrice": 104.4,
+        "n": 14994,
+        "OpenPrice": 105,
+        "Timestamp": "2021-10-28T04:00:00Z",
+        "Volume": 830514,
+        "vw": 104.965345
+    },
+    {
+        "ClosePrice": 105.46,
+        "HighPrice": 105.93,
+        "LowPrice": 104.15,
+        "n": 15915,
+        "OpenPrice": 104.4,
+        "Timestamp": "2021-10-29T04:00:00Z",
+        "Volume": 956139,
+        "vw": 105.371798
+    },
+    {
+        "ClosePrice": 105.39,
+        "HighPrice": 105.545,
+        "LowPrice": 103.38,
+        "n": 26722,
+        "OpenPrice": 105.38,
+        "Timestamp": "2021-11-01T04:00:00Z",
+        "Volume": 1826361,
+        "vw": 104.652869
+    },
+    {
+        "ClosePrice": 105.13,
+        "HighPrice": 106.46,
+        "LowPrice": 104.78,
+        "n": 25946,
+        "OpenPrice": 105.96,
+        "Timestamp": "2021-11-02T04:00:00Z",
+        "Volume": 1674399,
+        "vw": 105.488868
+    },
+    {
+        "ClosePrice": 110.87,
+        "HighPrice": 112.85,
+        "LowPrice": 106.81,
+        "n": 49296,
+        "OpenPrice": 107.11,
+        "Timestamp": "2021-11-03T04:00:00Z",
+        "Volume": 4087799,
+        "vw": 110.983888
+    },
+    {
+        "ClosePrice": 109.66,
+        "HighPrice": 111.17,
+        "LowPrice": 108.81,
+        "n": 26737,
+        "OpenPrice": 110.92,
+        "Timestamp": "2021-11-04T04:00:00Z",
+        "Volume": 2097580,
+        "vw": 109.977583
+    },
+    {
+        "ClosePrice": 107.29,
+        "HighPrice": 111.8,
+        "LowPrice": 107.1,
+        "n": 31300,
+        "OpenPrice": 111.14,
+        "Timestamp": "2021-11-05T04:00:00Z",
+        "Volume": 2128264,
+        "vw": 108.267562
     }
 ]

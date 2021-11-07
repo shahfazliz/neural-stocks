@@ -12838,5 +12838,85 @@
         "Timestamp": "2021-10-26T04:00:00Z",
         "Volume": 3013457,
         "vw": 77.135537
+    },
+    {
+        "ClosePrice": 73.05,
+        "HighPrice": 77.69,
+        "LowPrice": 73,
+        "n": 59101,
+        "OpenPrice": 76.5,
+        "Timestamp": "2021-10-27T04:00:00Z",
+        "Volume": 3908015,
+        "vw": 74.219404
+    },
+    {
+        "ClosePrice": 75.43,
+        "HighPrice": 75.75,
+        "LowPrice": 73.215,
+        "n": 29747,
+        "OpenPrice": 73.35,
+        "Timestamp": "2021-10-28T04:00:00Z",
+        "Volume": 2328669,
+        "vw": 74.838513
+    },
+    {
+        "ClosePrice": 74.91,
+        "HighPrice": 76.04,
+        "LowPrice": 74.09,
+        "n": 26152,
+        "OpenPrice": 74.8,
+        "Timestamp": "2021-10-29T04:00:00Z",
+        "Volume": 2327305,
+        "vw": 74.820887
+    },
+    {
+        "ClosePrice": 76.49,
+        "HighPrice": 76.68,
+        "LowPrice": 74.1,
+        "n": 35975,
+        "OpenPrice": 75.2,
+        "Timestamp": "2021-11-01T04:00:00Z",
+        "Volume": 2626562,
+        "vw": 75.905332
+    },
+    {
+        "ClosePrice": 75.04,
+        "HighPrice": 76.35,
+        "LowPrice": 73.0444,
+        "n": 41026,
+        "OpenPrice": 76.11,
+        "Timestamp": "2021-11-02T04:00:00Z",
+        "Volume": 3255135,
+        "vw": 74.439919
+    },
+    {
+        "ClosePrice": 76.71,
+        "HighPrice": 76.86,
+        "LowPrice": 73.68,
+        "n": 39189,
+        "OpenPrice": 75.27,
+        "Timestamp": "2021-11-03T04:00:00Z",
+        "Volume": 2716646,
+        "vw": 75.842629
+    },
+    {
+        "ClosePrice": 72.43,
+        "HighPrice": 75.66,
+        "LowPrice": 71.25,
+        "n": 67010,
+        "OpenPrice": 75.27,
+        "Timestamp": "2021-11-04T04:00:00Z",
+        "Volume": 5337781,
+        "vw": 72.973665
+    },
+    {
+        "ClosePrice": 68.55,
+        "HighPrice": 72.99,
+        "LowPrice": 68.46,
+        "n": 94118,
+        "OpenPrice": 72.83,
+        "Timestamp": "2021-11-05T04:00:00Z",
+        "Volume": 8623305,
+        "vw": 69.633259
     }
 ]

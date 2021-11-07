@@ -13128,5 +13128,85 @@
         "Timestamp": "2021-10-26T04:00:00Z",
         "Volume": 1385512,
         "vw": 2.777089
+    },
+    {
+        "ClosePrice": 2.81,
+        "HighPrice": 2.8276,
+        "LowPrice": 2.72,
+        "n": 6761,
+        "OpenPrice": 2.75,
+        "Timestamp": "2021-10-27T04:00:00Z",
+        "Volume": 948436,
+        "vw": 2.782186
+    },
+    {
+        "ClosePrice": 2.93,
+        "HighPrice": 2.9866,
+        "LowPrice": 2.78,
+        "n": 8860,
+        "OpenPrice": 2.82,
+        "Timestamp": "2021-10-28T04:00:00Z",
+        "Volume": 1159694,
+        "vw": 2.882264
+    },
+    {
+        "ClosePrice": 2.98,
+        "HighPrice": 3,
+        "LowPrice": 2.8725,
+        "n": 10130,
+        "OpenPrice": 2.9,
+        "Timestamp": "2021-10-29T04:00:00Z",
+        "Volume": 1607134,
+        "vw": 2.962893
+    },
+    {
+        "ClosePrice": 3.11,
+        "HighPrice": 3.13,
+        "LowPrice": 2.97,
+        "n": 12439,
+        "OpenPrice": 2.97,
+        "Timestamp": "2021-11-01T04:00:00Z",
+        "Volume": 1859554,
+        "vw": 3.070372
+    },
+    {
+        "ClosePrice": 3.11,
+        "HighPrice": 3.11,
+        "LowPrice": 2.98,
+        "n": 7895,
+        "OpenPrice": 3.06,
+        "Timestamp": "2021-11-02T04:00:00Z",
+        "Volume": 1165862,
+        "vw": 3.035379
+    },
+    {
+        "ClosePrice": 3.19,
+        "HighPrice": 3.21,
+        "LowPrice": 2.99,
+        "n": 9603,
+        "OpenPrice": 3.025,
+        "Timestamp": "2021-11-03T04:00:00Z",
+        "Volume": 1525248,
+        "vw": 3.147134
+    },
+    {
+        "ClosePrice": 3.2,
+        "HighPrice": 3.2,
+        "LowPrice": 3.09,
+        "n": 11133,
+        "OpenPrice": 3.19,
+        "Timestamp": "2021-11-04T04:00:00Z",
+        "Volume": 1633172,
+        "vw": 3.144777
+    },
+    {
+        "ClosePrice": 2.93,
+        "HighPrice": 3.22,
+        "LowPrice": 2.82,
+        "n": 15452,
+        "OpenPrice": 3.16,
+        "Timestamp": "2021-11-05T04:00:00Z",
+        "Volume": 2658661,
+        "vw": 3.004635
     }
 ]

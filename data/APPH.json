@@ -1868,5 +1868,85 @@
         "Timestamp": "2021-10-26T04:00:00Z",
         "Volume": 1527431,
         "vw": 5.188358
+    },
+    {
+        "ClosePrice": 5.13,
+        "HighPrice": 5.325,
+        "LowPrice": 5.105,
+        "n": 7584,
+        "OpenPrice": 5.16,
+        "Timestamp": "2021-10-27T04:00:00Z",
+        "Volume": 918263,
+        "vw": 5.19268
+    },
+    {
+        "ClosePrice": 5.95,
+        "HighPrice": 6.04,
+        "LowPrice": 5.15,
+        "n": 12848,
+        "OpenPrice": 5.22,
+        "Timestamp": "2021-10-28T04:00:00Z",
+        "Volume": 2758588,
+        "vw": 5.733001
+    },
+    {
+        "ClosePrice": 6.02,
+        "HighPrice": 6.45,
+        "LowPrice": 5.9,
+        "n": 14350,
+        "OpenPrice": 5.94,
+        "Timestamp": "2021-10-29T04:00:00Z",
+        "Volume": 2992441,
+        "vw": 6.171923
+    },
+    {
+        "ClosePrice": 6.15,
+        "HighPrice": 6.34,
+        "LowPrice": 6.06,
+        "n": 14401,
+        "OpenPrice": 6.09,
+        "Timestamp": "2021-11-01T04:00:00Z",
+        "Volume": 1916147,
+        "vw": 6.182291
+    },
+    {
+        "ClosePrice": 5.76,
+        "HighPrice": 6.21,
+        "LowPrice": 5.64,
+        "n": 12196,
+        "OpenPrice": 6.2,
+        "Timestamp": "2021-11-02T04:00:00Z",
+        "Volume": 1678132,
+        "vw": 5.796809
+    },
+    {
+        "ClosePrice": 5.87,
+        "HighPrice": 6.1,
+        "LowPrice": 5.67,
+        "n": 9902,
+        "OpenPrice": 5.78,
+        "Timestamp": "2021-11-03T04:00:00Z",
+        "Volume": 1652732,
+        "vw": 5.907471
+    },
+    {
+        "ClosePrice": 5.6,
+        "HighPrice": 5.97,
+        "LowPrice": 5.5,
+        "n": 8998,
+        "OpenPrice": 5.88,
+        "Timestamp": "2021-11-04T04:00:00Z",
+        "Volume": 1166938,
+        "vw": 5.633766
+    },
+    {
+        "ClosePrice": 5.54,
+        "HighPrice": 5.73,
+        "LowPrice": 5.46,
+        "n": 10242,
+        "OpenPrice": 5.66,
+        "Timestamp": "2021-11-05T04:00:00Z",
+        "Volume": 1404344,
+        "vw": 5.578854
     }
 ]
