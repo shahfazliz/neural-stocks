@@ -11,10 +11,10 @@
     },
     {
         "ClosePrice": 33.77,
-        "HighPrice": 34.2152,
-        "LowPrice": 33.6201,
+        "HighPrice": 34.22,
+        "LowPrice": 33.62,
         "n": 383,
-        "OpenPrice": 34.2152,
+        "OpenPrice": 34.22,
         "Timestamp": "2016-08-11T04:00:00Z",
         "Volume": 19380,
         "vw": 33.758107
@@ -22,7 +22,7 @@
     {
         "ClosePrice": 33.88,
         "HighPrice": 34.11,
-        "LowPrice": 33.7945,
+        "LowPrice": 33.79,
         "n": 386,
         "OpenPrice": 34.11,
         "Timestamp": "2016-08-12T04:00:00Z",
@@ -30,7 +30,7 @@
         "vw": 33.89671
     },
     {
-        "ClosePrice": 33.8401,
+        "ClosePrice": 33.84,
         "HighPrice": 34.09,
         "LowPrice": 33.83,
         "n": 341,
@@ -42,7 +42,7 @@
     {
         "ClosePrice": 33.43,
         "HighPrice": 33.63,
-        "LowPrice": 33.4299,
+        "LowPrice": 33.43,
         "n": 340,
         "OpenPrice": 33.63,
         "Timestamp": "2016-08-16T04:00:00Z",
@@ -52,7 +52,7 @@
     {
         "ClosePrice": 33.57,
         "HighPrice": 33.6,
-        "LowPrice": 33.2595,
+        "LowPrice": 33.26,
         "n": 344,
         "OpenPrice": 33.6,
         "Timestamp": "2016-08-17T04:00:00Z",
@@ -111,7 +111,7 @@
     },
     {
         "ClosePrice": 33.43,
-        "HighPrice": 33.6399,
+        "HighPrice": 33.64,
         "LowPrice": 33.13,
         "n": 395,
         "OpenPrice": 33.13,
@@ -132,7 +132,7 @@
     {
         "ClosePrice": 33.43,
         "HighPrice": 33.48,
-        "LowPrice": 33.0693,
+        "LowPrice": 33.07,
         "n": 622,
         "OpenPrice": 33.13,
         "Timestamp": "2016-08-29T04:00:00Z",
@@ -301,7 +301,7 @@
     },
     {
         "ClosePrice": 33.19,
-        "HighPrice": 33.2499,
+        "HighPrice": 33.25,
         "LowPrice": 32.77,
         "n": 5699,
         "OpenPrice": 32.77,
@@ -382,7 +382,7 @@
     {
         "ClosePrice": 31.65,
         "HighPrice": 32.15,
-        "LowPrice": 31.4725,
+        "LowPrice": 31.47,
         "n": 11120,
         "OpenPrice": 32.15,
         "Timestamp": "2016-10-04T04:00:00Z",
@@ -392,7 +392,7 @@
     {
         "ClosePrice": 31.06,
         "HighPrice": 31.85,
-        "LowPrice": 30.955,
+        "LowPrice": 30.95,
         "n": 12594,
         "OpenPrice": 31.66,
         "Timestamp": "2016-10-05T04:00:00Z",
@@ -421,7 +421,7 @@
     },
     {
         "ClosePrice": 31.21,
-        "HighPrice": 31.315,
+        "HighPrice": 31.32,
         "LowPrice": 31,
         "n": 6839,
         "OpenPrice": 31,
@@ -432,7 +432,7 @@
     {
         "ClosePrice": 30.92,
         "HighPrice": 31.2,
-        "LowPrice": 30.8234,
+        "LowPrice": 30.82,
         "n": 7248,
         "OpenPrice": 31.06,
         "Timestamp": "2016-10-11T04:00:00Z",
@@ -461,7 +461,7 @@
     },
     {
         "ClosePrice": 31.44,
-        "HighPrice": 31.7299,
+        "HighPrice": 31.73,
         "LowPrice": 31.35,
         "n": 7992,
         "OpenPrice": 31.36,
@@ -482,7 +482,7 @@
     {
         "ClosePrice": 31.61,
         "HighPrice": 31.81,
-        "LowPrice": 31.5442,
+        "LowPrice": 31.54,
         "n": 7381,
         "OpenPrice": 31.65,
         "Timestamp": "2016-10-18T04:00:00Z",
@@ -502,7 +502,7 @@
     {
         "ClosePrice": 31.62,
         "HighPrice": 31.83,
-        "LowPrice": 31.465,
+        "LowPrice": 31.46,
         "n": 4902,
         "OpenPrice": 31.57,
         "Timestamp": "2016-10-20T04:00:00Z",
@@ -522,7 +522,7 @@
     {
         "ClosePrice": 31.64,
         "HighPrice": 31.96,
-        "LowPrice": 31.541,
+        "LowPrice": 31.54,
         "n": 5747,
         "OpenPrice": 31.65,
         "Timestamp": "2016-10-24T04:00:00Z",
@@ -552,7 +552,7 @@
     {
         "ClosePrice": 30.45,
         "HighPrice": 31.11,
-        "LowPrice": 30.3553,
+        "LowPrice": 30.36,
         "n": 5581,
         "OpenPrice": 31.11,
         "Timestamp": "2016-10-27T04:00:00Z",
@@ -561,7 +561,7 @@
     },
     {
         "ClosePrice": 30.56,
-        "HighPrice": 30.7847,
+        "HighPrice": 30.78,
         "LowPrice": 30.43,
         "n": 5749,
         "OpenPrice": 30.55,
@@ -572,7 +572,7 @@
     {
         "ClosePrice": 30.95,
         "HighPrice": 30.98,
-        "LowPrice": 30.522,
+        "LowPrice": 30.52,
         "n": 4569,
         "OpenPrice": 30.61,
         "Timestamp": "2016-10-31T04:00:00Z",
@@ -581,8 +581,8 @@
     },
     {
         "ClosePrice": 30.34,
-        "HighPrice": 30.901,
-        "LowPrice": 30.205,
+        "HighPrice": 30.9,
+        "LowPrice": 30.2,
         "n": 7165,
         "OpenPrice": 30.87,
         "Timestamp": "2016-11-01T04:00:00Z",
@@ -641,7 +641,7 @@
     },
     {
         "ClosePrice": 29.99,
-        "HighPrice": 30.2437,
+        "HighPrice": 30.24,
         "LowPrice": 29.48,
         "n": 15937,
         "OpenPrice": 29.68,
@@ -652,7 +652,7 @@
     {
         "ClosePrice": 29.54,
         "HighPrice": 29.87,
-        "LowPrice": 29.0735,
+        "LowPrice": 29.07,
         "n": 19664,
         "OpenPrice": 29.85,
         "Timestamp": "2016-11-10T05:00:00Z",
@@ -761,7 +761,7 @@
     },
     {
         "ClosePrice": 30.17,
-        "HighPrice": 30.385,
+        "HighPrice": 30.39,
         "LowPrice": 30,
         "n": 7766,
         "OpenPrice": 29.92,
@@ -781,7 +781,7 @@
     },
     {
         "ClosePrice": 30.01,
-        "HighPrice": 30.255,
+        "HighPrice": 30.25,
         "LowPrice": 29.9,
         "n": 7585,
         "OpenPrice": 30.1,
@@ -791,7 +791,7 @@
     },
     {
         "ClosePrice": 29.55,
-        "HighPrice": 29.9143,
+        "HighPrice": 29.91,
         "LowPrice": 29.41,
         "n": 8891,
         "OpenPrice": 29.82,
@@ -801,7 +801,7 @@
     },
     {
         "ClosePrice": 29.83,
-        "HighPrice": 30.121,
+        "HighPrice": 30.12,
         "LowPrice": 29.55,
         "n": 6853,
         "OpenPrice": 29.64,
@@ -811,8 +811,8 @@
     },
     {
         "ClosePrice": 30.07,
-        "HighPrice": 30.105,
-        "LowPrice": 29.765,
+        "HighPrice": 30.11,
+        "LowPrice": 29.77,
         "n": 5625,
         "OpenPrice": 29.83,
         "Timestamp": "2016-12-05T05:00:00Z",
@@ -861,7 +861,7 @@
     },
     {
         "ClosePrice": 31.29,
-        "HighPrice": 31.304,
+        "HighPrice": 31.3,
         "LowPrice": 30.79,
         "n": 7337,
         "OpenPrice": 30.85,
@@ -872,7 +872,7 @@
     {
         "ClosePrice": 31.37,
         "HighPrice": 31.48,
-        "LowPrice": 31.1468,
+        "LowPrice": 31.15,
         "n": 7188,
         "OpenPrice": 31.41,
         "Timestamp": "2016-12-13T05:00:00Z",
@@ -891,7 +891,7 @@
     },
     {
         "ClosePrice": 30.57,
-        "HighPrice": 30.925,
+        "HighPrice": 30.93,
         "LowPrice": 30.51,
         "n": 10214,
         "OpenPrice": 30.73,
@@ -922,7 +922,7 @@
     {
         "ClosePrice": 30.73,
         "HighPrice": 30.87,
-        "LowPrice": 30.555,
+        "LowPrice": 30.55,
         "n": 6752,
         "OpenPrice": 30.66,
         "Timestamp": "2016-12-20T05:00:00Z",
@@ -941,8 +941,8 @@
     },
     {
         "ClosePrice": 30.3,
-        "HighPrice": 30.3236,
-        "LowPrice": 30.0058,
+        "HighPrice": 30.32,
+        "LowPrice": 30.01,
         "n": 5422,
         "OpenPrice": 30.24,
         "Timestamp": "2016-12-22T05:00:00Z",
@@ -972,7 +972,7 @@
     {
         "ClosePrice": 30.18,
         "HighPrice": 30.46,
-        "LowPrice": 30.115,
+        "LowPrice": 30.11,
         "n": 7913,
         "OpenPrice": 30.39,
         "Timestamp": "2016-12-28T05:00:00Z",
@@ -981,7 +981,7 @@
     },
     {
         "ClosePrice": 30.46,
-        "HighPrice": 30.569,
+        "HighPrice": 30.57,
         "LowPrice": 30.13,
         "n": 5658,
         "OpenPrice": 30.21,
@@ -1001,8 +1001,8 @@
     },
     {
         "ClosePrice": 30.85,
-        "HighPrice": 30.979,
-        "LowPrice": 30.6339,
+        "HighPrice": 30.98,
+        "LowPrice": 30.63,
         "n": 9205,
         "OpenPrice": 30.86,
         "Timestamp": "2017-01-03T05:00:00Z",
@@ -1011,7 +1011,7 @@
     },
     {
         "ClosePrice": 31.24,
-        "HighPrice": 31.295,
+        "HighPrice": 31.3,
         "LowPrice": 30.86,
         "n": 6307,
         "OpenPrice": 30.87,
@@ -1022,7 +1022,7 @@
     {
         "ClosePrice": 31.4,
         "HighPrice": 31.42,
-        "LowPrice": 30.8341,
+        "LowPrice": 30.83,
         "n": 8081,
         "OpenPrice": 31.08,
         "Timestamp": "2017-01-05T05:00:00Z",
@@ -1042,7 +1042,7 @@
     {
         "ClosePrice": 31.2,
         "HighPrice": 31.47,
-        "LowPrice": 31.1601,
+        "LowPrice": 31.16,
         "n": 7544,
         "OpenPrice": 31.44,
         "Timestamp": "2017-01-09T05:00:00Z",
@@ -1061,7 +1061,7 @@
     },
     {
         "ClosePrice": 30.64,
-        "HighPrice": 30.8643,
+        "HighPrice": 30.86,
         "LowPrice": 30.62,
         "n": 6968,
         "OpenPrice": 30.76,
@@ -1071,7 +1071,7 @@
     },
     {
         "ClosePrice": 30.76,
-        "HighPrice": 30.795,
+        "HighPrice": 30.8,
         "LowPrice": 30.39,
         "n": 5595,
         "OpenPrice": 30.54,
@@ -1102,7 +1102,7 @@
     {
         "ClosePrice": 31.01,
         "HighPrice": 31.14,
-        "LowPrice": 30.8901,
+        "LowPrice": 30.89,
         "n": 5857,
         "OpenPrice": 30.98,
         "Timestamp": "2017-01-18T05:00:00Z",
@@ -1112,7 +1112,7 @@
     {
         "ClosePrice": 30.71,
         "HighPrice": 30.91,
-        "LowPrice": 30.645,
+        "LowPrice": 30.64,
         "n": 5530,
         "OpenPrice": 30.88,
         "Timestamp": "2017-01-19T05:00:00Z",
@@ -1152,7 +1152,7 @@
     {
         "ClosePrice": 30.91,
         "HighPrice": 31.25,
-        "LowPrice": 30.8233,
+        "LowPrice": 30.82,
         "n": 5992,
         "OpenPrice": 31.25,
         "Timestamp": "2017-01-25T05:00:00Z",
@@ -1162,7 +1162,7 @@
     {
         "ClosePrice": 30.89,
         "HighPrice": 31.1,
-        "LowPrice": 30.8601,
+        "LowPrice": 30.86,
         "n": 5703,
         "OpenPrice": 30.91,
         "Timestamp": "2017-01-26T05:00:00Z",
@@ -1242,7 +1242,7 @@
     {
         "ClosePrice": 30.68,
         "HighPrice": 30.87,
-        "LowPrice": 30.645,
+        "LowPrice": 30.64,
         "n": 5614,
         "OpenPrice": 30.8,
         "Timestamp": "2017-02-07T05:00:00Z",
@@ -1251,7 +1251,7 @@
     },
     {
         "ClosePrice": 30.94,
-        "HighPrice": 31.005,
+        "HighPrice": 31,
         "LowPrice": 30.64,
         "n": 4766,
         "OpenPrice": 30.64,
@@ -1291,7 +1291,7 @@
     },
     {
         "ClosePrice": 31.27,
-        "HighPrice": 31.372,
+        "HighPrice": 31.37,
         "LowPrice": 30.99,
         "n": 6823,
         "OpenPrice": 31.35,
@@ -1322,7 +1322,7 @@
     {
         "ClosePrice": 31.4,
         "HighPrice": 31.49,
-        "LowPrice": 31.215,
+        "LowPrice": 31.21,
         "n": 7076,
         "OpenPrice": 31.28,
         "Timestamp": "2017-02-17T05:00:00Z",
@@ -1331,7 +1331,7 @@
     },
     {
         "ClosePrice": 31.83,
-        "HighPrice": 31.865,
+        "HighPrice": 31.86,
         "LowPrice": 31.34,
         "n": 6907,
         "OpenPrice": 31.34,
@@ -1361,7 +1361,7 @@
     },
     {
         "ClosePrice": 32.08,
-        "HighPrice": 32.095,
+        "HighPrice": 32.09,
         "LowPrice": 31.77,
         "n": 6266,
         "OpenPrice": 31.92,
@@ -1371,7 +1371,7 @@
     },
     {
         "ClosePrice": 32.24,
-        "HighPrice": 32.3501,
+        "HighPrice": 32.35,
         "LowPrice": 32.09,
         "n": 5453,
         "OpenPrice": 32.09,
@@ -1380,9 +1380,9 @@
         "vw": 32.244186
     },
     {
-        "ClosePrice": 32.145,
-        "HighPrice": 32.2866,
-        "LowPrice": 32.0727,
+        "ClosePrice": 32.15,
+        "HighPrice": 32.29,
+        "LowPrice": 32.07,
         "n": 6262,
         "OpenPrice": 32.15,
         "Timestamp": "2017-02-28T05:00:00Z",
@@ -1391,7 +1391,7 @@
     },
     {
         "ClosePrice": 32.06,
-        "HighPrice": 32.2475,
+        "HighPrice": 32.25,
         "LowPrice": 31.92,
         "n": 9268,
         "OpenPrice": 32.06,
@@ -1422,7 +1422,7 @@
     {
         "ClosePrice": 31.73,
         "HighPrice": 31.8,
-        "LowPrice": 31.585,
+        "LowPrice": 31.59,
         "n": 7613,
         "OpenPrice": 31.72,
         "Timestamp": "2017-03-06T05:00:00Z",
@@ -1432,7 +1432,7 @@
     {
         "ClosePrice": 31.62,
         "HighPrice": 31.72,
-        "LowPrice": 31.4544,
+        "LowPrice": 31.45,
         "n": 5964,
         "OpenPrice": 31.71,
         "Timestamp": "2017-03-07T05:00:00Z",
@@ -1442,7 +1442,7 @@
     {
         "ClosePrice": 31.15,
         "HighPrice": 31.54,
-        "LowPrice": 31.135,
+        "LowPrice": 31.14,
         "n": 5316,
         "OpenPrice": 31.38,
         "Timestamp": "2017-03-08T05:00:00Z",
@@ -1451,7 +1451,7 @@
     },
     {
         "ClosePrice": 30.75,
-        "HighPrice": 31.265,
+        "HighPrice": 31.27,
         "LowPrice": 30.7,
         "n": 6516,
         "OpenPrice": 31.14,
@@ -1471,8 +1471,8 @@
     },
     {
         "ClosePrice": 30.76,
-        "HighPrice": 30.9067,
-        "LowPrice": 30.665,
+        "HighPrice": 30.91,
+        "LowPrice": 30.66,
         "n": 6614,
         "OpenPrice": 30.72,
         "Timestamp": "2017-03-13T04:00:00Z",
@@ -1511,7 +1511,7 @@
     },
     {
         "ClosePrice": 31.1,
-        "HighPrice": 31.2469,
+        "HighPrice": 31.25,
         "LowPrice": 31.01,
         "n": 6126,
         "OpenPrice": 31.08,
@@ -1521,7 +1521,7 @@
     },
     {
         "ClosePrice": 31.13,
-        "HighPrice": 31.245,
+        "HighPrice": 31.25,
         "LowPrice": 31.05,
         "n": 5491,
         "OpenPrice": 31.1,
@@ -1532,7 +1532,7 @@
     {
         "ClosePrice": 31.08,
         "HighPrice": 31.34,
-        "LowPrice": 31.065,
+        "LowPrice": 31.07,
         "n": 9271,
         "OpenPrice": 31.2,
         "Timestamp": "2017-03-21T04:00:00Z",
@@ -1541,7 +1541,7 @@
     },
     {
         "ClosePrice": 31.15,
-        "HighPrice": 31.177,
+        "HighPrice": 31.18,
         "LowPrice": 30.86,
         "n": 9437,
         "OpenPrice": 31.14,
@@ -1551,7 +1551,7 @@
     },
     {
         "ClosePrice": 31.38,
-        "HighPrice": 31.565,
+        "HighPrice": 31.57,
         "LowPrice": 31.1,
         "n": 6847,
         "OpenPrice": 31.1,
@@ -1562,7 +1562,7 @@
     {
         "ClosePrice": 31.35,
         "HighPrice": 31.53,
-        "LowPrice": 31.2682,
+        "LowPrice": 31.27,
         "n": 9106,
         "OpenPrice": 31.44,
         "Timestamp": "2017-03-24T04:00:00Z",
@@ -1571,8 +1571,8 @@
     },
     {
         "ClosePrice": 31.1,
-        "HighPrice": 31.395,
-        "LowPrice": 31.035,
+        "HighPrice": 31.39,
+        "LowPrice": 31.04,
         "n": 8523,
         "OpenPrice": 31.28,
         "Timestamp": "2017-03-27T04:00:00Z",
@@ -1592,7 +1592,7 @@
     {
         "ClosePrice": 31.39,
         "HighPrice": 31.4,
-        "LowPrice": 31.1601,
+        "LowPrice": 31.16,
         "n": 5261,
         "OpenPrice": 31.2,
         "Timestamp": "2017-03-29T04:00:00Z",
@@ -1602,7 +1602,7 @@
     {
         "ClosePrice": 31.46,
         "HighPrice": 31.49,
-        "LowPrice": 31.1254,
+        "LowPrice": 31.13,
         "n": 5358,
         "OpenPrice": 31.32,
         "Timestamp": "2017-03-30T04:00:00Z",
@@ -1622,7 +1622,7 @@
     {
         "ClosePrice": 31.64,
         "HighPrice": 31.7,
-        "LowPrice": 31.515,
+        "LowPrice": 31.52,
         "n": 6575,
         "OpenPrice": 31.66,
         "Timestamp": "2017-04-03T04:00:00Z",
@@ -1632,7 +1632,7 @@
     {
         "ClosePrice": 31.55,
         "HighPrice": 31.8,
-        "LowPrice": 31.5261,
+        "LowPrice": 31.53,
         "n": 5574,
         "OpenPrice": 31.64,
         "Timestamp": "2017-04-04T04:00:00Z",
@@ -1681,8 +1681,8 @@
     },
     {
         "ClosePrice": 32.19,
-        "HighPrice": 32.2489,
-        "LowPrice": 32.025,
+        "HighPrice": 32.25,
+        "LowPrice": 32.02,
         "n": 6323,
         "OpenPrice": 32.06,
         "Timestamp": "2017-04-11T04:00:00Z",
@@ -1701,7 +1701,7 @@
     },
     {
         "ClosePrice": 32.07,
-        "HighPrice": 32.2162,
+        "HighPrice": 32.22,
         "LowPrice": 32.05,
         "n": 6368,
         "OpenPrice": 32.14,
@@ -1731,8 +1731,8 @@
     },
     {
         "ClosePrice": 32.45,
-        "HighPrice": 32.5906,
-        "LowPrice": 32.405,
+        "HighPrice": 32.59,
+        "LowPrice": 32.41,
         "n": 5250,
         "OpenPrice": 32.55,
         "Timestamp": "2017-04-19T04:00:00Z",
@@ -1772,7 +1772,7 @@
     {
         "ClosePrice": 32.08,
         "HighPrice": 32.13,
-        "LowPrice": 31.955,
+        "LowPrice": 31.95,
         "n": 5584,
         "OpenPrice": 32.07,
         "Timestamp": "2017-04-25T04:00:00Z",
@@ -1811,7 +1811,7 @@
     },
     {
         "ClosePrice": 31.85,
-        "HighPrice": 31.9074,
+        "HighPrice": 31.91,
         "LowPrice": 31.58,
         "n": 7829,
         "OpenPrice": 31.7,
@@ -1821,7 +1821,7 @@
     },
     {
         "ClosePrice": 31.86,
-        "HighPrice": 31.971,
+        "HighPrice": 31.97,
         "LowPrice": 31.72,
         "n": 6327,
         "OpenPrice": 31.82,
@@ -1841,7 +1841,7 @@
     },
     {
         "ClosePrice": 31.5,
-        "HighPrice": 31.5334,
+        "HighPrice": 31.53,
         "LowPrice": 31.14,
         "n": 4689,
         "OpenPrice": 31.31,
@@ -1861,7 +1861,7 @@
     },
     {
         "ClosePrice": 31.58,
-        "HighPrice": 31.8335,
+        "HighPrice": 31.83,
         "LowPrice": 31.42,
         "n": 4290,
         "OpenPrice": 31.71,
@@ -1891,7 +1891,7 @@
     },
     {
         "ClosePrice": 31.48,
-        "HighPrice": 31.5099,
+        "HighPrice": 31.51,
         "LowPrice": 31.23,
         "n": 7843,
         "OpenPrice": 31.49,
@@ -1912,7 +1912,7 @@
     {
         "ClosePrice": 31.5,
         "HighPrice": 31.66,
-        "LowPrice": 31.3542,
+        "LowPrice": 31.35,
         "n": 6815,
         "OpenPrice": 31.36,
         "Timestamp": "2017-05-15T04:00:00Z",
@@ -1922,7 +1922,7 @@
     {
         "ClosePrice": 31.34,
         "HighPrice": 31.49,
-        "LowPrice": 31.265,
+        "LowPrice": 31.27,
         "n": 5382,
         "OpenPrice": 31.48,
         "Timestamp": "2017-05-16T04:00:00Z",
@@ -1941,7 +1941,7 @@
     },
     {
         "ClosePrice": 31.6,
-        "HighPrice": 31.665,
+        "HighPrice": 31.66,
         "LowPrice": 31.29,
         "n": 8627,
         "OpenPrice": 31.45,
@@ -1991,7 +1991,7 @@
     },
     {
         "ClosePrice": 32.2,
-        "HighPrice": 32.3482,
+        "HighPrice": 32.35,
         "LowPrice": 32.03,
         "n": 3740,
         "OpenPrice": 32.14,
@@ -2001,7 +2001,7 @@
     },
     {
         "ClosePrice": 32,
-        "HighPrice": 32.2684,
+        "HighPrice": 32.27,
         "LowPrice": 31.92,
         "n": 5597,
         "OpenPrice": 32.21,
@@ -2032,7 +2032,7 @@
     {
         "ClosePrice": 31.96,
         "HighPrice": 32.01,
-        "LowPrice": 31.7246,
+        "LowPrice": 31.72,
         "n": 5692,
         "OpenPrice": 31.87,
         "Timestamp": "2017-06-01T04:00:00Z",
@@ -2041,7 +2041,7 @@
     },
     {
         "ClosePrice": 32.24,
-        "HighPrice": 32.3065,
+        "HighPrice": 32.31,
         "LowPrice": 32.07,
         "n": 4232,
         "OpenPrice": 32.14,
@@ -2122,7 +2122,7 @@
     {
         "ClosePrice": 32.57,
         "HighPrice": 32.79,
-        "LowPrice": 32.465,
+        "LowPrice": 32.47,
         "n": 6399,
         "OpenPrice": 32.74,
         "Timestamp": "2017-06-14T04:00:00Z",
@@ -2131,7 +2131,7 @@
     },
     {
         "ClosePrice": 32.73,
-        "HighPrice": 32.8233,
+        "HighPrice": 32.82,
         "LowPrice": 32.35,
         "n": 4442,
         "OpenPrice": 32.43,
@@ -2162,7 +2162,7 @@
     {
         "ClosePrice": 32.4,
         "HighPrice": 32.57,
-        "LowPrice": 32.1838,
+        "LowPrice": 32.18,
         "n": 5384,
         "OpenPrice": 32.49,
         "Timestamp": "2017-06-20T04:00:00Z",
@@ -2182,7 +2182,7 @@
     {
         "ClosePrice": 32.35,
         "HighPrice": 32.45,
-        "LowPrice": 32.2032,
+        "LowPrice": 32.2,
         "n": 8268,
         "OpenPrice": 32.29,
         "Timestamp": "2017-06-22T04:00:00Z",
@@ -2192,7 +2192,7 @@
     {
         "ClosePrice": 32.49,
         "HighPrice": 32.62,
-        "LowPrice": 32.3455,
+        "LowPrice": 32.35,
         "n": 11882,
         "OpenPrice": 32.35,
         "Timestamp": "2017-06-23T04:00:00Z",
@@ -2201,7 +2201,7 @@
     },
     {
         "ClosePrice": 32.64,
-        "HighPrice": 32.7764,
+        "HighPrice": 32.78,
         "LowPrice": 32.54,
         "n": 6509,
         "OpenPrice": 32.54,
@@ -2211,7 +2211,7 @@
     },
     {
         "ClosePrice": 32.51,
-        "HighPrice": 32.835,
+        "HighPrice": 32.84,
         "LowPrice": 32.51,
         "n": 6791,
         "OpenPrice": 32.55,
@@ -2231,7 +2231,7 @@
     },
     {
         "ClosePrice": 32.22,
-        "HighPrice": 32.4196,
+        "HighPrice": 32.42,
         "LowPrice": 32.16,
         "n": 9338,
         "OpenPrice": 32.34,
@@ -2321,7 +2321,7 @@
     },
     {
         "ClosePrice": 31.88,
-        "HighPrice": 31.935,
+        "HighPrice": 31.93,
         "LowPrice": 31.77,
         "n": 3581,
         "OpenPrice": 31.83,
@@ -2411,7 +2411,7 @@
     },
     {
         "ClosePrice": 32.69,
-        "HighPrice": 32.7695,
+        "HighPrice": 32.77,
         "LowPrice": 32.34,
         "n": 5784,
         "OpenPrice": 32.43,
@@ -2421,7 +2421,7 @@
     },
     {
         "ClosePrice": 32.66,
-        "HighPrice": 32.7557,
+        "HighPrice": 32.76,
         "LowPrice": 32.32,
         "n": 5758,
         "OpenPrice": 32.56,
@@ -2441,7 +2441,7 @@
     },
     {
         "ClosePrice": 32.59,
-        "HighPrice": 32.655,
+        "HighPrice": 32.66,
         "LowPrice": 32.36,
         "n": 5993,
         "OpenPrice": 32.62,
@@ -2502,7 +2502,7 @@
     {
         "ClosePrice": 32.42,
         "HighPrice": 32.56,
-        "LowPrice": 32.3201,
+        "LowPrice": 32.32,
         "n": 3398,
         "OpenPrice": 32.51,
         "Timestamp": "2017-08-08T04:00:00Z",
@@ -2522,7 +2522,7 @@
     {
         "ClosePrice": 32.17,
         "HighPrice": 32.42,
-        "LowPrice": 32.155,
+        "LowPrice": 32.16,
         "n": 5122,
         "OpenPrice": 32.37,
         "Timestamp": "2017-08-10T04:00:00Z",
@@ -2532,7 +2532,7 @@
     {
         "ClosePrice": 31.96,
         "HighPrice": 32.2,
-        "LowPrice": 31.8244,
+        "LowPrice": 31.82,
         "n": 5334,
         "OpenPrice": 32.08,
         "Timestamp": "2017-08-11T04:00:00Z",
@@ -2541,7 +2541,7 @@
     },
     {
         "ClosePrice": 32.49,
-        "HighPrice": 32.535,
+        "HighPrice": 32.53,
         "LowPrice": 32.07,
         "n": 4096,
         "OpenPrice": 32.08,
@@ -2552,7 +2552,7 @@
     {
         "ClosePrice": 32.43,
         "HighPrice": 32.44,
-        "LowPrice": 32.225,
+        "LowPrice": 32.23,
         "n": 3283,
         "OpenPrice": 32.38,
         "Timestamp": "2017-08-15T04:00:00Z",
@@ -2561,7 +2561,7 @@
     },
     {
         "ClosePrice": 32.53,
-        "HighPrice": 32.645,
+        "HighPrice": 32.65,
         "LowPrice": 32.46,
         "n": 3621,
         "OpenPrice": 32.46,
@@ -2571,7 +2571,7 @@
     },
     {
         "ClosePrice": 32.3,
-        "HighPrice": 32.595,
+        "HighPrice": 32.59,
         "LowPrice": 32.3,
         "n": 4254,
         "OpenPrice": 32.48,
@@ -2702,7 +2702,7 @@
     {
         "ClosePrice": 32.94,
         "HighPrice": 33.1,
-        "LowPrice": 32.895,
+        "LowPrice": 32.9,
         "n": 5773,
         "OpenPrice": 32.99,
         "Timestamp": "2017-09-06T04:00:00Z",
@@ -2711,7 +2711,7 @@
     },
     {
         "ClosePrice": 33.19,
-        "HighPrice": 33.255,
+        "HighPrice": 33.26,
         "LowPrice": 32.94,
         "n": 4278,
         "OpenPrice": 32.99,
@@ -2721,7 +2721,7 @@
     },
     {
         "ClosePrice": 33.2,
-        "HighPrice": 33.315,
+        "HighPrice": 33.31,
         "LowPrice": 33.08,
         "n": 3416,
         "OpenPrice": 33.15,
@@ -2742,7 +2742,7 @@
     {
         "ClosePrice": 33.08,
         "HighPrice": 33.44,
-        "LowPrice": 32.9447,
+        "LowPrice": 32.94,
         "n": 3691,
         "OpenPrice": 33.41,
         "Timestamp": "2017-09-12T04:00:00Z",
@@ -2781,7 +2781,7 @@
     },
     {
         "ClosePrice": 32.86,
-        "HighPrice": 33.105,
+        "HighPrice": 33.1,
         "LowPrice": 32.78,
         "n": 3468,
         "OpenPrice": 33.04,
@@ -2822,7 +2822,7 @@
     {
         "ClosePrice": 32.11,
         "HighPrice": 32.46,
-        "LowPrice": 32.0757,
+        "LowPrice": 32.08,
         "n": 5281,
         "OpenPrice": 32.36,
         "Timestamp": "2017-09-22T04:00:00Z",
@@ -2872,7 +2872,7 @@
     {
         "ClosePrice": 32.24,
         "HighPrice": 32.27,
-        "LowPrice": 32.0701,
+        "LowPrice": 32.07,
         "n": 4167,
         "OpenPrice": 32.17,
         "Timestamp": "2017-09-29T04:00:00Z",
@@ -2881,7 +2881,7 @@
     },
     {
         "ClosePrice": 32.12,
-        "HighPrice": 32.3411,
+        "HighPrice": 32.34,
         "LowPrice": 32.11,
         "n": 4239,
         "OpenPrice": 32.25,
@@ -2891,8 +2891,8 @@
     },
     {
         "ClosePrice": 32.11,
-        "HighPrice": 32.1958,
-        "LowPrice": 32.041,
+        "HighPrice": 32.2,
+        "LowPrice": 32.04,
         "n": 4896,
         "OpenPrice": 32.12,
         "Timestamp": "2017-10-03T04:00:00Z",
@@ -2901,7 +2901,7 @@
     },
     {
         "ClosePrice": 32.39,
-        "HighPrice": 32.4068,
+        "HighPrice": 32.41,
         "LowPrice": 32.05,
         "n": 4271,
         "OpenPrice": 32.12,
@@ -2921,7 +2921,7 @@
     },
     {
         "ClosePrice": 32.4,
-        "HighPrice": 32.435,
+        "HighPrice": 32.44,
         "LowPrice": 32.09,
         "n": 2968,
         "OpenPrice": 32.34,
@@ -2942,7 +2942,7 @@
     {
         "ClosePrice": 32.52,
         "HighPrice": 32.73,
-        "LowPrice": 32.4622,
+        "LowPrice": 32.46,
         "n": 2611,
         "OpenPrice": 32.54,
         "Timestamp": "2017-10-10T04:00:00Z",
@@ -2971,7 +2971,7 @@
     },
     {
         "ClosePrice": 33.02,
-        "HighPrice": 33.117,
+        "HighPrice": 33.12,
         "LowPrice": 32.9,
         "n": 4046,
         "OpenPrice": 33.07,
@@ -2982,7 +2982,7 @@
     {
         "ClosePrice": 32.86,
         "HighPrice": 33.08,
-        "LowPrice": 32.835,
+        "LowPrice": 32.84,
         "n": 3487,
         "OpenPrice": 32.99,
         "Timestamp": "2017-10-16T04:00:00Z",
@@ -3012,7 +3012,7 @@
     {
         "ClosePrice": 32.78,
         "HighPrice": 32.86,
-        "LowPrice": 32.655,
+        "LowPrice": 32.66,
         "n": 4362,
         "OpenPrice": 32.79,
         "Timestamp": "2017-10-19T04:00:00Z",
@@ -3022,7 +3022,7 @@
     {
         "ClosePrice": 32.73,
         "HighPrice": 32.83,
-        "LowPrice": 32.615,
+        "LowPrice": 32.62,
         "n": 3565,
         "OpenPrice": 32.79,
         "Timestamp": "2017-10-20T04:00:00Z",
@@ -3051,7 +3051,7 @@
     },
     {
         "ClosePrice": 32.32,
-        "HighPrice": 32.405,
+        "HighPrice": 32.41,
         "LowPrice": 32.13,
         "n": 4926,
         "OpenPrice": 32.31,
@@ -3072,7 +3072,7 @@
     {
         "ClosePrice": 32.19,
         "HighPrice": 32.31,
-        "LowPrice": 31.865,
+        "LowPrice": 31.86,
         "n": 4307,
         "OpenPrice": 32.08,
         "Timestamp": "2017-10-27T04:00:00Z",
@@ -3082,7 +3082,7 @@
     {
         "ClosePrice": 32.39,
         "HighPrice": 32.57,
-        "LowPrice": 32.1756,
+        "LowPrice": 32.18,
         "n": 4934,
         "OpenPrice": 32.2,
         "Timestamp": "2017-10-30T04:00:00Z",
@@ -3102,7 +3102,7 @@
     {
         "ClosePrice": 32.47,
         "HighPrice": 32.6,
-        "LowPrice": 32.415,
+        "LowPrice": 32.41,
         "n": 7233,
         "OpenPrice": 32.55,
         "Timestamp": "2017-11-01T04:00:00Z",
@@ -3111,7 +3111,7 @@
     },
     {
         "ClosePrice": 32.75,
-        "HighPrice": 32.9432,
+        "HighPrice": 32.94,
         "LowPrice": 32.51,
         "n": 6785,
         "OpenPrice": 32.55,
@@ -3131,7 +3131,7 @@
     },
     {
         "ClosePrice": 33.25,
-        "HighPrice": 33.385,
+        "HighPrice": 33.38,
         "LowPrice": 32.91,
         "n": 5691,
         "OpenPrice": 32.94,
@@ -3172,7 +3172,7 @@
     {
         "ClosePrice": 33.81,
         "HighPrice": 33.91,
-        "LowPrice": 33.6135,
+        "LowPrice": 33.61,
         "n": 4956,
         "OpenPrice": 33.69,
         "Timestamp": "2017-11-10T05:00:00Z",
@@ -3181,7 +3181,7 @@
     },
     {
         "ClosePrice": 33.91,
-        "HighPrice": 34.0238,
+        "HighPrice": 34.02,
         "LowPrice": 33.81,
         "n": 5276,
         "OpenPrice": 33.9,
@@ -3241,8 +3241,8 @@
     },
     {
         "ClosePrice": 33.66,
-        "HighPrice": 33.695,
-        "LowPrice": 33.5171,
+        "HighPrice": 33.7,
+        "LowPrice": 33.52,
         "n": 3322,
         "OpenPrice": 33.58,
         "Timestamp": "2017-11-21T05:00:00Z",
@@ -3291,7 +3291,7 @@
     },
     {
         "ClosePrice": 33.41,
-        "HighPrice": 33.5068,
+        "HighPrice": 33.51,
         "LowPrice": 33.21,
         "n": 5366,
         "OpenPrice": 33.48,
@@ -3372,7 +3372,7 @@
     {
         "ClosePrice": 33.28,
         "HighPrice": 33.28,
-        "LowPrice": 33.075,
+        "LowPrice": 33.08,
         "n": 5198,
         "OpenPrice": 33.19,
         "Timestamp": "2017-12-11T05:00:00Z",
@@ -3381,7 +3381,7 @@
     },
     {
         "ClosePrice": 33.43,
-        "HighPrice": 33.529,
+        "HighPrice": 33.53,
         "LowPrice": 33.17,
         "n": 3159,
         "OpenPrice": 33.39,
@@ -3412,7 +3412,7 @@
     {
         "ClosePrice": 33.19,
         "HighPrice": 33.27,
-        "LowPrice": 33.0586,
+        "LowPrice": 33.06,
         "n": 5404,
         "OpenPrice": 33.2,
         "Timestamp": "2017-12-15T05:00:00Z",
@@ -3421,7 +3421,7 @@
     },
     {
         "ClosePrice": 33.3,
-        "HighPrice": 33.455,
+        "HighPrice": 33.45,
         "LowPrice": 33.25,
         "n": 3841,
         "OpenPrice": 33.25,
@@ -3441,7 +3441,7 @@
     },
     {
         "ClosePrice": 32.32,
-        "HighPrice": 32.7275,
+        "HighPrice": 32.73,
         "LowPrice": 32.31,
         "n": 4081,
         "OpenPrice": 32.67,
@@ -3481,7 +3481,7 @@
     },
     {
         "ClosePrice": 32.72,
-        "HighPrice": 32.7799,
+        "HighPrice": 32.78,
         "LowPrice": 32.62,
         "n": 8097,
         "OpenPrice": 32.67,
@@ -3541,7 +3541,7 @@
     },
     {
         "ClosePrice": 32.28,
-        "HighPrice": 32.325,
+        "HighPrice": 32.33,
         "LowPrice": 32.18,
         "n": 4207,
         "OpenPrice": 32.27,
@@ -3561,7 +3561,7 @@
     },
     {
         "ClosePrice": 32.12,
-        "HighPrice": 32.4899,
+        "HighPrice": 32.49,
         "LowPrice": 32.1,
         "n": 3643,
         "OpenPrice": 32.47,
@@ -3582,7 +3582,7 @@
     {
         "ClosePrice": 31.42,
         "HighPrice": 31.74,
-        "LowPrice": 31.3522,
+        "LowPrice": 31.35,
         "n": 3978,
         "OpenPrice": 31.7,
         "Timestamp": "2018-01-11T05:00:00Z",
@@ -3592,7 +3592,7 @@
     {
         "ClosePrice": 31.19,
         "HighPrice": 31.43,
-        "LowPrice": 31.1033,
+        "LowPrice": 31.1,
         "n": 5564,
         "OpenPrice": 31.39,
         "Timestamp": "2018-01-12T05:00:00Z",
@@ -3672,7 +3672,7 @@
     {
         "ClosePrice": 32.07,
         "HighPrice": 32.14,
-        "LowPrice": 31.865,
+        "LowPrice": 31.86,
         "n": 5876,
         "OpenPrice": 32.12,
         "Timestamp": "2018-01-25T05:00:00Z",
@@ -3681,7 +3681,7 @@
     },
     {
         "ClosePrice": 32.16,
-        "HighPrice": 32.1666,
+        "HighPrice": 32.17,
         "LowPrice": 31.91,
         "n": 4525,
         "OpenPrice": 32.08,
@@ -3721,7 +3721,7 @@
     },
     {
         "ClosePrice": 31.72,
-        "HighPrice": 32.4201,
+        "HighPrice": 32.42,
         "LowPrice": 31.66,
         "n": 9249,
         "OpenPrice": 32.21,
@@ -3811,7 +3811,7 @@
     },
     {
         "ClosePrice": 30.2,
-        "HighPrice": 30.231,
+        "HighPrice": 30.23,
         "LowPrice": 29.74,
         "n": 9253,
         "OpenPrice": 30.1,
@@ -3882,7 +3882,7 @@
     {
         "ClosePrice": 30.81,
         "HighPrice": 30.84,
-        "LowPrice": 30.6073,
+        "LowPrice": 30.61,
         "n": 6189,
         "OpenPrice": 30.79,
         "Timestamp": "2018-02-26T05:00:00Z",
@@ -3931,7 +3931,7 @@
     },
     {
         "ClosePrice": 30.28,
-        "HighPrice": 30.3852,
+        "HighPrice": 30.39,
         "LowPrice": 29.66,
         "n": 6105,
         "OpenPrice": 29.74,
@@ -3972,7 +3972,7 @@
     {
         "ClosePrice": 30.97,
         "HighPrice": 30.97,
-        "LowPrice": 30.6332,
+        "LowPrice": 30.63,
         "n": 6171,
         "OpenPrice": 30.78,
         "Timestamp": "2018-03-09T05:00:00Z",
@@ -3981,7 +3981,7 @@
     },
     {
         "ClosePrice": 31.12,
-        "HighPrice": 31.1956,
+        "HighPrice": 31.2,
         "LowPrice": 30.93,
         "n": 6990,
         "OpenPrice": 30.97,
@@ -4001,7 +4001,7 @@
     },
     {
         "ClosePrice": 31.28,
-        "HighPrice": 31.365,
+        "HighPrice": 31.36,
         "LowPrice": 31.16,
         "n": 9170,
         "OpenPrice": 31.3,
@@ -4011,7 +4011,7 @@
     },
     {
         "ClosePrice": 31.28,
-        "HighPrice": 31.415,
+        "HighPrice": 31.41,
         "LowPrice": 31.14,
         "n": 8101,
         "OpenPrice": 31.31,
@@ -4022,7 +4022,7 @@
     {
         "ClosePrice": 31.26,
         "HighPrice": 31.31,
-        "LowPrice": 30.985,
+        "LowPrice": 30.98,
         "n": 6749,
         "OpenPrice": 31.07,
         "Timestamp": "2018-03-16T04:00:00Z",
@@ -4042,7 +4042,7 @@
     {
         "ClosePrice": 30.94,
         "HighPrice": 31.19,
-        "LowPrice": 30.8238,
+        "LowPrice": 30.82,
         "n": 8245,
         "OpenPrice": 30.97,
         "Timestamp": "2018-03-20T04:00:00Z",
@@ -4072,7 +4072,7 @@
     {
         "ClosePrice": 30.07,
         "HighPrice": 30.67,
-        "LowPrice": 29.9901,
+        "LowPrice": 29.99,
         "n": 15961,
         "OpenPrice": 30.6,
         "Timestamp": "2018-03-23T04:00:00Z",
@@ -4081,7 +4081,7 @@
     },
     {
         "ClosePrice": 30.48,
-        "HighPrice": 30.535,
+        "HighPrice": 30.54,
         "LowPrice": 30.13,
         "n": 11474,
         "OpenPrice": 30.32,
@@ -4101,7 +4101,7 @@
     },
     {
         "ClosePrice": 31.09,
-        "HighPrice": 31.205,
+        "HighPrice": 31.2,
         "LowPrice": 30.63,
         "n": 17249,
         "OpenPrice": 30.63,
@@ -4112,7 +4112,7 @@
     {
         "ClosePrice": 31.08,
         "HighPrice": 31.23,
-        "LowPrice": 30.965,
+        "LowPrice": 30.96,
         "n": 10050,
         "OpenPrice": 31.19,
         "Timestamp": "2018-03-29T04:00:00Z",
@@ -4131,7 +4131,7 @@
     },
     {
         "ClosePrice": 30.81,
-        "HighPrice": 30.915,
+        "HighPrice": 30.91,
         "LowPrice": 30.52,
         "n": 10635,
         "OpenPrice": 30.76,
@@ -4151,7 +4151,7 @@
     },
     {
         "ClosePrice": 31.2,
-        "HighPrice": 31.225,
+        "HighPrice": 31.23,
         "LowPrice": 30.93,
         "n": 9004,
         "OpenPrice": 31.22,
@@ -4172,7 +4172,7 @@
     {
         "ClosePrice": 30.87,
         "HighPrice": 31.14,
-        "LowPrice": 30.795,
+        "LowPrice": 30.8,
         "n": 8931,
         "OpenPrice": 30.94,
         "Timestamp": "2018-04-09T04:00:00Z",
@@ -4221,7 +4221,7 @@
     },
     {
         "ClosePrice": 30.68,
-        "HighPrice": 30.805,
+        "HighPrice": 30.8,
         "LowPrice": 30.49,
         "n": 6500,
         "OpenPrice": 30.62,
@@ -4232,7 +4232,7 @@
     {
         "ClosePrice": 31.09,
         "HighPrice": 31.27,
-        "LowPrice": 30.6575,
+        "LowPrice": 30.66,
         "n": 7665,
         "OpenPrice": 30.77,
         "Timestamp": "2018-04-17T04:00:00Z",
@@ -4261,7 +4261,7 @@
     },
     {
         "ClosePrice": 30.22,
-        "HighPrice": 30.606,
+        "HighPrice": 30.61,
         "LowPrice": 30.18,
         "n": 8836,
         "OpenPrice": 30.53,
@@ -4272,7 +4272,7 @@
     {
         "ClosePrice": 30.28,
         "HighPrice": 30.39,
-        "LowPrice": 30.135,
+        "LowPrice": 30.14,
         "n": 5547,
         "OpenPrice": 30.22,
         "Timestamp": "2018-04-23T04:00:00Z",
@@ -4292,7 +4292,7 @@
     {
         "ClosePrice": 30.21,
         "HighPrice": 30.36,
-        "LowPrice": 30.0332,
+        "LowPrice": 30.03,
         "n": 7045,
         "OpenPrice": 30.26,
         "Timestamp": "2018-04-25T04:00:00Z",
@@ -4301,8 +4301,8 @@
     },
     {
         "ClosePrice": 30.6,
-        "HighPrice": 30.7832,
-        "LowPrice": 30.2862,
+        "HighPrice": 30.78,
+        "LowPrice": 30.29,
         "n": 6762,
         "OpenPrice": 30.31,
         "Timestamp": "2018-04-26T04:00:00Z",
@@ -4331,8 +4331,8 @@
     },
     {
         "ClosePrice": 31.11,
-        "HighPrice": 31.135,
-        "LowPrice": 30.8229,
+        "HighPrice": 31.14,
+        "LowPrice": 30.82,
         "n": 8329,
         "OpenPrice": 30.94,
         "Timestamp": "2018-05-01T04:00:00Z",
@@ -4342,7 +4342,7 @@
     {
         "ClosePrice": 30.97,
         "HighPrice": 31.13,
-        "LowPrice": 30.791,
+        "LowPrice": 30.79,
         "n": 7228,
         "OpenPrice": 31,
         "Timestamp": "2018-05-02T04:00:00Z",
@@ -4351,7 +4351,7 @@
     },
     {
         "ClosePrice": 30.96,
-        "HighPrice": 31.085,
+        "HighPrice": 31.09,
         "LowPrice": 30.8,
         "n": 7816,
         "OpenPrice": 30.93,
@@ -4372,7 +4372,7 @@
     {
         "ClosePrice": 31.37,
         "HighPrice": 31.43,
-        "LowPrice": 31.235,
+        "LowPrice": 31.23,
         "n": 4808,
         "OpenPrice": 31.36,
         "Timestamp": "2018-05-07T04:00:00Z",
@@ -4382,7 +4382,7 @@
     {
         "ClosePrice": 31.15,
         "HighPrice": 31.32,
-        "LowPrice": 31.045,
+        "LowPrice": 31.05,
         "n": 4435,
         "OpenPrice": 31.27,
         "Timestamp": "2018-05-08T04:00:00Z",
@@ -4401,7 +4401,7 @@
     },
     {
         "ClosePrice": 31.68,
-        "HighPrice": 31.745,
+        "HighPrice": 31.75,
         "LowPrice": 31.47,
         "n": 4745,
         "OpenPrice": 31.5,
@@ -4432,7 +4432,7 @@
     {
         "ClosePrice": 30.78,
         "HighPrice": 31.11,
-        "LowPrice": 30.695,
+        "LowPrice": 30.7,
         "n": 6492,
         "OpenPrice": 31.11,
         "Timestamp": "2018-05-15T04:00:00Z",
@@ -4442,7 +4442,7 @@
     {
         "ClosePrice": 30.7,
         "HighPrice": 30.96,
-        "LowPrice": 30.6401,
+        "LowPrice": 30.64,
         "n": 4252,
         "OpenPrice": 30.85,
         "Timestamp": "2018-05-16T04:00:00Z",
@@ -4471,7 +4471,7 @@
     },
     {
         "ClosePrice": 30.87,
-        "HighPrice": 30.955,
+        "HighPrice": 30.95,
         "LowPrice": 30.43,
         "n": 4720,
         "OpenPrice": 30.63,
@@ -4482,7 +4482,7 @@
     {
         "ClosePrice": 30.91,
         "HighPrice": 30.95,
-        "LowPrice": 30.7201,
+        "LowPrice": 30.72,
         "n": 4803,
         "OpenPrice": 30.87,
         "Timestamp": "2018-05-22T04:00:00Z",
@@ -4502,7 +4502,7 @@
     {
         "ClosePrice": 31.04,
         "HighPrice": 31.29,
-        "LowPrice": 30.8851,
+        "LowPrice": 30.89,
         "n": 4731,
         "OpenPrice": 31.17,
         "Timestamp": "2018-05-24T04:00:00Z",
@@ -4521,7 +4521,7 @@
     },
     {
         "ClosePrice": 31.27,
-        "HighPrice": 31.375,
+        "HighPrice": 31.38,
         "LowPrice": 30.99,
         "n": 9142,
         "OpenPrice": 31.12,
@@ -4531,7 +4531,7 @@
     },
     {
         "ClosePrice": 31.68,
-        "HighPrice": 31.805,
+        "HighPrice": 31.8,
         "LowPrice": 31.16,
         "n": 8463,
         "OpenPrice": 31.24,
@@ -4551,7 +4551,7 @@
     },
     {
         "ClosePrice": 31.71,
-        "HighPrice": 31.775,
+        "HighPrice": 31.77,
         "LowPrice": 31.48,
         "n": 6706,
         "OpenPrice": 31.57,
@@ -4562,7 +4562,7 @@
     {
         "ClosePrice": 32.02,
         "HighPrice": 32.02,
-        "LowPrice": 31.675,
+        "LowPrice": 31.68,
         "n": 6964,
         "OpenPrice": 31.78,
         "Timestamp": "2018-06-04T04:00:00Z",
@@ -4571,7 +4571,7 @@
     },
     {
         "ClosePrice": 31.86,
-        "HighPrice": 32.135,
+        "HighPrice": 32.13,
         "LowPrice": 31.81,
         "n": 6282,
         "OpenPrice": 32.07,
@@ -4582,7 +4582,7 @@
     {
         "ClosePrice": 31.95,
         "HighPrice": 31.96,
-        "LowPrice": 31.715,
+        "LowPrice": 31.71,
         "n": 5412,
         "OpenPrice": 31.84,
         "Timestamp": "2018-06-06T04:00:00Z",
@@ -4601,7 +4601,7 @@
     },
     {
         "ClosePrice": 32.06,
-        "HighPrice": 32.085,
+        "HighPrice": 32.09,
         "LowPrice": 31.87,
         "n": 6693,
         "OpenPrice": 31.92,
@@ -4622,7 +4622,7 @@
     {
         "ClosePrice": 32.23,
         "HighPrice": 32.31,
-        "LowPrice": 31.915,
+        "LowPrice": 31.91,
         "n": 4044,
         "OpenPrice": 31.99,
         "Timestamp": "2018-06-12T04:00:00Z",
@@ -4632,7 +4632,7 @@
     {
         "ClosePrice": 31.51,
         "HighPrice": 32.27,
-        "LowPrice": 31.475,
+        "LowPrice": 31.48,
         "n": 7227,
         "OpenPrice": 32.23,
         "Timestamp": "2018-06-13T04:00:00Z",
@@ -4641,7 +4641,7 @@
     },
     {
         "ClosePrice": 31.81,
-        "HighPrice": 31.939,
+        "HighPrice": 31.94,
         "LowPrice": 31.63,
         "n": 5710,
         "OpenPrice": 31.63,
@@ -4652,7 +4652,7 @@
     {
         "ClosePrice": 31.49,
         "HighPrice": 31.76,
-        "LowPrice": 31.4532,
+        "LowPrice": 31.45,
         "n": 5932,
         "OpenPrice": 31.53,
         "Timestamp": "2018-06-15T04:00:00Z",
@@ -4662,7 +4662,7 @@
     {
         "ClosePrice": 31.46,
         "HighPrice": 31.55,
-        "LowPrice": 31.285,
+        "LowPrice": 31.29,
         "n": 5393,
         "OpenPrice": 31.39,
         "Timestamp": "2018-06-18T04:00:00Z",
@@ -4671,7 +4671,7 @@
     },
     {
         "ClosePrice": 31.5,
-        "HighPrice": 31.675,
+        "HighPrice": 31.68,
         "LowPrice": 31.34,
         "n": 7230,
         "OpenPrice": 31.34,
@@ -4702,7 +4702,7 @@
     {
         "ClosePrice": 32.31,
         "HighPrice": 32.34,
-        "LowPrice": 31.935,
+        "LowPrice": 31.93,
         "n": 6106,
         "OpenPrice": 32.14,
         "Timestamp": "2018-06-22T04:00:00Z",
@@ -4711,8 +4711,8 @@
     },
     {
         "ClosePrice": 32.23,
-        "HighPrice": 32.385,
-        "LowPrice": 32.045,
+        "HighPrice": 32.38,
+        "LowPrice": 32.05,
         "n": 16259,
         "OpenPrice": 32.33,
         "Timestamp": "2018-06-25T04:00:00Z",
@@ -4721,7 +4721,7 @@
     },
     {
         "ClosePrice": 32.4,
-        "HighPrice": 32.545,
+        "HighPrice": 32.55,
         "LowPrice": 32.16,
         "n": 6444,
         "OpenPrice": 32.27,
@@ -4762,7 +4762,7 @@
     {
         "ClosePrice": 32.52,
         "HighPrice": 32.75,
-        "LowPrice": 32.155,
+        "LowPrice": 32.16,
         "n": 15631,
         "OpenPrice": 32.67,
         "Timestamp": "2018-07-02T04:00:00Z",
@@ -4782,7 +4782,7 @@
     {
         "ClosePrice": 33.14,
         "HighPrice": 33.16,
-        "LowPrice": 32.705,
+        "LowPrice": 32.7,
         "n": 7610,
         "OpenPrice": 32.77,
         "Timestamp": "2018-07-05T04:00:00Z",
@@ -4792,7 +4792,7 @@
     {
         "ClosePrice": 33.28,
         "HighPrice": 33.35,
-        "LowPrice": 33.165,
+        "LowPrice": 33.16,
         "n": 6417,
         "OpenPrice": 33.23,
         "Timestamp": "2018-07-06T04:00:00Z",
@@ -4822,7 +4822,7 @@
     {
         "ClosePrice": 33.03,
         "HighPrice": 33.19,
-        "LowPrice": 32.975,
+        "LowPrice": 32.98,
         "n": 7430,
         "OpenPrice": 33.1,
         "Timestamp": "2018-07-11T04:00:00Z",
@@ -4841,7 +4841,7 @@
     },
     {
         "ClosePrice": 33,
-        "HighPrice": 33.255,
+        "HighPrice": 33.26,
         "LowPrice": 32.98,
         "n": 6364,
         "OpenPrice": 33.13,
@@ -4852,7 +4852,7 @@
     {
         "ClosePrice": 32.81,
         "HighPrice": 32.96,
-        "LowPrice": 32.5944,
+        "LowPrice": 32.59,
         "n": 6572,
         "OpenPrice": 32.94,
         "Timestamp": "2018-07-16T04:00:00Z",
@@ -4881,7 +4881,7 @@
     },
     {
         "ClosePrice": 32.79,
-        "HighPrice": 32.935,
+        "HighPrice": 32.94,
         "LowPrice": 32.36,
         "n": 6460,
         "OpenPrice": 32.42,
@@ -4902,7 +4902,7 @@
     {
         "ClosePrice": 32.41,
         "HighPrice": 32.49,
-        "LowPrice": 32.2133,
+        "LowPrice": 32.21,
         "n": 8452,
         "OpenPrice": 32.49,
         "Timestamp": "2018-07-23T04:00:00Z",
@@ -4921,7 +4921,7 @@
     },
     {
         "ClosePrice": 32.64,
-        "HighPrice": 32.695,
+        "HighPrice": 32.7,
         "LowPrice": 32.32,
         "n": 7486,
         "OpenPrice": 32.42,
@@ -4941,8 +4941,8 @@
     },
     {
         "ClosePrice": 32.45,
-        "HighPrice": 32.8548,
-        "LowPrice": 32.4208,
+        "HighPrice": 32.85,
+        "LowPrice": 32.42,
         "n": 7153,
         "OpenPrice": 32.85,
         "Timestamp": "2018-07-27T04:00:00Z",
@@ -4951,7 +4951,7 @@
     },
     {
         "ClosePrice": 32.42,
-        "HighPrice": 32.515,
+        "HighPrice": 32.52,
         "LowPrice": 32.19,
         "n": 7585,
         "OpenPrice": 32.48,
@@ -4981,8 +4981,8 @@
     },
     {
         "ClosePrice": 33.11,
-        "HighPrice": 33.315,
-        "LowPrice": 33.0475,
+        "HighPrice": 33.31,
+        "LowPrice": 33.05,
         "n": 8588,
         "OpenPrice": 33.14,
         "Timestamp": "2018-08-02T04:00:00Z",
@@ -4991,7 +4991,7 @@
     },
     {
         "ClosePrice": 33.54,
-        "HighPrice": 33.585,
+        "HighPrice": 33.59,
         "LowPrice": 33.1,
         "n": 5545,
         "OpenPrice": 33.13,
@@ -5022,7 +5022,7 @@
     {
         "ClosePrice": 33.2,
         "HighPrice": 33.45,
-        "LowPrice": 33.155,
+        "LowPrice": 33.16,
         "n": 5848,
         "OpenPrice": 33.45,
         "Timestamp": "2018-08-08T04:00:00Z",
@@ -5061,7 +5061,7 @@
     },
     {
         "ClosePrice": 33.05,
-        "HighPrice": 33.125,
+        "HighPrice": 33.13,
         "LowPrice": 32.91,
         "n": 6172,
         "OpenPrice": 32.99,
@@ -5071,7 +5071,7 @@
     },
     {
         "ClosePrice": 33.34,
-        "HighPrice": 33.365,
+        "HighPrice": 33.37,
         "LowPrice": 32.96,
         "n": 9063,
         "OpenPrice": 33.06,
@@ -5101,7 +5101,7 @@
     },
     {
         "ClosePrice": 33.96,
-        "HighPrice": 34.135,
+        "HighPrice": 34.13,
         "LowPrice": 33.91,
         "n": 6216,
         "OpenPrice": 33.97,
@@ -5131,7 +5131,7 @@
     },
     {
         "ClosePrice": 33.36,
-        "HighPrice": 33.515,
+        "HighPrice": 33.52,
         "LowPrice": 33.34,
         "n": 3827,
         "OpenPrice": 33.43,
@@ -5151,7 +5151,7 @@
     },
     {
         "ClosePrice": 33.54,
-        "HighPrice": 33.6699,
+        "HighPrice": 33.67,
         "LowPrice": 33.36,
         "n": 6167,
         "OpenPrice": 33.61,
@@ -5182,7 +5182,7 @@
     {
         "ClosePrice": 33.72,
         "HighPrice": 33.97,
-        "LowPrice": 33.665,
+        "LowPrice": 33.66,
         "n": 5520,
         "OpenPrice": 33.96,
         "Timestamp": "2018-08-30T04:00:00Z",
@@ -5282,7 +5282,7 @@
     {
         "ClosePrice": 33.58,
         "HighPrice": 33.79,
-        "LowPrice": 33.375,
+        "LowPrice": 33.38,
         "n": 4790,
         "OpenPrice": 33.77,
         "Timestamp": "2018-09-14T04:00:00Z",
@@ -5292,7 +5292,7 @@
     {
         "ClosePrice": 33.77,
         "HighPrice": 33.82,
-        "LowPrice": 33.495,
+        "LowPrice": 33.49,
         "n": 4987,
         "OpenPrice": 33.5,
         "Timestamp": "2018-09-17T04:00:00Z",
@@ -5312,7 +5312,7 @@
     {
         "ClosePrice": 33.25,
         "HighPrice": 33.59,
-        "LowPrice": 33.195,
+        "LowPrice": 33.2,
         "n": 5995,
         "OpenPrice": 33.58,
         "Timestamp": "2018-09-19T04:00:00Z",
@@ -5331,7 +5331,7 @@
     },
     {
         "ClosePrice": 33.15,
-        "HighPrice": 33.305,
+        "HighPrice": 33.3,
         "LowPrice": 33.04,
         "n": 5382,
         "OpenPrice": 33.17,
@@ -5342,7 +5342,7 @@
     {
         "ClosePrice": 32.5,
         "HighPrice": 33.05,
-        "LowPrice": 32.375,
+        "LowPrice": 32.38,
         "n": 6996,
         "OpenPrice": 33.04,
         "Timestamp": "2018-09-24T04:00:00Z",
@@ -5351,8 +5351,8 @@
     },
     {
         "ClosePrice": 32.47,
-        "HighPrice": 32.6651,
-        "LowPrice": 32.4335,
+        "HighPrice": 32.67,
+        "LowPrice": 32.43,
         "n": 4788,
         "OpenPrice": 32.5,
         "Timestamp": "2018-09-25T04:00:00Z",
@@ -5391,7 +5391,7 @@
     },
     {
         "ClosePrice": 32.36,
-        "HighPrice": 32.6984,
+        "HighPrice": 32.7,
         "LowPrice": 32.34,
         "n": 5277,
         "OpenPrice": 32.61,
@@ -5411,7 +5411,7 @@
     },
     {
         "ClosePrice": 31.89,
-        "HighPrice": 32.405,
+        "HighPrice": 32.41,
         "LowPrice": 31.71,
         "n": 5334,
         "OpenPrice": 32.29,
@@ -5441,7 +5441,7 @@
     },
     {
         "ClosePrice": 32.16,
-        "HighPrice": 32.305,
+        "HighPrice": 32.3,
         "LowPrice": 31.77,
         "n": 6963,
         "OpenPrice": 31.85,
@@ -5501,7 +5501,7 @@
     },
     {
         "ClosePrice": 31.58,
-        "HighPrice": 31.675,
+        "HighPrice": 31.68,
         "LowPrice": 30.93,
         "n": 7769,
         "OpenPrice": 31.04,
@@ -5511,7 +5511,7 @@
     },
     {
         "ClosePrice": 31.49,
-        "HighPrice": 31.675,
+        "HighPrice": 31.68,
         "LowPrice": 31.26,
         "n": 7931,
         "OpenPrice": 31.54,
@@ -5521,7 +5521,7 @@
     },
     {
         "ClosePrice": 31.5,
-        "HighPrice": 31.775,
+        "HighPrice": 31.77,
         "LowPrice": 31.37,
         "n": 8103,
         "OpenPrice": 31.48,
@@ -5541,7 +5541,7 @@
     },
     {
         "ClosePrice": 31.37,
-        "HighPrice": 31.995,
+        "HighPrice": 32,
         "LowPrice": 31.36,
         "n": 7834,
         "OpenPrice": 31.9,
@@ -5621,7 +5621,7 @@
     },
     {
         "ClosePrice": 32.21,
-        "HighPrice": 32.315,
+        "HighPrice": 32.31,
         "LowPrice": 31.97,
         "n": 10016,
         "OpenPrice": 32.18,
@@ -5662,7 +5662,7 @@
     {
         "ClosePrice": 33.01,
         "HighPrice": 33.03,
-        "LowPrice": 32.625,
+        "LowPrice": 32.63,
         "n": 10012,
         "OpenPrice": 32.82,
         "Timestamp": "2018-11-07T05:00:00Z",
@@ -5672,7 +5672,7 @@
     {
         "ClosePrice": 33.08,
         "HighPrice": 33.08,
-        "LowPrice": 32.795,
+        "LowPrice": 32.8,
         "n": 8938,
         "OpenPrice": 32.97,
         "Timestamp": "2018-11-08T05:00:00Z",
@@ -5721,7 +5721,7 @@
     },
     {
         "ClosePrice": 32.99,
-        "HighPrice": 33.1799,
+        "HighPrice": 33.18,
         "LowPrice": 32.67,
         "n": 14879,
         "OpenPrice": 33.12,
@@ -5811,7 +5811,7 @@
     },
     {
         "ClosePrice": 33.53,
-        "HighPrice": 33.695,
+        "HighPrice": 33.7,
         "LowPrice": 33.28,
         "n": 6609,
         "OpenPrice": 33.48,
@@ -5821,8 +5821,8 @@
     },
     {
         "ClosePrice": 33.85,
-        "HighPrice": 33.885,
-        "LowPrice": 33.465,
+        "HighPrice": 33.88,
+        "LowPrice": 33.47,
         "n": 10625,
         "OpenPrice": 33.63,
         "Timestamp": "2018-11-30T05:00:00Z",
@@ -5862,7 +5862,7 @@
     {
         "ClosePrice": 33.96,
         "HighPrice": 34.38,
-        "LowPrice": 33.8599,
+        "LowPrice": 33.86,
         "n": 13339,
         "OpenPrice": 34.37,
         "Timestamp": "2018-12-07T05:00:00Z",
@@ -5872,7 +5872,7 @@
     {
         "ClosePrice": 33.83,
         "HighPrice": 33.99,
-        "LowPrice": 33.315,
+        "LowPrice": 33.31,
         "n": 15154,
         "OpenPrice": 33.96,
         "Timestamp": "2018-12-10T05:00:00Z",
@@ -5892,7 +5892,7 @@
     {
         "ClosePrice": 33.25,
         "HighPrice": 34.12,
-        "LowPrice": 33.225,
+        "LowPrice": 33.23,
         "n": 11034,
         "OpenPrice": 34.02,
         "Timestamp": "2018-12-12T05:00:00Z",
@@ -5951,7 +5951,7 @@
     },
     {
         "ClosePrice": 31.8,
-        "HighPrice": 32.325,
+        "HighPrice": 32.33,
         "LowPrice": 31.58,
         "n": 22935,
         "OpenPrice": 32.19,
@@ -5962,7 +5962,7 @@
     {
         "ClosePrice": 30.95,
         "HighPrice": 32.1,
-        "LowPrice": 30.9186,
+        "LowPrice": 30.92,
         "n": 29223,
         "OpenPrice": 31.6,
         "Timestamp": "2018-12-21T05:00:00Z",
@@ -5972,7 +5972,7 @@
     {
         "ClosePrice": 29.81,
         "HighPrice": 31.1,
-        "LowPrice": 29.8009,
+        "LowPrice": 29.8,
         "n": 22771,
         "OpenPrice": 30.84,
         "Timestamp": "2018-12-24T05:00:00Z",
@@ -6002,7 +6002,7 @@
     {
         "ClosePrice": 30.94,
         "HighPrice": 31.24,
-        "LowPrice": 30.6773,
+        "LowPrice": 30.68,
         "n": 21361,
         "OpenPrice": 31.06,
         "Timestamp": "2018-12-28T05:00:00Z",
@@ -6091,7 +6091,7 @@
     },
     {
         "ClosePrice": 31.97,
-        "HighPrice": 31.9895,
+        "HighPrice": 31.99,
         "LowPrice": 31.68,
         "n": 7106,
         "OpenPrice": 31.81,
@@ -6121,7 +6121,7 @@
     },
     {
         "ClosePrice": 32.38,
-        "HighPrice": 32.515,
+        "HighPrice": 32.52,
         "LowPrice": 32.11,
         "n": 15602,
         "OpenPrice": 32.2,
@@ -6142,7 +6142,7 @@
     {
         "ClosePrice": 32.66,
         "HighPrice": 32.67,
-        "LowPrice": 32.3936,
+        "LowPrice": 32.39,
         "n": 7125,
         "OpenPrice": 32.67,
         "Timestamp": "2019-01-18T05:00:00Z",
@@ -6171,7 +6171,7 @@
     },
     {
         "ClosePrice": 32.75,
-        "HighPrice": 32.825,
+        "HighPrice": 32.83,
         "LowPrice": 32.39,
         "n": 10298,
         "OpenPrice": 32.57,
@@ -6262,7 +6262,7 @@
     {
         "ClosePrice": 34.28,
         "HighPrice": 34.49,
-        "LowPrice": 34.1646,
+        "LowPrice": 34.16,
         "n": 8641,
         "OpenPrice": 34.45,
         "Timestamp": "2019-02-06T05:00:00Z",
@@ -6271,7 +6271,7 @@
     },
     {
         "ClosePrice": 34.57,
-        "HighPrice": 34.585,
+        "HighPrice": 34.59,
         "LowPrice": 34.09,
         "n": 15220,
         "OpenPrice": 34.2,
@@ -6302,7 +6302,7 @@
     {
         "ClosePrice": 34.43,
         "HighPrice": 34.7,
-        "LowPrice": 34.293,
+        "LowPrice": 34.29,
         "n": 13971,
         "OpenPrice": 34.7,
         "Timestamp": "2019-02-12T05:00:00Z",
@@ -6352,7 +6352,7 @@
     {
         "ClosePrice": 34.82,
         "HighPrice": 35,
-        "LowPrice": 34.5632,
+        "LowPrice": 34.56,
         "n": 6336,
         "OpenPrice": 34.99,
         "Timestamp": "2019-02-20T05:00:00Z",
@@ -6422,7 +6422,7 @@
     {
         "ClosePrice": 34.67,
         "HighPrice": 34.77,
-        "LowPrice": 34.265,
+        "LowPrice": 34.27,
         "n": 14201,
         "OpenPrice": 34.77,
         "Timestamp": "2019-03-01T05:00:00Z",
@@ -6432,7 +6432,7 @@
     {
         "ClosePrice": 34.81,
         "HighPrice": 34.85,
-        "LowPrice": 34.405,
+        "LowPrice": 34.41,
         "n": 12411,
         "OpenPrice": 34.77,
         "Timestamp": "2019-03-04T05:00:00Z",
@@ -6471,8 +6471,8 @@
     },
     {
         "ClosePrice": 34.82,
-        "HighPrice": 34.985,
-        "LowPrice": 34.6562,
+        "HighPrice": 34.98,
+        "LowPrice": 34.66,
         "n": 8723,
         "OpenPrice": 34.72,
         "Timestamp": "2019-03-08T05:00:00Z",
@@ -6482,7 +6482,7 @@
     {
         "ClosePrice": 35.36,
         "HighPrice": 35.39,
-        "LowPrice": 34.9316,
+        "LowPrice": 34.93,
         "n": 7113,
         "OpenPrice": 34.98,
         "Timestamp": "2019-03-11T04:00:00Z",
@@ -6552,7 +6552,7 @@
     {
         "ClosePrice": 35.34,
         "HighPrice": 35.53,
-        "LowPrice": 34.9474,
+        "LowPrice": 34.95,
         "n": 11328,
         "OpenPrice": 35.21,
         "Timestamp": "2019-03-20T04:00:00Z",
@@ -6571,7 +6571,7 @@
     },
     {
         "ClosePrice": 35.8,
-        "HighPrice": 36.3065,
+        "HighPrice": 36.31,
         "LowPrice": 35.8,
         "n": 11288,
         "OpenPrice": 35.97,
@@ -6582,7 +6582,7 @@
     {
         "ClosePrice": 35.83,
         "HighPrice": 35.97,
-        "LowPrice": 35.665,
+        "LowPrice": 35.66,
         "n": 10274,
         "OpenPrice": 35.82,
         "Timestamp": "2019-03-25T04:00:00Z",
@@ -6611,7 +6611,7 @@
     },
     {
         "ClosePrice": 36.23,
-        "HighPrice": 36.235,
+        "HighPrice": 36.23,
         "LowPrice": 35.89,
         "n": 7500,
         "OpenPrice": 36.01,
@@ -6622,7 +6622,7 @@
     {
         "ClosePrice": 36.22,
         "HighPrice": 36.29,
-        "LowPrice": 36.065,
+        "LowPrice": 36.06,
         "n": 8067,
         "OpenPrice": 36.22,
         "Timestamp": "2019-03-29T04:00:00Z",
@@ -6632,7 +6632,7 @@
     {
         "ClosePrice": 36.11,
         "HighPrice": 36.29,
-        "LowPrice": 35.7699,
+        "LowPrice": 35.77,
         "n": 11398,
         "OpenPrice": 36.27,
         "Timestamp": "2019-04-01T04:00:00Z",
@@ -6641,7 +6641,7 @@
     },
     {
         "ClosePrice": 36.42,
-        "HighPrice": 36.485,
+        "HighPrice": 36.48,
         "LowPrice": 35.88,
         "n": 12032,
         "OpenPrice": 36.15,
@@ -6651,7 +6651,7 @@
     },
     {
         "ClosePrice": 36.38,
-        "HighPrice": 36.5399,
+        "HighPrice": 36.54,
         "LowPrice": 36.1,
         "n": 8837,
         "OpenPrice": 36.41,
@@ -6671,7 +6671,7 @@
     },
     {
         "ClosePrice": 36.55,
-        "HighPrice": 36.5869,
+        "HighPrice": 36.59,
         "LowPrice": 36.21,
         "n": 5979,
         "OpenPrice": 36.31,
@@ -6712,7 +6712,7 @@
     {
         "ClosePrice": 36.51,
         "HighPrice": 36.7,
-        "LowPrice": 36.3501,
+        "LowPrice": 36.35,
         "n": 6104,
         "OpenPrice": 36.56,
         "Timestamp": "2019-04-11T04:00:00Z",
@@ -6752,7 +6752,7 @@
     {
         "ClosePrice": 35.25,
         "HighPrice": 35.8,
-        "LowPrice": 35.135,
+        "LowPrice": 35.13,
         "n": 10142,
         "OpenPrice": 35.73,
         "Timestamp": "2019-04-17T04:00:00Z",
@@ -6772,7 +6772,7 @@
     {
         "ClosePrice": 35.14,
         "HighPrice": 35.46,
-        "LowPrice": 34.825,
+        "LowPrice": 34.83,
         "n": 9231,
         "OpenPrice": 35.46,
         "Timestamp": "2019-04-22T04:00:00Z",
@@ -6811,7 +6811,7 @@
     },
     {
         "ClosePrice": 35.99,
-        "HighPrice": 36.015,
+        "HighPrice": 36.02,
         "LowPrice": 35.71,
         "n": 5516,
         "OpenPrice": 35.89,
@@ -6822,7 +6822,7 @@
     {
         "ClosePrice": 35.62,
         "HighPrice": 36.07,
-        "LowPrice": 35.575,
+        "LowPrice": 35.58,
         "n": 6194,
         "OpenPrice": 35.92,
         "Timestamp": "2019-04-29T04:00:00Z",
@@ -6831,7 +6831,7 @@
     },
     {
         "ClosePrice": 36.03,
-        "HighPrice": 36.075,
+        "HighPrice": 36.08,
         "LowPrice": 35.39,
         "n": 10202,
         "OpenPrice": 35.64,
@@ -6892,7 +6892,7 @@
     {
         "ClosePrice": 35.58,
         "HighPrice": 35.92,
-        "LowPrice": 35.565,
+        "LowPrice": 35.56,
         "n": 11248,
         "OpenPrice": 35.65,
         "Timestamp": "2019-05-08T04:00:00Z",
@@ -6912,7 +6912,7 @@
     {
         "ClosePrice": 36.11,
         "HighPrice": 36.2,
-        "LowPrice": 35.595,
+        "LowPrice": 35.59,
         "n": 7629,
         "OpenPrice": 35.62,
         "Timestamp": "2019-05-10T04:00:00Z",
@@ -6921,7 +6921,7 @@
     },
     {
         "ClosePrice": 36.11,
-        "HighPrice": 36.1699,
+        "HighPrice": 36.17,
         "LowPrice": 35.8,
         "n": 9498,
         "OpenPrice": 35.87,
@@ -6981,7 +6981,7 @@
     },
     {
         "ClosePrice": 36.35,
-        "HighPrice": 36.455,
+        "HighPrice": 36.45,
         "LowPrice": 36.15,
         "n": 5363,
         "OpenPrice": 36.21,
@@ -7001,7 +7001,7 @@
     },
     {
         "ClosePrice": 36.7,
-        "HighPrice": 36.735,
+        "HighPrice": 36.73,
         "LowPrice": 36.36,
         "n": 7921,
         "OpenPrice": 36.42,
@@ -7032,7 +7032,7 @@
     {
         "ClosePrice": 35.95,
         "HighPrice": 36.43,
-        "LowPrice": 35.8016,
+        "LowPrice": 35.8,
         "n": 7745,
         "OpenPrice": 36.34,
         "Timestamp": "2019-05-29T04:00:00Z",
@@ -7041,7 +7041,7 @@
     },
     {
         "ClosePrice": 36.17,
-        "HighPrice": 36.285,
+        "HighPrice": 36.28,
         "LowPrice": 35.93,
         "n": 6266,
         "OpenPrice": 35.99,
@@ -7122,7 +7122,7 @@
     {
         "ClosePrice": 37.37,
         "HighPrice": 37.48,
-        "LowPrice": 37.115,
+        "LowPrice": 37.12,
         "n": 7402,
         "OpenPrice": 37.4,
         "Timestamp": "2019-06-11T04:00:00Z",
@@ -7141,8 +7141,8 @@
     },
     {
         "ClosePrice": 37.56,
-        "HighPrice": 37.615,
-        "LowPrice": 37.415,
+        "HighPrice": 37.62,
+        "LowPrice": 37.41,
         "n": 7304,
         "OpenPrice": 37.54,
         "Timestamp": "2019-06-13T04:00:00Z",
@@ -7151,7 +7151,7 @@
     },
     {
         "ClosePrice": 37.72,
-        "HighPrice": 37.8463,
+        "HighPrice": 37.85,
         "LowPrice": 37.56,
         "n": 5474,
         "OpenPrice": 37.56,
@@ -7161,7 +7161,7 @@
     },
     {
         "ClosePrice": 38.13,
-        "HighPrice": 38.175,
+        "HighPrice": 38.17,
         "LowPrice": 37.82,
         "n": 9857,
         "OpenPrice": 37.82,
@@ -7181,7 +7181,7 @@
     },
     {
         "ClosePrice": 38.27,
-        "HighPrice": 38.395,
+        "HighPrice": 38.4,
         "LowPrice": 37.81,
         "n": 13860,
         "OpenPrice": 37.99,
@@ -7251,7 +7251,7 @@
     },
     {
         "ClosePrice": 36.77,
-        "HighPrice": 36.9785,
+        "HighPrice": 36.98,
         "LowPrice": 36.65,
         "n": 12788,
         "OpenPrice": 36.71,
@@ -7262,7 +7262,7 @@
     {
         "ClosePrice": 36.7,
         "HighPrice": 37,
-        "LowPrice": 36.2851,
+        "LowPrice": 36.29,
         "n": 15319,
         "OpenPrice": 36.95,
         "Timestamp": "2019-07-01T04:00:00Z",
@@ -7281,8 +7281,8 @@
     },
     {
         "ClosePrice": 37.9,
-        "HighPrice": 37.9299,
-        "LowPrice": 37.4479,
+        "HighPrice": 37.93,
+        "LowPrice": 37.45,
         "n": 7606,
         "OpenPrice": 37.49,
         "Timestamp": "2019-07-03T04:00:00Z",
@@ -7291,7 +7291,7 @@
     },
     {
         "ClosePrice": 37.71,
-        "HighPrice": 37.839,
+        "HighPrice": 37.84,
         "LowPrice": 37.13,
         "n": 11952,
         "OpenPrice": 37.64,
@@ -7311,7 +7311,7 @@
     },
     {
         "ClosePrice": 38.05,
-        "HighPrice": 38.095,
+        "HighPrice": 38.09,
         "LowPrice": 37.72,
         "n": 9447,
         "OpenPrice": 37.77,
@@ -7332,7 +7332,7 @@
     {
         "ClosePrice": 37.77,
         "HighPrice": 38.21,
-        "LowPrice": 37.605,
+        "LowPrice": 37.6,
         "n": 9231,
         "OpenPrice": 38.2,
         "Timestamp": "2019-07-11T04:00:00Z",
@@ -7342,7 +7342,7 @@
     {
         "ClosePrice": 37.62,
         "HighPrice": 37.84,
-        "LowPrice": 37.495,
+        "LowPrice": 37.49,
         "n": 8051,
         "OpenPrice": 37.79,
         "Timestamp": "2019-07-12T04:00:00Z",
@@ -7361,7 +7361,7 @@
     },
     {
         "ClosePrice": 37.61,
-        "HighPrice": 37.746,
+        "HighPrice": 37.75,
         "LowPrice": 37.49,
         "n": 9976,
         "OpenPrice": 37.63,
@@ -7372,7 +7372,7 @@
     {
         "ClosePrice": 37.42,
         "HighPrice": 37.83,
-        "LowPrice": 37.225,
+        "LowPrice": 37.23,
         "n": 7422,
         "OpenPrice": 37.71,
         "Timestamp": "2019-07-17T04:00:00Z",
@@ -7402,7 +7402,7 @@
     {
         "ClosePrice": 36.76,
         "HighPrice": 36.89,
-        "LowPrice": 36.605,
+        "LowPrice": 36.6,
         "n": 7804,
         "OpenPrice": 36.85,
         "Timestamp": "2019-07-22T04:00:00Z",
@@ -7461,7 +7461,7 @@
     },
     {
         "ClosePrice": 37.56,
-        "HighPrice": 37.6752,
+        "HighPrice": 37.68,
         "LowPrice": 37.18,
         "n": 8521,
         "OpenPrice": 37.19,
@@ -7491,8 +7491,8 @@
     },
     {
         "ClosePrice": 37.79,
-        "HighPrice": 38.045,
-        "LowPrice": 37.465,
+        "HighPrice": 38.05,
+        "LowPrice": 37.47,
         "n": 15324,
         "OpenPrice": 37.54,
         "Timestamp": "2019-08-02T04:00:00Z",
@@ -7501,7 +7501,7 @@
     },
     {
         "ClosePrice": 37.07,
-        "HighPrice": 37.7199,
+        "HighPrice": 37.72,
         "LowPrice": 36.62,
         "n": 17050,
         "OpenPrice": 37.7,
@@ -7522,7 +7522,7 @@
     {
         "ClosePrice": 37.88,
         "HighPrice": 38.13,
-        "LowPrice": 36.955,
+        "LowPrice": 36.95,
         "n": 19598,
         "OpenPrice": 37.56,
         "Timestamp": "2019-08-07T04:00:00Z",
@@ -7551,8 +7551,8 @@
     },
     {
         "ClosePrice": 38.38,
-        "HighPrice": 38.585,
-        "LowPrice": 38.205,
+        "HighPrice": 38.59,
+        "LowPrice": 38.2,
         "n": 12671,
         "OpenPrice": 38.46,
         "Timestamp": "2019-08-12T04:00:00Z",
@@ -7621,7 +7621,7 @@
     },
     {
         "ClosePrice": 38.88,
-        "HighPrice": 38.9766,
+        "HighPrice": 38.98,
         "LowPrice": 38.66,
         "n": 10399,
         "OpenPrice": 38.81,
@@ -7641,8 +7641,8 @@
     },
     {
         "ClosePrice": 38.58,
-        "HighPrice": 39.3375,
-        "LowPrice": 38.4149,
+        "HighPrice": 39.34,
+        "LowPrice": 38.41,
         "n": 16327,
         "OpenPrice": 39.08,
         "Timestamp": "2019-08-23T04:00:00Z",
@@ -7672,7 +7672,7 @@
     {
         "ClosePrice": 38.92,
         "HighPrice": 38.99,
-        "LowPrice": 38.725,
+        "LowPrice": 38.73,
         "n": 9063,
         "OpenPrice": 38.83,
         "Timestamp": "2019-08-28T04:00:00Z",
@@ -7681,7 +7681,7 @@
     },
     {
         "ClosePrice": 39.2,
-        "HighPrice": 39.265,
+        "HighPrice": 39.27,
         "LowPrice": 38.98,
         "n": 8401,
         "OpenPrice": 39.13,
@@ -7731,7 +7731,7 @@
     },
     {
         "ClosePrice": 39.8,
-        "HighPrice": 39.9866,
+        "HighPrice": 39.99,
         "LowPrice": 39.69,
         "n": 8009,
         "OpenPrice": 39.77,
@@ -7782,7 +7782,7 @@
     {
         "ClosePrice": 38.59,
         "HighPrice": 39.16,
-        "LowPrice": 38.465,
+        "LowPrice": 38.47,
         "n": 16078,
         "OpenPrice": 39,
         "Timestamp": "2019-09-13T04:00:00Z",
@@ -7812,7 +7812,7 @@
     {
         "ClosePrice": 39.42,
         "HighPrice": 39.71,
-        "LowPrice": 39.033,
+        "LowPrice": 39.03,
         "n": 15261,
         "OpenPrice": 39.64,
         "Timestamp": "2019-09-18T04:00:00Z",
@@ -7841,7 +7841,7 @@
     },
     {
         "ClosePrice": 39.26,
-        "HighPrice": 39.425,
+        "HighPrice": 39.42,
         "LowPrice": 39.02,
         "n": 10334,
         "OpenPrice": 39.09,
@@ -7871,7 +7871,7 @@
     },
     {
         "ClosePrice": 39.55,
-        "HighPrice": 39.6283,
+        "HighPrice": 39.63,
         "LowPrice": 39.26,
         "n": 8889,
         "OpenPrice": 39.29,
@@ -7911,7 +7911,7 @@
     },
     {
         "ClosePrice": 38.76,
-        "HighPrice": 39.045,
+        "HighPrice": 39.05,
         "LowPrice": 38.53,
         "n": 17518,
         "OpenPrice": 38.95,
@@ -7931,7 +7931,7 @@
     },
     {
         "ClosePrice": 39.4,
-        "HighPrice": 39.4898,
+        "HighPrice": 39.49,
         "LowPrice": 39.24,
         "n": 7708,
         "OpenPrice": 39.28,
@@ -7942,7 +7942,7 @@
     {
         "ClosePrice": 39.32,
         "HighPrice": 39.51,
-        "LowPrice": 39.1499,
+        "LowPrice": 39.15,
         "n": 9328,
         "OpenPrice": 39.3,
         "Timestamp": "2019-10-07T04:00:00Z",
@@ -7951,7 +7951,7 @@
     },
     {
         "ClosePrice": 39.14,
-        "HighPrice": 39.465,
+        "HighPrice": 39.47,
         "LowPrice": 38.94,
         "n": 12367,
         "OpenPrice": 39.3,
@@ -7962,7 +7962,7 @@
     {
         "ClosePrice": 39.26,
         "HighPrice": 39.42,
-        "LowPrice": 39.165,
+        "LowPrice": 39.16,
         "n": 9195,
         "OpenPrice": 39.29,
         "Timestamp": "2019-10-09T04:00:00Z",
@@ -8012,7 +8012,7 @@
     {
         "ClosePrice": 39.27,
         "HighPrice": 39.36,
-        "LowPrice": 39.015,
+        "LowPrice": 39.02,
         "n": 8689,
         "OpenPrice": 39.32,
         "Timestamp": "2019-10-16T04:00:00Z",
@@ -8022,7 +8022,7 @@
     {
         "ClosePrice": 39.53,
         "HighPrice": 39.64,
-        "LowPrice": 39.2699,
+        "LowPrice": 39.27,
         "n": 7442,
         "OpenPrice": 39.38,
         "Timestamp": "2019-10-17T04:00:00Z",
@@ -8072,7 +8072,7 @@
     {
         "ClosePrice": 39.98,
         "HighPrice": 40.26,
-        "LowPrice": 39.865,
+        "LowPrice": 39.87,
         "n": 4303,
         "OpenPrice": 40.21,
         "Timestamp": "2019-10-24T04:00:00Z",
@@ -8091,7 +8091,7 @@
     },
     {
         "ClosePrice": 39.07,
-        "HighPrice": 39.4778,
+        "HighPrice": 39.48,
         "LowPrice": 38.99,
         "n": 9214,
         "OpenPrice": 39.42,
@@ -8131,7 +8131,7 @@
     },
     {
         "ClosePrice": 39.23,
-        "HighPrice": 39.515,
+        "HighPrice": 39.52,
         "LowPrice": 38.82,
         "n": 10657,
         "OpenPrice": 39.38,
@@ -8161,8 +8161,8 @@
     },
     {
         "ClosePrice": 38.26,
-        "HighPrice": 38.4386,
-        "LowPrice": 38.1349,
+        "HighPrice": 38.44,
+        "LowPrice": 38.13,
         "n": 7383,
         "OpenPrice": 38.17,
         "Timestamp": "2019-11-06T05:00:00Z",
@@ -8172,7 +8172,7 @@
     {
         "ClosePrice": 37.85,
         "HighPrice": 38.16,
-        "LowPrice": 37.715,
+        "LowPrice": 37.72,
         "n": 9802,
         "OpenPrice": 38.15,
         "Timestamp": "2019-11-07T05:00:00Z",
@@ -8191,7 +8191,7 @@
     },
     {
         "ClosePrice": 37.85,
-        "HighPrice": 37.9869,
+        "HighPrice": 37.99,
         "LowPrice": 37.75,
         "n": 6454,
         "OpenPrice": 37.76,
@@ -8201,7 +8201,7 @@
     },
     {
         "ClosePrice": 37.6,
-        "HighPrice": 38.1064,
+        "HighPrice": 38.11,
         "LowPrice": 37.55,
         "n": 6927,
         "OpenPrice": 37.85,
@@ -8262,7 +8262,7 @@
     {
         "ClosePrice": 38.86,
         "HighPrice": 38.95,
-        "LowPrice": 38.6126,
+        "LowPrice": 38.61,
         "n": 13259,
         "OpenPrice": 38.81,
         "Timestamp": "2019-11-20T05:00:00Z",
@@ -8272,7 +8272,7 @@
     {
         "ClosePrice": 38.32,
         "HighPrice": 38.77,
-        "LowPrice": 38.2908,
+        "LowPrice": 38.29,
         "n": 9400,
         "OpenPrice": 38.77,
         "Timestamp": "2019-11-21T05:00:00Z",
@@ -8282,7 +8282,7 @@
     {
         "ClosePrice": 38.12,
         "HighPrice": 38.4,
-        "LowPrice": 37.935,
+        "LowPrice": 37.94,
         "n": 9454,
         "OpenPrice": 38.38,
         "Timestamp": "2019-11-22T05:00:00Z",
@@ -8292,7 +8292,7 @@
     {
         "ClosePrice": 38.13,
         "HighPrice": 38.41,
-        "LowPrice": 38.085,
+        "LowPrice": 38.09,
         "n": 6106,
         "OpenPrice": 38.2,
         "Timestamp": "2019-11-25T05:00:00Z",
@@ -8302,7 +8302,7 @@
     {
         "ClosePrice": 38.68,
         "HighPrice": 38.68,
-        "LowPrice": 38.1504,
+        "LowPrice": 38.15,
         "n": 10086,
         "OpenPrice": 38.18,
         "Timestamp": "2019-11-26T05:00:00Z",
@@ -8351,7 +8351,7 @@
     },
     {
         "ClosePrice": 38.45,
-        "HighPrice": 38.545,
+        "HighPrice": 38.55,
         "LowPrice": 38.09,
         "n": 5614,
         "OpenPrice": 38.17,
@@ -8362,7 +8362,7 @@
     {
         "ClosePrice": 38.51,
         "HighPrice": 38.51,
-        "LowPrice": 38.235,
+        "LowPrice": 38.23,
         "n": 6614,
         "OpenPrice": 38.39,
         "Timestamp": "2019-12-05T05:00:00Z",
@@ -8372,7 +8372,7 @@
     {
         "ClosePrice": 38.52,
         "HighPrice": 38.7,
-        "LowPrice": 38.485,
+        "LowPrice": 38.48,
         "n": 8134,
         "OpenPrice": 38.52,
         "Timestamp": "2019-12-06T05:00:00Z",
@@ -8382,7 +8382,7 @@
     {
         "ClosePrice": 38.57,
         "HighPrice": 38.68,
-        "LowPrice": 38.415,
+        "LowPrice": 38.41,
         "n": 6559,
         "OpenPrice": 38.57,
         "Timestamp": "2019-12-09T05:00:00Z",
@@ -8432,7 +8432,7 @@
     {
         "ClosePrice": 37.88,
         "HighPrice": 37.99,
-        "LowPrice": 37.415,
+        "LowPrice": 37.41,
         "n": 10684,
         "OpenPrice": 37.65,
         "Timestamp": "2019-12-16T05:00:00Z",
@@ -8442,7 +8442,7 @@
     {
         "ClosePrice": 37.47,
         "HighPrice": 38,
-        "LowPrice": 37.395,
+        "LowPrice": 37.4,
         "n": 10519,
         "OpenPrice": 37.95,
         "Timestamp": "2019-12-17T05:00:00Z",
@@ -8471,7 +8471,7 @@
     },
     {
         "ClosePrice": 38.24,
-        "HighPrice": 38.345,
+        "HighPrice": 38.34,
         "LowPrice": 38.05,
         "n": 7390,
         "OpenPrice": 38.1,
@@ -8512,7 +8512,7 @@
     {
         "ClosePrice": 38.43,
         "HighPrice": 38.47,
-        "LowPrice": 38.265,
+        "LowPrice": 38.27,
         "n": 3869,
         "OpenPrice": 38.41,
         "Timestamp": "2019-12-27T05:00:00Z",
@@ -8551,7 +8551,7 @@
     },
     {
         "ClosePrice": 38.5,
-        "HighPrice": 38.585,
+        "HighPrice": 38.59,
         "LowPrice": 37.97,
         "n": 9099,
         "OpenPrice": 37.99,
@@ -8572,7 +8572,7 @@
     {
         "ClosePrice": 38.09,
         "HighPrice": 38.4,
-        "LowPrice": 37.885,
+        "LowPrice": 37.88,
         "n": 7670,
         "OpenPrice": 38.4,
         "Timestamp": "2020-01-07T05:00:00Z",
@@ -8601,8 +8601,8 @@
     },
     {
         "ClosePrice": 38.64,
-        "HighPrice": 38.651,
-        "LowPrice": 38.265,
+        "HighPrice": 38.65,
+        "LowPrice": 38.27,
         "n": 5770,
         "OpenPrice": 38.35,
         "Timestamp": "2020-01-10T05:00:00Z",
@@ -8612,7 +8612,7 @@
     {
         "ClosePrice": 39.11,
         "HighPrice": 39.11,
-        "LowPrice": 38.6501,
+        "LowPrice": 38.65,
         "n": 7069,
         "OpenPrice": 38.66,
         "Timestamp": "2020-01-13T05:00:00Z",
@@ -8622,7 +8622,7 @@
     {
         "ClosePrice": 38.92,
         "HighPrice": 39.07,
-        "LowPrice": 38.705,
+        "LowPrice": 38.7,
         "n": 8292,
         "OpenPrice": 39.07,
         "Timestamp": "2020-01-14T05:00:00Z",
@@ -8691,7 +8691,7 @@
     },
     {
         "ClosePrice": 39.99,
-        "HighPrice": 40.205,
+        "HighPrice": 40.2,
         "LowPrice": 39.84,
         "n": 6040,
         "OpenPrice": 40.13,
@@ -8711,7 +8711,7 @@
     },
     {
         "ClosePrice": 39.92,
-        "HighPrice": 40.089,
+        "HighPrice": 40.09,
         "LowPrice": 39.77,
         "n": 6468,
         "OpenPrice": 39.87,
@@ -8731,7 +8731,7 @@
     },
     {
         "ClosePrice": 39.8,
-        "HighPrice": 39.8332,
+        "HighPrice": 39.83,
         "LowPrice": 39.51,
         "n": 8446,
         "OpenPrice": 39.58,
@@ -8742,7 +8742,7 @@
     {
         "ClosePrice": 39.23,
         "HighPrice": 39.75,
-        "LowPrice": 39.135,
+        "LowPrice": 39.13,
         "n": 15448,
         "OpenPrice": 39.7,
         "Timestamp": "2020-01-31T05:00:00Z",
@@ -8751,8 +8751,8 @@
     },
     {
         "ClosePrice": 39.27,
-        "HighPrice": 39.638,
-        "LowPrice": 39.235,
+        "HighPrice": 39.64,
+        "LowPrice": 39.23,
         "n": 11464,
         "OpenPrice": 39.39,
         "Timestamp": "2020-02-03T05:00:00Z",
@@ -8761,8 +8761,8 @@
     },
     {
         "ClosePrice": 39.78,
-        "HighPrice": 39.9252,
-        "LowPrice": 39.335,
+        "HighPrice": 39.93,
+        "LowPrice": 39.34,
         "n": 12685,
         "OpenPrice": 39.41,
         "Timestamp": "2020-02-04T05:00:00Z",
@@ -8791,8 +8791,8 @@
     },
     {
         "ClosePrice": 39.94,
-        "HighPrice": 39.985,
-        "LowPrice": 39.825,
+        "HighPrice": 39.98,
+        "LowPrice": 39.83,
         "n": 10482,
         "OpenPrice": 39.94,
         "Timestamp": "2020-02-07T05:00:00Z",
@@ -8831,7 +8831,7 @@
     },
     {
         "ClosePrice": 41.4,
-        "HighPrice": 41.4947,
+        "HighPrice": 41.49,
         "LowPrice": 41.04,
         "n": 7678,
         "OpenPrice": 41.09,
@@ -8891,8 +8891,8 @@
     },
     {
         "ClosePrice": 41.37,
-        "HighPrice": 41.815,
-        "LowPrice": 41.1807,
+        "HighPrice": 41.81,
+        "LowPrice": 41.18,
         "n": 14766,
         "OpenPrice": 41.44,
         "Timestamp": "2020-02-24T05:00:00Z",
@@ -8911,8 +8911,8 @@
     },
     {
         "ClosePrice": 39.98,
-        "HighPrice": 40.695,
-        "LowPrice": 39.8907,
+        "HighPrice": 40.7,
+        "LowPrice": 39.89,
         "n": 21674,
         "OpenPrice": 40.38,
         "Timestamp": "2020-02-26T05:00:00Z",
@@ -8932,7 +8932,7 @@
     {
         "ClosePrice": 36.79,
         "HighPrice": 37.16,
-        "LowPrice": 35.6933,
+        "LowPrice": 35.69,
         "n": 92297,
         "OpenPrice": 36.92,
         "Timestamp": "2020-02-28T05:00:00Z",
@@ -8951,7 +8951,7 @@
     },
     {
         "ClosePrice": 38.59,
-        "HighPrice": 39.555,
+        "HighPrice": 39.55,
         "LowPrice": 38.22,
         "n": 100568,
         "OpenPrice": 38.7,
@@ -9162,7 +9162,7 @@
     {
         "ClosePrice": 29.12,
         "HighPrice": 29.62,
-        "LowPrice": 28.4799,
+        "LowPrice": 28.48,
         "n": 37673,
         "OpenPrice": 29.6,
         "Timestamp": "2020-04-01T04:00:00Z",
@@ -9232,7 +9232,7 @@
     {
         "ClosePrice": 33.9,
         "HighPrice": 35.39,
-        "LowPrice": 33.695,
+        "LowPrice": 33.7,
         "n": 40120,
         "OpenPrice": 35.33,
         "Timestamp": "2020-04-13T04:00:00Z",
@@ -9262,7 +9262,7 @@
     {
         "ClosePrice": 33.46,
         "HighPrice": 34.02,
-        "LowPrice": 33.265,
+        "LowPrice": 33.27,
         "n": 23213,
         "OpenPrice": 33.73,
         "Timestamp": "2020-04-16T04:00:00Z",
@@ -9292,7 +9292,7 @@
     {
         "ClosePrice": 32.77,
         "HighPrice": 33.01,
-        "LowPrice": 32.3701,
+        "LowPrice": 32.37,
         "n": 27270,
         "OpenPrice": 32.48,
         "Timestamp": "2020-04-21T04:00:00Z",
@@ -9321,8 +9321,8 @@
     },
     {
         "ClosePrice": 33.08,
-        "HighPrice": 33.231,
-        "LowPrice": 32.715,
+        "HighPrice": 33.23,
+        "LowPrice": 32.72,
         "n": 17739,
         "OpenPrice": 33.13,
         "Timestamp": "2020-04-24T04:00:00Z",
@@ -9391,8 +9391,8 @@
     },
     {
         "ClosePrice": 33.07,
-        "HighPrice": 33.509,
-        "LowPrice": 33.025,
+        "HighPrice": 33.51,
+        "LowPrice": 33.02,
         "n": 15412,
         "OpenPrice": 33.14,
         "Timestamp": "2020-05-05T04:00:00Z",
@@ -9452,7 +9452,7 @@
     {
         "ClosePrice": 31.05,
         "HighPrice": 31.74,
-        "LowPrice": 30.895,
+        "LowPrice": 30.89,
         "n": 20014,
         "OpenPrice": 31.37,
         "Timestamp": "2020-05-13T04:00:00Z",
@@ -9502,7 +9502,7 @@
     {
         "ClosePrice": 32.16,
         "HighPrice": 32.25,
-        "LowPrice": 31.9095,
+        "LowPrice": 31.91,
         "n": 15465,
         "OpenPrice": 32.2,
         "Timestamp": "2020-05-20T04:00:00Z",
@@ -9532,7 +9532,7 @@
     {
         "ClosePrice": 33.74,
         "HighPrice": 33.97,
-        "LowPrice": 33.345,
+        "LowPrice": 33.34,
         "n": 15219,
         "OpenPrice": 33.73,
         "Timestamp": "2020-05-26T04:00:00Z",
@@ -9571,7 +9571,7 @@
     },
     {
         "ClosePrice": 35.34,
-        "HighPrice": 35.605,
+        "HighPrice": 35.6,
         "LowPrice": 34.52,
         "n": 18251,
         "OpenPrice": 34.62,
@@ -9591,7 +9591,7 @@
     },
     {
         "ClosePrice": 36.42,
-        "HighPrice": 36.625,
+        "HighPrice": 36.63,
         "LowPrice": 35.83,
         "n": 12634,
         "OpenPrice": 35.89,
@@ -9721,7 +9721,7 @@
     },
     {
         "ClosePrice": 34.98,
-        "HighPrice": 35.105,
+        "HighPrice": 35.1,
         "LowPrice": 34.51,
         "n": 10988,
         "OpenPrice": 34.97,
@@ -9752,7 +9752,7 @@
     {
         "ClosePrice": 34.32,
         "HighPrice": 34.34,
-        "LowPrice": 33.6735,
+        "LowPrice": 33.67,
         "n": 15571,
         "OpenPrice": 33.78,
         "Timestamp": "2020-06-25T04:00:00Z",
@@ -9792,7 +9792,7 @@
     {
         "ClosePrice": 35.76,
         "HighPrice": 35.87,
-        "LowPrice": 34.8749,
+        "LowPrice": 34.87,
         "n": 17752,
         "OpenPrice": 34.95,
         "Timestamp": "2020-07-01T04:00:00Z",
@@ -9812,7 +9812,7 @@
     {
         "ClosePrice": 35.68,
         "HighPrice": 36.36,
-        "LowPrice": 35.613,
+        "LowPrice": 35.61,
         "n": 11422,
         "OpenPrice": 36.25,
         "Timestamp": "2020-07-06T04:00:00Z",
@@ -9832,7 +9832,7 @@
     {
         "ClosePrice": 35.08,
         "HighPrice": 35.32,
-        "LowPrice": 34.7704,
+        "LowPrice": 34.77,
         "n": 14427,
         "OpenPrice": 35.21,
         "Timestamp": "2020-07-08T04:00:00Z",
@@ -9851,7 +9851,7 @@
     },
     {
         "ClosePrice": 35,
-        "HighPrice": 35.1801,
+        "HighPrice": 35.18,
         "LowPrice": 34.82,
         "n": 12915,
         "OpenPrice": 34.96,
@@ -9882,7 +9882,7 @@
     {
         "ClosePrice": 34.95,
         "HighPrice": 35.37,
-        "LowPrice": 34.755,
+        "LowPrice": 34.76,
         "n": 16017,
         "OpenPrice": 35.25,
         "Timestamp": "2020-07-15T04:00:00Z",
@@ -9892,7 +9892,7 @@
     {
         "ClosePrice": 34.54,
         "HighPrice": 34.97,
-        "LowPrice": 34.455,
+        "LowPrice": 34.45,
         "n": 11748,
         "OpenPrice": 34.81,
         "Timestamp": "2020-07-16T04:00:00Z",
@@ -9971,7 +9971,7 @@
     },
     {
         "ClosePrice": 35.92,
-        "HighPrice": 36.0978,
+        "HighPrice": 36.1,
         "LowPrice": 35.12,
         "n": 13410,
         "OpenPrice": 35.2,
@@ -10012,7 +10012,7 @@
     {
         "ClosePrice": 35.7,
         "HighPrice": 36.18,
-        "LowPrice": 35.585,
+        "LowPrice": 35.59,
         "n": 15031,
         "OpenPrice": 36.18,
         "Timestamp": "2020-08-03T04:00:00Z",
@@ -10021,7 +10021,7 @@
     },
     {
         "ClosePrice": 36.21,
-        "HighPrice": 36.325,
+        "HighPrice": 36.33,
         "LowPrice": 35.64,
         "n": 12499,
         "OpenPrice": 35.69,
@@ -10042,7 +10042,7 @@
     {
         "ClosePrice": 36.01,
         "HighPrice": 36.07,
-        "LowPrice": 35.745,
+        "LowPrice": 35.74,
         "n": 10164,
         "OpenPrice": 35.87,
         "Timestamp": "2020-08-06T04:00:00Z",
@@ -10051,7 +10051,7 @@
     },
     {
         "ClosePrice": 36.5,
-        "HighPrice": 36.525,
+        "HighPrice": 36.52,
         "LowPrice": 35.85,
         "n": 12728,
         "OpenPrice": 35.86,
@@ -10072,7 +10072,7 @@
     {
         "ClosePrice": 35.74,
         "HighPrice": 36.75,
-        "LowPrice": 35.6167,
+        "LowPrice": 35.62,
         "n": 15666,
         "OpenPrice": 36.75,
         "Timestamp": "2020-08-11T04:00:00Z",
@@ -10102,7 +10102,7 @@
     {
         "ClosePrice": 35.86,
         "HighPrice": 36.13,
-        "LowPrice": 35.7122,
+        "LowPrice": 35.71,
         "n": 7413,
         "OpenPrice": 35.75,
         "Timestamp": "2020-08-14T04:00:00Z",
@@ -10112,7 +10112,7 @@
     {
         "ClosePrice": 36.18,
         "HighPrice": 36.18,
-        "LowPrice": 35.7358,
+        "LowPrice": 35.74,
         "n": 9170,
         "OpenPrice": 35.85,
         "Timestamp": "2020-08-17T04:00:00Z",
@@ -10121,7 +10121,7 @@
     },
     {
         "ClosePrice": 36.14,
-        "HighPrice": 36.265,
+        "HighPrice": 36.27,
         "LowPrice": 35.91,
         "n": 10921,
         "OpenPrice": 36.25,
@@ -10141,8 +10141,8 @@
     },
     {
         "ClosePrice": 35.78,
-        "HighPrice": 35.945,
-        "LowPrice": 35.1701,
+        "HighPrice": 35.95,
+        "LowPrice": 35.17,
         "n": 11589,
         "OpenPrice": 35.26,
         "Timestamp": "2020-08-20T04:00:00Z",
@@ -10152,7 +10152,7 @@
     {
         "ClosePrice": 35.88,
         "HighPrice": 35.99,
-        "LowPrice": 35.441,
+        "LowPrice": 35.44,
         "n": 8619,
         "OpenPrice": 35.87,
         "Timestamp": "2020-08-21T04:00:00Z",
@@ -10162,7 +10162,7 @@
     {
         "ClosePrice": 35.95,
         "HighPrice": 35.97,
-        "LowPrice": 35.4303,
+        "LowPrice": 35.43,
         "n": 11014,
         "OpenPrice": 35.97,
         "Timestamp": "2020-08-24T04:00:00Z",
@@ -10172,7 +10172,7 @@
     {
         "ClosePrice": 36.06,
         "HighPrice": 36.1,
-        "LowPrice": 35.741,
+        "LowPrice": 35.74,
         "n": 10860,
         "OpenPrice": 36.06,
         "Timestamp": "2020-08-25T04:00:00Z",
@@ -10182,7 +10182,7 @@
     {
         "ClosePrice": 35.81,
         "HighPrice": 36.01,
-        "LowPrice": 35.5667,
+        "LowPrice": 35.57,
         "n": 7419,
         "OpenPrice": 35.96,
         "Timestamp": "2020-08-26T04:00:00Z",
@@ -10191,7 +10191,7 @@
     },
     {
         "ClosePrice": 36.29,
-        "HighPrice": 36.3999,
+        "HighPrice": 36.4,
         "LowPrice": 35.86,
         "n": 10478,
         "OpenPrice": 35.9,
@@ -10281,7 +10281,7 @@
     },
     {
         "ClosePrice": 35.67,
-        "HighPrice": 36.2502,
+        "HighPrice": 36.25,
         "LowPrice": 35.65,
         "n": 18457,
         "OpenPrice": 36.21,
@@ -10301,7 +10301,7 @@
     },
     {
         "ClosePrice": 36.42,
-        "HighPrice": 36.514,
+        "HighPrice": 36.51,
         "LowPrice": 35.79,
         "n": 12435,
         "OpenPrice": 35.79,
@@ -10311,7 +10311,7 @@
     },
     {
         "ClosePrice": 36.9,
-        "HighPrice": 37.2399,
+        "HighPrice": 37.24,
         "LowPrice": 36.49,
         "n": 11579,
         "OpenPrice": 36.52,
@@ -10321,7 +10321,7 @@
     },
     {
         "ClosePrice": 37.14,
-        "HighPrice": 37.515,
+        "HighPrice": 37.52,
         "LowPrice": 36.96,
         "n": 12475,
         "OpenPrice": 37.08,
@@ -10332,7 +10332,7 @@
     {
         "ClosePrice": 36.32,
         "HighPrice": 37.06,
-        "LowPrice": 36.0737,
+        "LowPrice": 36.07,
         "n": 15900,
         "OpenPrice": 36.82,
         "Timestamp": "2020-09-17T04:00:00Z",
@@ -10342,7 +10342,7 @@
     {
         "ClosePrice": 35.6,
         "HighPrice": 36.34,
-        "LowPrice": 35.5299,
+        "LowPrice": 35.53,
         "n": 22018,
         "OpenPrice": 36.34,
         "Timestamp": "2020-09-18T04:00:00Z",
@@ -10352,7 +10352,7 @@
     {
         "ClosePrice": 34.43,
         "HighPrice": 35.04,
-        "LowPrice": 34.255,
+        "LowPrice": 34.26,
         "n": 22882,
         "OpenPrice": 34.99,
         "Timestamp": "2020-09-21T04:00:00Z",
@@ -10372,7 +10372,7 @@
     {
         "ClosePrice": 33.85,
         "HighPrice": 34.86,
-        "LowPrice": 33.795,
+        "LowPrice": 33.8,
         "n": 18574,
         "OpenPrice": 34.86,
         "Timestamp": "2020-09-23T04:00:00Z",
@@ -10452,7 +10452,7 @@
     {
         "ClosePrice": 36.63,
         "HighPrice": 36.68,
-        "LowPrice": 35.885,
+        "LowPrice": 35.88,
         "n": 10558,
         "OpenPrice": 36.53,
         "Timestamp": "2020-10-05T04:00:00Z",
@@ -10471,7 +10471,7 @@
     },
     {
         "ClosePrice": 36.42,
-        "HighPrice": 36.655,
+        "HighPrice": 36.66,
         "LowPrice": 36.29,
         "n": 10262,
         "OpenPrice": 36.56,
@@ -10492,7 +10492,7 @@
     {
         "ClosePrice": 36.93,
         "HighPrice": 37.25,
-        "LowPrice": 36.7887,
+        "LowPrice": 36.79,
         "n": 9887,
         "OpenPrice": 37.24,
         "Timestamp": "2020-10-09T04:00:00Z",
@@ -10561,7 +10561,7 @@
     },
     {
         "ClosePrice": 35.78,
-        "HighPrice": 36.035,
+        "HighPrice": 36.03,
         "LowPrice": 35.68,
         "n": 12770,
         "OpenPrice": 35.74,
@@ -10582,7 +10582,7 @@
     {
         "ClosePrice": 35.4,
         "HighPrice": 35.69,
-        "LowPrice": 35.335,
+        "LowPrice": 35.34,
         "n": 11085,
         "OpenPrice": 35.64,
         "Timestamp": "2020-10-22T04:00:00Z",
@@ -10592,7 +10592,7 @@
     {
         "ClosePrice": 35.63,
         "HighPrice": 35.73,
-        "LowPrice": 35.345,
+        "LowPrice": 35.34,
         "n": 7230,
         "OpenPrice": 35.54,
         "Timestamp": "2020-10-23T04:00:00Z",
@@ -10682,7 +10682,7 @@
     {
         "ClosePrice": 35.77,
         "HighPrice": 36.12,
-        "LowPrice": 35.611,
+        "LowPrice": 35.61,
         "n": 20729,
         "OpenPrice": 35.92,
         "Timestamp": "2020-11-05T05:00:00Z",
@@ -10691,7 +10691,7 @@
     },
     {
         "ClosePrice": 35.63,
-        "HighPrice": 36.055,
+        "HighPrice": 36.05,
         "LowPrice": 35.5,
         "n": 18341,
         "OpenPrice": 35.8,
@@ -10722,7 +10722,7 @@
     {
         "ClosePrice": 37.05,
         "HighPrice": 37.27,
-        "LowPrice": 36.6701,
+        "LowPrice": 36.67,
         "n": 24631,
         "OpenPrice": 36.96,
         "Timestamp": "2020-11-11T05:00:00Z",
@@ -10731,7 +10731,7 @@
     },
     {
         "ClosePrice": 36.67,
-        "HighPrice": 37.165,
+        "HighPrice": 37.16,
         "LowPrice": 36.45,
         "n": 20972,
         "OpenPrice": 36.94,
@@ -10771,7 +10771,7 @@
     },
     {
         "ClosePrice": 37.13,
-        "HighPrice": 38.145,
+        "HighPrice": 38.15,
         "LowPrice": 37.11,
         "n": 16358,
         "OpenPrice": 37.8,
@@ -10802,7 +10802,7 @@
     {
         "ClosePrice": 36.82,
         "HighPrice": 37.22,
-        "LowPrice": 36.755,
+        "LowPrice": 36.76,
         "n": 11133,
         "OpenPrice": 37.15,
         "Timestamp": "2020-11-23T05:00:00Z",
@@ -10812,7 +10812,7 @@
     {
         "ClosePrice": 36.8,
         "HighPrice": 37.37,
-        "LowPrice": 36.7582,
+        "LowPrice": 36.76,
         "n": 9999,
         "OpenPrice": 37.24,
         "Timestamp": "2020-11-24T05:00:00Z",
@@ -10842,7 +10842,7 @@
     {
         "ClosePrice": 36.52,
         "HighPrice": 36.8,
-        "LowPrice": 36.325,
+        "LowPrice": 36.33,
         "n": 15628,
         "OpenPrice": 36.8,
         "Timestamp": "2020-11-30T05:00:00Z",
@@ -10851,7 +10851,7 @@
     },
     {
         "ClosePrice": 36.96,
-        "HighPrice": 37.0884,
+        "HighPrice": 37.09,
         "LowPrice": 36.79,
         "n": 16395,
         "OpenPrice": 36.87,
@@ -10892,7 +10892,7 @@
     {
         "ClosePrice": 36.96,
         "HighPrice": 37.36,
-        "LowPrice": 36.835,
+        "LowPrice": 36.84,
         "n": 13861,
         "OpenPrice": 37.28,
         "Timestamp": "2020-12-07T05:00:00Z",
@@ -10941,7 +10941,7 @@
     },
     {
         "ClosePrice": 36.01,
-        "HighPrice": 36.795,
+        "HighPrice": 36.8,
         "LowPrice": 35.99,
         "n": 12088,
         "OpenPrice": 36.58,
@@ -10961,8 +10961,8 @@
     },
     {
         "ClosePrice": 36.65,
-        "HighPrice": 36.905,
-        "LowPrice": 36.4385,
+        "HighPrice": 36.91,
+        "LowPrice": 36.44,
         "n": 10868,
         "OpenPrice": 36.71,
         "Timestamp": "2020-12-16T05:00:00Z",
@@ -10982,7 +10982,7 @@
     {
         "ClosePrice": 36.44,
         "HighPrice": 37.13,
-        "LowPrice": 36.175,
+        "LowPrice": 36.17,
         "n": 16680,
         "OpenPrice": 37.11,
         "Timestamp": "2020-12-18T05:00:00Z",
@@ -11011,7 +11011,7 @@
     },
     {
         "ClosePrice": 35.56,
-        "HighPrice": 36.2179,
+        "HighPrice": 36.22,
         "LowPrice": 35.56,
         "n": 7496,
         "OpenPrice": 36.02,
@@ -11052,7 +11052,7 @@
     {
         "ClosePrice": 36.12,
         "HighPrice": 36.39,
-        "LowPrice": 35.935,
+        "LowPrice": 35.94,
         "n": 7663,
         "OpenPrice": 36.01,
         "Timestamp": "2020-12-30T05:00:00Z",
@@ -11091,7 +11091,7 @@
     },
     {
         "ClosePrice": 35.17,
-        "HighPrice": 35.395,
+        "HighPrice": 35.4,
         "LowPrice": 34.97,
         "n": 23210,
         "OpenPrice": 35.33,
@@ -11102,7 +11102,7 @@
     {
         "ClosePrice": 35.28,
         "HighPrice": 35.4,
-        "LowPrice": 35.015,
+        "LowPrice": 35.02,
         "n": 10608,
         "OpenPrice": 35.25,
         "Timestamp": "2021-01-07T05:00:00Z",
@@ -11122,7 +11122,7 @@
     {
         "ClosePrice": 35.07,
         "HighPrice": 35.63,
-        "LowPrice": 34.955,
+        "LowPrice": 34.95,
         "n": 12676,
         "OpenPrice": 35.47,
         "Timestamp": "2021-01-11T05:00:00Z",
@@ -11161,7 +11161,7 @@
     },
     {
         "ClosePrice": 36.34,
-        "HighPrice": 36.4061,
+        "HighPrice": 36.41,
         "LowPrice": 35.63,
         "n": 13955,
         "OpenPrice": 35.72,
@@ -11172,7 +11172,7 @@
     {
         "ClosePrice": 36.1,
         "HighPrice": 36.54,
-        "LowPrice": 36.025,
+        "LowPrice": 36.02,
         "n": 12967,
         "OpenPrice": 36.51,
         "Timestamp": "2021-01-19T05:00:00Z",
@@ -11181,7 +11181,7 @@
     },
     {
         "ClosePrice": 36.85,
-        "HighPrice": 36.9939,
+        "HighPrice": 36.99,
         "LowPrice": 36.01,
         "n": 13525,
         "OpenPrice": 36.19,
@@ -11191,7 +11191,7 @@
     },
     {
         "ClosePrice": 36.73,
-        "HighPrice": 36.7694,
+        "HighPrice": 36.77,
         "LowPrice": 36.37,
         "n": 11494,
         "OpenPrice": 36.7,
@@ -11241,7 +11241,7 @@
     },
     {
         "ClosePrice": 37.13,
-        "HighPrice": 37.5913,
+        "HighPrice": 37.59,
         "LowPrice": 36.8,
         "n": 20199,
         "OpenPrice": 37.08,
@@ -11261,7 +11261,7 @@
     },
     {
         "ClosePrice": 37.59,
-        "HighPrice": 37.605,
+        "HighPrice": 37.6,
         "LowPrice": 36.52,
         "n": 14535,
         "OpenPrice": 36.99,
@@ -11331,8 +11331,8 @@
     },
     {
         "ClosePrice": 38.45,
-        "HighPrice": 38.705,
-        "LowPrice": 38.2313,
+        "HighPrice": 38.7,
+        "LowPrice": 38.23,
         "n": 12425,
         "OpenPrice": 38.38,
         "Timestamp": "2021-02-10T05:00:00Z",
@@ -11352,7 +11352,7 @@
     {
         "ClosePrice": 38.37,
         "HighPrice": 38.46,
-        "LowPrice": 38.0207,
+        "LowPrice": 38.02,
         "n": 8317,
         "OpenPrice": 38.29,
         "Timestamp": "2021-02-12T05:00:00Z",
@@ -11371,7 +11371,7 @@
     },
     {
         "ClosePrice": 37.99,
-        "HighPrice": 38.055,
+        "HighPrice": 38.05,
         "LowPrice": 37.72,
         "n": 12664,
         "OpenPrice": 37.94,
@@ -11392,7 +11392,7 @@
     {
         "ClosePrice": 38.09,
         "HighPrice": 38.36,
-        "LowPrice": 37.985,
+        "LowPrice": 37.98,
         "n": 9861,
         "OpenPrice": 38.15,
         "Timestamp": "2021-02-19T05:00:00Z",
@@ -11412,7 +11412,7 @@
     {
         "ClosePrice": 38.45,
         "HighPrice": 38.69,
-        "LowPrice": 38.305,
+        "LowPrice": 38.3,
         "n": 25752,
         "OpenPrice": 38.54,
         "Timestamp": "2021-02-23T05:00:00Z",
@@ -11421,7 +11421,7 @@
     },
     {
         "ClosePrice": 38.63,
-        "HighPrice": 38.765,
+        "HighPrice": 38.77,
         "LowPrice": 38.31,
         "n": 15382,
         "OpenPrice": 38.45,
@@ -11442,7 +11442,7 @@
     {
         "ClosePrice": 37.34,
         "HighPrice": 38.12,
-        "LowPrice": 37.3167,
+        "LowPrice": 37.32,
         "n": 27591,
         "OpenPrice": 38.12,
         "Timestamp": "2021-02-26T05:00:00Z",
@@ -11452,7 +11452,7 @@
     {
         "ClosePrice": 37.38,
         "HighPrice": 38.02,
-        "LowPrice": 37.375,
+        "LowPrice": 37.38,
         "n": 15718,
         "OpenPrice": 37.76,
         "Timestamp": "2021-03-01T05:00:00Z",
@@ -11472,7 +11472,7 @@
     {
         "ClosePrice": 36.69,
         "HighPrice": 37.15,
-        "LowPrice": 36.635,
+        "LowPrice": 36.63,
         "n": 24590,
         "OpenPrice": 37.15,
         "Timestamp": "2021-03-03T05:00:00Z",
@@ -11511,7 +11511,7 @@
     },
     {
         "ClosePrice": 37.44,
-        "HighPrice": 37.695,
+        "HighPrice": 37.7,
         "LowPrice": 37.21,
         "n": 15807,
         "OpenPrice": 37.21,
@@ -11532,7 +11532,7 @@
     {
         "ClosePrice": 38.37,
         "HighPrice": 38.65,
-        "LowPrice": 37.825,
+        "LowPrice": 37.83,
         "n": 17144,
         "OpenPrice": 37.92,
         "Timestamp": "2021-03-11T05:00:00Z",
@@ -11551,8 +11551,8 @@
     },
     {
         "ClosePrice": 39.47,
-        "HighPrice": 39.5799,
-        "LowPrice": 38.8415,
+        "HighPrice": 39.58,
+        "LowPrice": 38.84,
         "n": 16754,
         "OpenPrice": 39.06,
         "Timestamp": "2021-03-15T04:00:00Z",
@@ -11562,7 +11562,7 @@
     {
         "ClosePrice": 39.47,
         "HighPrice": 39.66,
-        "LowPrice": 39.2899,
+        "LowPrice": 39.29,
         "n": 14843,
         "OpenPrice": 39.53,
         "Timestamp": "2021-03-16T04:00:00Z",
@@ -11581,7 +11581,7 @@
     },
     {
         "ClosePrice": 39.16,
-        "HighPrice": 39.2699,
+        "HighPrice": 39.27,
         "LowPrice": 38.86,
         "n": 14914,
         "OpenPrice": 39.19,
@@ -11591,7 +11591,7 @@
     },
     {
         "ClosePrice": 38.64,
-        "HighPrice": 39.3094,
+        "HighPrice": 39.31,
         "LowPrice": 38.58,
         "n": 19169,
         "OpenPrice": 39.17,
@@ -11622,7 +11622,7 @@
     {
         "ClosePrice": 38.63,
         "HighPrice": 39.03,
-        "LowPrice": 38.505,
+        "LowPrice": 38.51,
         "n": 15356,
         "OpenPrice": 38.78,
         "Timestamp": "2021-03-24T04:00:00Z",
@@ -11631,7 +11631,7 @@
     },
     {
         "ClosePrice": 38.96,
-        "HighPrice": 39.005,
+        "HighPrice": 39.01,
         "LowPrice": 38.22,
         "n": 18238,
         "OpenPrice": 38.63,
@@ -11671,7 +11671,7 @@
     },
     {
         "ClosePrice": 39.49,
-        "HighPrice": 39.8963,
+        "HighPrice": 39.9,
         "LowPrice": 39.27,
         "n": 17976,
         "OpenPrice": 39.6,
@@ -11711,8 +11711,8 @@
     },
     {
         "ClosePrice": 40.48,
-        "HighPrice": 40.5741,
-        "LowPrice": 40.115,
+        "HighPrice": 40.57,
+        "LowPrice": 40.12,
         "n": 10915,
         "OpenPrice": 40.46,
         "Timestamp": "2021-04-07T04:00:00Z",
@@ -11722,7 +11722,7 @@
     {
         "ClosePrice": 40.28,
         "HighPrice": 40.7,
-        "LowPrice": 40.245,
+        "LowPrice": 40.24,
         "n": 16456,
         "OpenPrice": 40.52,
         "Timestamp": "2021-04-08T04:00:00Z",
@@ -11741,7 +11741,7 @@
     },
     {
         "ClosePrice": 40.58,
-        "HighPrice": 40.585,
+        "HighPrice": 40.59,
         "LowPrice": 40.09,
         "n": 8817,
         "OpenPrice": 40.41,
@@ -11752,7 +11752,7 @@
     {
         "ClosePrice": 40.82,
         "HighPrice": 40.86,
-        "LowPrice": 40.4875,
+        "LowPrice": 40.49,
         "n": 8617,
         "OpenPrice": 40.52,
         "Timestamp": "2021-04-13T04:00:00Z",
@@ -11791,8 +11791,8 @@
     },
     {
         "ClosePrice": 41.53,
-        "HighPrice": 41.545,
-        "LowPrice": 41.165,
+        "HighPrice": 41.55,
+        "LowPrice": 41.16,
         "n": 9617,
         "OpenPrice": 41.41,
         "Timestamp": "2021-04-19T04:00:00Z",
@@ -11871,7 +11871,7 @@
     },
     {
         "ClosePrice": 42.49,
-        "HighPrice": 42.5801,
+        "HighPrice": 42.58,
         "LowPrice": 42.2,
         "n": 12709,
         "OpenPrice": 42.43,
@@ -11904,7 +11904,7 @@
         "HighPrice": 42.72,
         "LowPrice": 42.02,
         "n": 14058,
-        "OpenPrice": 42.525,
+        "OpenPrice": 42.52,
         "Timestamp": "2021-05-04T04:00:00Z",
         "Volume": 4576999,
         "vw": 42.381923
@@ -11941,8 +11941,8 @@
     },
     {
         "ClosePrice": 42.56,
-        "HighPrice": 42.938,
-        "LowPrice": 42.465,
+        "HighPrice": 42.94,
+        "LowPrice": 42.47,
         "n": 12202,
         "OpenPrice": 42.57,
         "Timestamp": "2021-05-10T04:00:00Z",
@@ -11951,8 +11951,8 @@
     },
     {
         "ClosePrice": 42.06,
-        "HighPrice": 42.218,
-        "LowPrice": 41.675,
+        "HighPrice": 42.22,
+        "LowPrice": 41.67,
         "n": 17987,
         "OpenPrice": 42.18,
         "Timestamp": "2021-05-11T04:00:00Z",
@@ -11971,7 +11971,7 @@
     },
     {
         "ClosePrice": 41.56,
-        "HighPrice": 41.7982,
+        "HighPrice": 41.8,
         "LowPrice": 41.11,
         "n": 15009,
         "OpenPrice": 41.15,
@@ -11991,7 +11991,7 @@
     },
     {
         "ClosePrice": 41.97,
-        "HighPrice": 42.075,
+        "HighPrice": 42.08,
         "LowPrice": 41.82,
         "n": 11729,
         "OpenPrice": 41.91,
@@ -12001,8 +12001,8 @@
     },
     {
         "ClosePrice": 42.05,
-        "HighPrice": 42.299,
-        "LowPrice": 41.675,
+        "HighPrice": 42.3,
+        "LowPrice": 41.67,
         "n": 14609,
         "OpenPrice": 41.95,
         "Timestamp": "2021-05-18T04:00:00Z",
@@ -12022,7 +12022,7 @@
     {
         "ClosePrice": 42.41,
         "HighPrice": 42.57,
-        "LowPrice": 41.745,
+        "LowPrice": 41.74,
         "n": 11018,
         "OpenPrice": 41.82,
         "Timestamp": "2021-05-20T04:00:00Z",
@@ -12041,7 +12041,7 @@
     },
     {
         "ClosePrice": 42.8,
-        "HighPrice": 42.995,
+        "HighPrice": 42.99,
         "LowPrice": 42.51,
         "n": 9946,
         "OpenPrice": 42.59,
@@ -12051,7 +12051,7 @@
     },
     {
         "ClosePrice": 42.92,
-        "HighPrice": 43.079,
+        "HighPrice": 43.08,
         "LowPrice": 42.61,
         "n": 9833,
         "OpenPrice": 42.9,
@@ -12072,7 +12072,7 @@
     {
         "ClosePrice": 42.97,
         "HighPrice": 43.18,
-        "LowPrice": 42.904,
+        "LowPrice": 42.9,
         "n": 13577,
         "OpenPrice": 43.16,
         "Timestamp": "2021-05-27T04:00:00Z",
@@ -12112,7 +12112,7 @@
     {
         "ClosePrice": 44.52,
         "HighPrice": 44.56,
-        "LowPrice": 44.235,
+        "LowPrice": 44.23,
         "n": 13288,
         "OpenPrice": 44.49,
         "Timestamp": "2021-06-03T04:00:00Z",
@@ -12141,8 +12141,8 @@
     },
     {
         "ClosePrice": 45.22,
-        "HighPrice": 45.368,
-        "LowPrice": 45.005,
+        "HighPrice": 45.37,
+        "LowPrice": 45.01,
         "n": 19410,
         "OpenPrice": 45.07,
         "Timestamp": "2021-06-08T04:00:00Z",
@@ -12151,7 +12151,7 @@
     },
     {
         "ClosePrice": 45.27,
-        "HighPrice": 45.4684,
+        "HighPrice": 45.47,
         "LowPrice": 45.23,
         "n": 9873,
         "OpenPrice": 45.38,
@@ -12162,7 +12162,7 @@
     {
         "ClosePrice": 45.73,
         "HighPrice": 45.81,
-        "LowPrice": 45.175,
+        "LowPrice": 45.17,
         "n": 13729,
         "OpenPrice": 45.3,
         "Timestamp": "2021-06-10T04:00:00Z",
@@ -12201,7 +12201,7 @@
     },
     {
         "ClosePrice": 44.87,
-        "HighPrice": 45.505,
+        "HighPrice": 45.51,
         "LowPrice": 44.83,
         "n": 17250,
         "OpenPrice": 45.33,
@@ -12221,7 +12221,7 @@
     },
     {
         "ClosePrice": 44.33,
-        "HighPrice": 45.045,
+        "HighPrice": 45.05,
         "LowPrice": 44.33,
         "n": 22238,
         "OpenPrice": 44.84,
@@ -12234,7 +12234,7 @@
         "HighPrice": 45.03,
         "LowPrice": 44.07,
         "n": 15945,
-        "OpenPrice": 44.285,
+        "OpenPrice": 44.28,
         "Timestamp": "2021-06-21T04:00:00Z",
         "Volume": 4670922,
         "vw": 44.689251
@@ -12251,8 +12251,8 @@
     },
     {
         "ClosePrice": 44.58,
-        "HighPrice": 44.8442,
-        "LowPrice": 44.523,
+        "HighPrice": 44.84,
+        "LowPrice": 44.52,
         "n": 14525,
         "OpenPrice": 44.7,
         "Timestamp": "2021-06-23T04:00:00Z",
@@ -12291,7 +12291,7 @@
     },
     {
         "ClosePrice": 44.68,
-        "HighPrice": 44.978,
+        "HighPrice": 44.98,
         "LowPrice": 44.6,
         "n": 10095,
         "OpenPrice": 44.64,
@@ -12312,7 +12312,7 @@
     {
         "ClosePrice": 44.51,
         "HighPrice": 44.85,
-        "LowPrice": 44.165,
+        "LowPrice": 44.16,
         "n": 16847,
         "OpenPrice": 44.36,
         "Timestamp": "2021-07-01T04:00:00Z",
@@ -12321,7 +12321,7 @@
     },
     {
         "ClosePrice": 44.72,
-        "HighPrice": 44.8763,
+        "HighPrice": 44.88,
         "LowPrice": 44.5,
         "n": 11880,
         "OpenPrice": 44.65,
@@ -12334,7 +12334,7 @@
         "HighPrice": 45.16,
         "LowPrice": 44.41,
         "n": 15950,
-        "OpenPrice": 44.685,
+        "OpenPrice": 44.69,
         "Timestamp": "2021-07-06T04:00:00Z",
         "Volume": 4987927,
         "vw": 44.791092
@@ -12361,7 +12361,7 @@
     },
     {
         "ClosePrice": 45.91,
-        "HighPrice": 45.9399,
+        "HighPrice": 45.94,
         "LowPrice": 45.35,
         "n": 12920,
         "OpenPrice": 45.54,
@@ -12391,10 +12391,10 @@
     },
     {
         "ClosePrice": 46.11,
-        "HighPrice": 46.245,
+        "HighPrice": 46.24,
         "LowPrice": 45.61,
         "n": 14632,
-        "OpenPrice": 45.715,
+        "OpenPrice": 45.72,
         "Timestamp": "2021-07-14T04:00:00Z",
         "Volume": 3828349,
         "vw": 46.017759
@@ -12402,7 +12402,7 @@
     {
         "ClosePrice": 46.18,
         "HighPrice": 46.25,
-        "LowPrice": 46.015,
+        "LowPrice": 46.02,
         "n": 13965,
         "OpenPrice": 46.09,
         "Timestamp": "2021-07-15T04:00:00Z",
@@ -12411,7 +12411,7 @@
     },
     {
         "ClosePrice": 46.23,
-        "HighPrice": 46.5451,
+        "HighPrice": 46.55,
         "LowPrice": 46.18,
         "n": 11859,
         "OpenPrice": 46.31,
@@ -12442,7 +12442,7 @@
     {
         "ClosePrice": 46.19,
         "HighPrice": 46.47,
-        "LowPrice": 46.115,
+        "LowPrice": 46.12,
         "n": 14759,
         "OpenPrice": 46.4,
         "Timestamp": "2021-07-21T04:00:00Z",
@@ -12471,7 +12471,7 @@
     },
     {
         "ClosePrice": 46.28,
-        "HighPrice": 46.299,
+        "HighPrice": 46.3,
         "LowPrice": 45.88,
         "n": 13302,
         "OpenPrice": 46.13,
@@ -12482,7 +12482,7 @@
     {
         "ClosePrice": 46.65,
         "HighPrice": 46.69,
-        "LowPrice": 46.095,
+        "LowPrice": 46.09,
         "n": 13099,
         "OpenPrice": 46.21,
         "Timestamp": "2021-07-27T04:00:00Z",
@@ -12531,8 +12531,8 @@
     },
     {
         "ClosePrice": 46.59,
-        "HighPrice": 46.665,
-        "LowPrice": 46.2875,
+        "HighPrice": 46.66,
+        "LowPrice": 46.29,
         "n": 19363,
         "OpenPrice": 46.56,
         "Timestamp": "2021-08-03T04:00:00Z",
@@ -12562,7 +12562,7 @@
     {
         "ClosePrice": 46.73,
         "HighPrice": 47.01,
-        "LowPrice": 46.6317,
+        "LowPrice": 46.63,
         "n": 10140,
         "OpenPrice": 46.82,
         "Timestamp": "2021-08-06T04:00:00Z",
@@ -12612,7 +12612,7 @@
     {
         "ClosePrice": 46.74,
         "HighPrice": 46.76,
-        "LowPrice": 46.385,
+        "LowPrice": 46.38,
         "n": 13863,
         "OpenPrice": 46.52,
         "Timestamp": "2021-08-13T04:00:00Z",
@@ -12631,7 +12631,7 @@
     },
     {
         "ClosePrice": 46.88,
-        "HighPrice": 46.895,
+        "HighPrice": 46.9,
         "LowPrice": 46.47,
         "n": 14218,
         "OpenPrice": 46.58,
@@ -12651,7 +12651,7 @@
     },
     {
         "ClosePrice": 46.78,
-        "HighPrice": 46.8499,
+        "HighPrice": 46.85,
         "LowPrice": 46.12,
         "n": 15806,
         "OpenPrice": 46.22,
@@ -12661,7 +12661,7 @@
     },
     {
         "ClosePrice": 47,
-        "HighPrice": 47.2367,
+        "HighPrice": 47.24,
         "LowPrice": 46.43,
         "n": 13425,
         "OpenPrice": 46.67,
@@ -12691,7 +12691,7 @@
     },
     {
         "ClosePrice": 46.42,
-        "HighPrice": 46.655,
+        "HighPrice": 46.66,
         "LowPrice": 46.26,
         "n": 14394,
         "OpenPrice": 46.46,
@@ -12701,8 +12701,8 @@
     },
     {
         "ClosePrice": 46.45,
-        "HighPrice": 46.595,
-        "LowPrice": 46.275,
+        "HighPrice": 46.59,
+        "LowPrice": 46.27,
         "n": 11507,
         "OpenPrice": 46.46,
         "Timestamp": "2021-08-26T04:00:00Z",
@@ -12721,7 +12721,7 @@
     },
     {
         "ClosePrice": 47.4,
-        "HighPrice": 47.415,
+        "HighPrice": 47.41,
         "LowPrice": 46.77,
         "n": 17362,
         "OpenPrice": 46.85,
@@ -12761,8 +12761,8 @@
     },
     {
         "ClosePrice": 48.73,
-        "HighPrice": 48.805,
-        "LowPrice": 48.155,
+        "HighPrice": 48.8,
+        "LowPrice": 48.16,
         "n": 17504,
         "OpenPrice": 48.57,
         "Timestamp": "2021-09-03T04:00:00Z",
@@ -12772,7 +12772,7 @@
     {
         "ClosePrice": 48.19,
         "HighPrice": 48.6,
-        "LowPrice": 47.7336,
+        "LowPrice": 47.73,
         "n": 25684,
         "OpenPrice": 48.57,
         "Timestamp": "2021-09-07T04:00:00Z",
@@ -12811,8 +12811,8 @@
     },
     {
         "ClosePrice": 47.11,
-        "HighPrice": 47.505,
-        "LowPrice": 46.911,
+        "HighPrice": 47.51,
+        "LowPrice": 46.91,
         "n": 21194,
         "OpenPrice": 47.22,
         "Timestamp": "2021-09-13T04:00:00Z",
@@ -12841,7 +12841,7 @@
     },
     {
         "ClosePrice": 47.28,
-        "HighPrice": 47.479,
+        "HighPrice": 47.48,
         "LowPrice": 46.85,
         "n": 16890,
         "OpenPrice": 47.2,
@@ -12852,7 +12852,7 @@
     {
         "ClosePrice": 46.85,
         "HighPrice": 47.33,
-        "LowPrice": 46.7731,
+        "LowPrice": 46.77,
         "n": 25548,
         "OpenPrice": 47.04,
         "Timestamp": "2021-09-17T04:00:00Z",
@@ -12861,8 +12861,8 @@
     },
     {
         "ClosePrice": 46.27,
-        "HighPrice": 46.615,
-        "LowPrice": 45.7201,
+        "HighPrice": 46.62,
+        "LowPrice": 45.72,
         "n": 36425,
         "OpenPrice": 46.13,
         "Timestamp": "2021-09-20T04:00:00Z",
@@ -12912,7 +12912,7 @@
     {
         "ClosePrice": 45.15,
         "HighPrice": 46.14,
-        "LowPrice": 45.105,
+        "LowPrice": 45.1,
         "n": 23094,
         "OpenPrice": 45.9,
         "Timestamp": "2021-09-27T04:00:00Z",
@@ -12941,7 +12941,7 @@
     },
     {
         "ClosePrice": 44.45,
-        "HighPrice": 45.395,
+        "HighPrice": 45.4,
         "LowPrice": 44.45,
         "n": 21518,
         "OpenPrice": 45.36,
@@ -12981,7 +12981,7 @@
     },
     {
         "ClosePrice": 45.06,
-        "HighPrice": 45.1001,
+        "HighPrice": 45.1,
         "LowPrice": 43.95,
         "n": 27415,
         "OpenPrice": 44.45,
@@ -13011,7 +13011,7 @@
     },
     {
         "ClosePrice": 44.68,
-        "HighPrice": 44.8757,
+        "HighPrice": 44.88,
         "LowPrice": 44.34,
         "n": 14841,
         "OpenPrice": 44.54,
@@ -13032,7 +13032,7 @@
     {
         "ClosePrice": 45.54,
         "HighPrice": 45.59,
-        "LowPrice": 44.8526,
+        "LowPrice": 44.85,
         "n": 27715,
         "OpenPrice": 45.18,
         "Timestamp": "2021-10-13T04:00:00Z",
@@ -13041,7 +13041,7 @@
     },
     {
         "ClosePrice": 46.18,
-        "HighPrice": 46.235,
+        "HighPrice": 46.23,
         "LowPrice": 45.71,
         "n": 15765,
         "OpenPrice": 45.81,
@@ -13092,7 +13092,7 @@
     {
         "ClosePrice": 47.35,
         "HighPrice": 47.39,
-        "LowPrice": 47.025,
+        "LowPrice": 47.02,
         "n": 18942,
         "OpenPrice": 47.15,
         "Timestamp": "2021-10-21T04:00:00Z",
@@ -13101,7 +13101,7 @@
     },
     {
         "ClosePrice": 47.69,
-        "HighPrice": 47.795,
+        "HighPrice": 47.8,
         "LowPrice": 47.41,
         "n": 15772,
         "OpenPrice": 47.5,
@@ -13111,17 +13111,17 @@
     },
     {
         "ClosePrice": 47.83,
-        "HighPrice": 47.945,
-        "LowPrice": 47.355,
+        "HighPrice": 47.95,
+        "LowPrice": 47.35,
         "n": 16995,
-        "OpenPrice": 47.715,
+        "OpenPrice": 47.72,
         "Timestamp": "2021-10-25T04:00:00Z",
         "Volume": 4747751,
         "vw": 47.731283
     },
     {
         "ClosePrice": 48.05,
-        "HighPrice": 48.219,
+        "HighPrice": 48.22,
         "LowPrice": 47.83,
         "n": 22077,
         "OpenPrice": 47.91,
@@ -13142,7 +13142,7 @@
     {
         "ClosePrice": 48.4,
         "HighPrice": 48.4,
-        "LowPrice": 47.672,
+        "LowPrice": 47.67,
         "n": 22940,
         "OpenPrice": 47.74,
         "Timestamp": "2021-10-28T04:00:00Z",
@@ -13161,8 +13161,8 @@
     },
     {
         "ClosePrice": 47.93,
-        "HighPrice": 48.025,
-        "LowPrice": 47.145,
+        "HighPrice": 48.02,
+        "LowPrice": 47.15,
         "n": 22199,
         "OpenPrice": 47.91,
         "Timestamp": "2021-11-01T04:00:00Z",
@@ -13171,7 +13171,7 @@
     },
     {
         "ClosePrice": 48.38,
-        "HighPrice": 48.548,
+        "HighPrice": 48.55,
         "LowPrice": 47.92,
         "n": 23861,
         "OpenPrice": 48.18,
@@ -13202,7 +13202,7 @@
     {
         "ClosePrice": 48.22,
         "HighPrice": 48.85,
-        "LowPrice": 48.1383,
+        "LowPrice": 48.14,
         "n": 21659,
         "OpenPrice": 48.53,
         "Timestamp": "2021-11-05T04:00:00Z",
@@ -13232,7 +13232,7 @@
     {
         "ClosePrice": 48.15,
         "HighPrice": 48.56,
-        "LowPrice": 48.145,
+        "LowPrice": 48.15,
         "n": 18573,
         "OpenPrice": 48.24,
         "Timestamp": "2021-11-10T05:00:00Z",
@@ -13272,7 +13272,7 @@
     {
         "ClosePrice": 48.16,
         "HighPrice": 48.58,
-        "LowPrice": 48.065,
+        "LowPrice": 48.06,
         "n": 17847,
         "OpenPrice": 48.53,
         "Timestamp": "2021-11-16T05:00:00Z",
@@ -13298,5 +13298,15 @@
         "Timestamp": "2021-11-18T05:00:00Z",
         "Volume": 5426571,
         "vw": 48.416902
+    },
+    {
+        "ClosePrice": 48.21,
+        "HighPrice": 48.59,
+        "LowPrice": 48.09,
+        "n": 19454,
+        "OpenPrice": 48.56,
+        "Timestamp": "2021-11-19T05:00:00Z",
+        "Volume": 5072653,
+        "vw": 48.349681
     }
 ]
