@@ -13302,11 +13302,21 @@
     {
         "ClosePrice": 128.91,
         "HighPrice": 129.25,
-        "LowPrice": 128.8701,
+        "LowPrice": 128.87,
         "n": 5218,
-        "OpenPrice": 129.145,
+        "OpenPrice": 129.15,
         "Timestamp": "2021-11-19T05:00:00Z",
         "Volume": 1263371,
         "vw": 129.059724
+    },
+    {
+        "ClosePrice": 128.33,
+        "HighPrice": 128.61,
+        "LowPrice": 128.28,
+        "n": 5031,
+        "OpenPrice": 128.5,
+        "Timestamp": "2021-11-22T05:00:00Z",
+        "Volume": 1062358,
+        "vw": 128.431305
     }
 ]
