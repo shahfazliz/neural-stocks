@@ -91,26 +91,51 @@ export default class Candlestick {
         return new MomentAdaptor(this.__timestamp, 'YYYY-MM-DD').month();
     }
 
+    getStandardDeviation() {
+        return this.__standardDeviation;
+    }
+
+    getVolumeProfile() {
+        return this.__volumeProfile;
+    }
+
+    setVolumeProfile(volumeProfile) {
+        this.__volumeProfile = volumeProfile;
+        return this;
+    }
+
+    setStandardDeviation(standardDeviation) {
+        this.__standardDeviation = standardDeviation;
+        return this;
+    }
+
     setOpenDiff(openDiff) {
         this.__openDiff = openDiff;
+        return this;
     }
     setCloseDiff(closeDiff) {
         this.__closeDiff = closeDiff;
+        return this;
     }
     setHighDiff(highDiff) {
         this.__highDiff = highDiff;
+        return this;
     }
     setLowDiff(lowDiff) {
         this.__lowDiff = lowDiff;
+        return this;
     }
     setVolumeDiff(volumeDiff) {
         this.__volumeDiff = volumeDiff;
+        return this;
     }
     setVwDiff(vwDiff) {
         this.__vwDiff = vwDiff;
+        return this;
     }
     setNDiff(nDiff) {
         this.__nDiff = nDiff;
+        return this;
     }
 
     getOpenDiff() {

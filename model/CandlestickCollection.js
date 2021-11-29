@@ -1,9 +1,11 @@
+import { linearRegression } from 'everpolate';
 import ArrayFn from '../util/ArrayFn.js';
 import Candlestick from './Candlestick.js';
 import MomentAdaptor from '../util/MomentAdaptor.js';
 
 export default class CandlestickCollection {
     __collection = [];
+    __numberOfCandlesAYear = 252;
 
     constructor(rawCandlestickArrayOfObj) {
         // Sort the data by date ascending (older first, newer last)
@@ -14,16 +16,27 @@ export default class CandlestickCollection {
 
         // Initialize each data into Candlestick object, then add into collection array
         rawCandlestickArrayOfObj
-            .forEach(rawCandleStickObj => this.push(new Candlestick({
-                close: rawCandleStickObj.ClosePrice,
-                high: rawCandleStickObj.HighPrice,
-                low: rawCandleStickObj.LowPrice,
-                n: rawCandleStickObj.n,
-                open: rawCandleStickObj.OpenPrice,
-                timestamp: rawCandleStickObj.Timestamp,
-                volume: rawCandleStickObj.Volume,
-                vw: rawCandleStickObj.vw,
-            })));
+            .forEach((rawCandleStickObj, index) => {
+                // console.log(`Pushing candlestick ${index}`)
+                this.push(new Candlestick({
+                    close: this.currency(rawCandleStickObj.ClosePrice),
+                    high: this.currency(rawCandleStickObj.HighPrice),
+                    low: this.currency(rawCandleStickObj.LowPrice),
+                    n: rawCandleStickObj.n,
+                    open: this.currency(rawCandleStickObj.OpenPrice),
+                    timestamp: rawCandleStickObj.Timestamp,
+                    volume: rawCandleStickObj.Volume,
+                    vw: rawCandleStickObj.vw,
+                }));
+            });
+    }
+
+    currency(value) {
+        return parseFloat(value.toFixed(2));
+    }
+
+    precision(value) {
+        return parseFloat(value.toFixed(5));
     }
 
     getByIndex(index) {
@@ -39,18 +52,63 @@ export default class CandlestickCollection {
     }
 
     push(candlestick) {
+        // console.log(`push candlestick: ${candlestick}`);
         // The first candlestick will not have diff because there is no previous candlestick
         if (!ArrayFn.isEmpty(this.__collection)) {
             const previousCandlestick = ArrayFn.getLastElement(this.__collection);
+            const previousCandlestickClose = previousCandlestick.getClose();
+            const previousCandlestickVolume = previousCandlestick.getVolume();
 
-            candlestick.setOpenDiff(candlestick.getOpen() - previousCandlestick.getClose());
-            candlestick.setCloseDiff(candlestick.getClose() - previousCandlestick.getClose());
-            candlestick.setHighDiff(candlestick.getHigh() - previousCandlestick.getClose());
-            candlestick.setLowDiff(candlestick.getLow() - previousCandlestick.getClose());
-            candlestick.setVolumeDiff(candlestick.getVolume() - previousCandlestick.getVolume());
+            candlestick
+                .setOpenDiff(Math.log(candlestick.getOpen() / previousCandlestickClose))
+                .setCloseDiff(Math.log(candlestick.getClose() / previousCandlestickClose))
+                .setHighDiff(Math.log(candlestick.getHigh() / previousCandlestickClose))
+                .setLowDiff(Math.log(candlestick.getLow() / previousCandlestickClose))
+                .setVolumeDiff(Math.log(candlestick.getVolume() / previousCandlestickVolume))
+                .setLong(candlestick.getClose() - previousCandlestick.getLow() >= 0)
+                .setShort(candlestick.getClose() - previousCandlestick.getHigh() <= 0);
 
-            candlestick.setLong(candlestick.getClose() - previousCandlestick.getLow() >= 0);
-            candlestick.setShort(candlestick.getClose() - previousCandlestick.getHigh() <= 0);
+            // Set standard deviation and volume profile
+            if (this.__collection.length > this.__numberOfCandlesAYear) {
+
+                const oneYearCollection = this
+                    .__collection
+                    .slice(this.__collection.length - this.__numberOfCandlesAYear, this.__collection.length);
+
+                candlestick
+                    .setStandardDeviation(this
+                        .precision(this
+                            .calculateStandardDeviation(oneYearCollection
+                                .map(candlestickOfYear => {
+                                    // console.log(candlestickOfYear.getCloseDiff());
+                                    return candlestickOfYear.getCloseDiff();
+                                })
+                            )
+                        )
+                    );
+
+                // Build volume profile using polynomial interpolation
+                const volumeProfile = {};
+                oneYearCollection.forEach(candlestickOfYear => {
+
+                    const maxPrice = Math.ceil(candlestickOfYear.getHigh());
+                    const minPrice = Math.floor(candlestickOfYear.getLow());
+                    const numberOfPriceLevels = (maxPrice - minPrice + 1) * 100;
+                    const averageVolume = Math.floor(candlestickOfYear.getVolume() / numberOfPriceLevels);
+
+                    for (let h = minPrice; h <= maxPrice; h+=0.01) {
+                        volumeProfile[h] = volumeProfile[h] + averageVolume || averageVolume;
+                    }
+                });
+
+                let interpolatedVolumeProfile = linearRegression(
+                    Object.keys(volumeProfile).map(val => parseFloat(val)),
+                    Object.values(volumeProfile)
+                ).evaluate([candlestick.getClose()])[0];
+
+
+                candlestick.setVolumeProfile(this.precision(interpolatedVolumeProfile));
+            }
         }
 
         this
@@ -58,6 +116,11 @@ export default class CandlestickCollection {
             .push(candlestick);
 
         return this;
+    }
+
+    calculateStandardDeviation(numbers) {
+        const mean = numbers.reduce((acc, value) => acc + value) / numbers.length;
+        return Math.sqrt(numbers.reduce((acc, value) => acc += (value - mean) ** 2, 0) / numbers.length);
     }
 
     length() {
@@ -142,25 +205,31 @@ export default class CandlestickCollection {
         volume,
     }) {
         const previousCandlestick = this.__collection[index - 1];
+        const previousCandlestickClose = previousCandlestick.getClose();
+        const previousCandlestickVolume = previousCandlestick.getVolume();
 
         this.__collection[index].setVolume(volume);
-        this.__collection[index].setVolumeDiff(volume - previousCandlestick.getVolume());
+        this.__collection[index].setVolumeDiff(Math.log(volume / previousCandlestickVolume));
 
         this.__collection[index].setOpen(openPrice);
-        this.__collection[index].setOpenDiff(openPrice - previousCandlestick.getClose());
+        this.__collection[index].setOpenDiff(Math.log(openPrice / previousCandlestickClose));
 
         this.__collection[index].setClose(closePrice);
-        this.__collection[index].setCloseDiff(closePrice - previousCandlestick.getClose());
+        this.__collection[index].setCloseDiff(Math.log(closePrice / previousCandlestickClose));
 
         this.__collection[index].setHigh(highPrice);
-        this.__collection[index].setHighDiff(highPrice - previousCandlestick.getClose());
+        this.__collection[index].setHighDiff(Math.log(highPrice / previousCandlestickClose));
 
         this.__collection[index].setLow(lowPrice);
-        this.__collection[index].setLowDiff(lowPrice - previousCandlestick.getClose());
+        this.__collection[index].setLowDiff(Math.log(lowPrice / previousCandlestickClose));
 
         this.__collection[index].setLong(closePrice - previousCandlestick.getLow() >= 0);
         this.__collection[index].setShort(closePrice - previousCandlestick.getHigh() <= 0);
 
         return this;
+    }
+
+    map(callbackFunction) {
+        return this.__collection.map(callbackFunction);
     }
 }

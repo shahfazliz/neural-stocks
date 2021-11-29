@@ -7,10 +7,10 @@ import fs from 'fs/promises';
 export default class App {
     __trainingOptions = {
         activation: 'sigmoid',
-        binaryThresh: 0.2,
-        errorThresh: 0.025,
-        hiddenLayers: [25, 25, 25, 25],
-        iterations: 3000,
+        binaryThresh: 0.1,
+        errorThresh: 0.15,
+        hiddenLayers: [100, 100, 100, 100],
+        iterations: 1000,
         learningRate: 0.1,
         log: true,
         logPeriod: 1,
@@ -30,7 +30,6 @@ export default class App {
         'IEF', 'IEI',
         'IWM',
         'IYT',
-        'JJA',
         'NIB',
         'RJA', 'RJI',
         'QQQ',
@@ -101,7 +100,7 @@ export default class App {
     }
 
     /**
-     * Read json file
+     * Write json file
      */
     writeToJSONFile({
         jsonfilepath,
@@ -363,7 +362,7 @@ export default class App {
                 // For debugging, see the dates
                 // result[`${tickerSymbol}_Timestamp_${replaceDateWithCount}`] = candlestick.getTimestamp();
                 result[`${tickerSymbol}_Day_${replaceDateWithCount}`] = candlestick.getDay();
-                result[`${tickerSymbol}_Month_${replaceDateWithCount}`] = candlestick.getDay();
+                result[`${tickerSymbol}_Month_${replaceDateWithCount}`] = candlestick.getMonth();
 
                 // Normalize tickerDailyData by calculating difference with today and yesterday
                 result[`${tickerSymbol}_OpenPrice_${replaceDateWithCount}`] = candlestick.getOpenDiff();
