@@ -7,7 +7,7 @@ const app = new App();
 const marketWatchAPI = new MarketWatchAPI();
 
 app
-    .readFromCSVFileToJson('./csv_sample/cboesymboldirweeklys.csv')
+    .readFromCSVFileToJson('./data/csv_sample/cboesymboldirweeklys.csv')
     .then(json => json.map(company => company.StockSymbol))
     .then(tickerSymbols => {
         fixMissingData(tickerSymbols.concat(app.getListOfTickers()));
@@ -19,7 +19,7 @@ function fixMissingData(tickerSymbols) {
     Promise
         .all(tickerSymbols
             .map(tickerSymbol => app
-                .readJSONFileAsCandlestickCollection(`./data/${tickerSymbol}.json`)
+                .readJSONFileAsCandlestickCollection(`./data/tickers/${tickerSymbol}.json`)
                 .then(candlestickCollection => ({[`${tickerSymbol}`]: candlestickCollection}))
             )
         )
@@ -94,7 +94,7 @@ function fixMissingData(tickerSymbols) {
 
                                 // save collection
                                 return app.writeToJSONFile({
-                                    jsonfilepath: `./data/${tickerSymbol}.json`,
+                                    jsonfilepath: `./data/tickers/${tickerSymbol}.json`,
                                     data: candlestickCollection.stringify(),
                                 });
                             })

@@ -10,7 +10,7 @@ Promise
     .all(app
         .getListOfTickers()
         .map(tickerSymbol => app
-            .readJSONFileAsCandlestickCollection(`./data/${tickerSymbol}.json`)
+            .readJSONFileAsCandlestickCollection(`./data/tickers/${tickerSymbol}.json`)
             .then(candlestickCollection => app.createLastInput({
                 tickerSymbol,
                 candlestickCollection,
@@ -43,7 +43,7 @@ Promise
     .all(app
         .getListOfTickers()
         .map(tickerSymbol => app
-            .readJSONFileAsCandlestickCollection(`./data/${tickerSymbol}.json`)
+            .readJSONFileAsCandlestickCollection(`./data/tickers/${tickerSymbol}.json`)
             // Hijack data by adding today's daily quote
             .then(candlestickCollection => axios
                 .get(`https://data.alpaca.markets/v2/stocks/${tickerSymbol}/snapshot`, {
