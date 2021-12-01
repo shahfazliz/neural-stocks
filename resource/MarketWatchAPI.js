@@ -9,7 +9,7 @@ export default class MarketWatchAPI {
     constructor() {
         this
             .app
-            .readJSONFile('./data/ignoreTicker.json')
+            .readJSONFile('./data/tickers/ignoreTicker.json')
             .then(ignoreTickerSymbols => this.__ignoreTickerSymbols = ignoreTickerSymbols);
     }
 

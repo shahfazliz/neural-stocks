@@ -12,7 +12,7 @@ export default class AlpacaAPI {
     constructor() {
         this
             .app
-            .readJSONFile('./data/ignoreTicker.json')
+            .readJSONFile('./data/tickers/ignoreTicker.json')
             .then(ignoreTickerSymbols => this.__ignoreTickerSymbols = ignoreTickerSymbols);
     }
 
@@ -24,7 +24,7 @@ export default class AlpacaAPI {
 
     recordInvalidTickerSymbol() {
         // Record so that we don't call that ticker anymore
-        const jsonfilepath = './data/ignoreTicker.json';
+        const jsonfilepath = './data/tickers/ignoreTicker.json';
         return this
             .app
             .writeToJSONFile({
