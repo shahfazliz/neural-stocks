@@ -67,7 +67,7 @@ function getData(tickerSymbols) {
                         candlesticks.forEach(candlestick => candlestickCollection.push(candlestick));
 
                         return app.writeToJSONFile({
-                            jsonfilepath: `./data/${lastFilteredTickerSymbol.symbol}.json`,
+                            jsonfilepath: `./data/tickers/${lastFilteredTickerSymbol.symbol}.json`,
                             data: candlestickCollection.stringify(),
                         });
                     })
