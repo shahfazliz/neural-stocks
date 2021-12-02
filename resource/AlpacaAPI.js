@@ -85,4 +85,15 @@ export default class AlpacaAPI {
                     }));
             });
     }
+
+    getClock() {
+        return axios
+            .get(`https://api.alpaca.markets/v2/clock`, {
+                headers: {
+                    'APCA-API-KEY-ID': process.env.APCA_API_KEY_ID,
+                    'APCA-API-SECRET-KEY': process.env.APCA_API_SECRET_KEY,
+                },
+            })
+            .then(response => response.data);
+    }
 }

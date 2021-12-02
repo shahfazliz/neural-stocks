@@ -2,17 +2,22 @@ import AlpacaAPI from './resource/AlpacaAPI.js';
 import App from './app.js';
 import MomentAdaptor from './util/MomentAdaptor.js';
 import ArrayFn from './util/ArrayFn.js';
+import GeneticAlgo from './trainGeneticAlgo.js';
 
 const app = new App();
 const alpacaAPI = new AlpacaAPI();
 
 getData(app.getListOfTickers());
 
-function getData(tickerSymbols) {
+async function getData(tickerSymbols) {
+    const clock = await alpacaAPI.getClock();
+    const nextTradingDay = new MomentAdaptor(clock.next_open, 'YYYY-MM-DD');
+    const lastTradingDay = nextTradingDay.subtractBusinessDay(1);
+
     Promise
         .all(tickerSymbols
             .map(tickerSymbol => app
-                .readJSONFileAsCandlestickCollection(`./data/tickers/${tickerSymbol}.json`)
+                .readJSONFile(`./data/tickers/${tickerSymbol}.json`)
                 .then(candlestickCollection => ({[`${tickerSymbol}`]: candlestickCollection}))
             )
         )
@@ -29,18 +34,17 @@ function getData(tickerSymbols) {
             let lastFilteredTickerSymbols = [];
             for (let tickerSymbol of removedIgnoredTickerSymbols) {
                 const candlestickCollection = multipleTickerCandlestickCollection[tickerSymbol];
-                const startDateAfterLastDateInCollection = candlestickCollection.isEmpty()
+                const startDateAfterLastDateInCollection = ArrayFn.isEmpty(candlestickCollection)
                     ? new MomentAdaptor('2016-08-10', 'YYYY-MM-DD')
                     : new MomentAdaptor(
-                        candlestickCollection
-                            .getLastElement()
-                            .getTimestamp(),
+                        ArrayFn
+                            .getLastElement(candlestickCollection)
+                            .Timestamp,
                         'YYYY-MM-DD'
                     ).addBusinessDays(1);
-                const yesterday = new MomentAdaptor().subtractBusinessDay(1);
 
-                if (startDateAfterLastDateInCollection.isSameOrAfter(yesterday)) {
-                    // console.log(`For ${tickerSymbol}, the last day in collection is the same or after yesterday`);
+                if (startDateAfterLastDateInCollection.isSameOrAfter(lastTradingDay)) {
+                    console.log(`For ${tickerSymbol}, the last day in collection is the same or after lastTradingDay`);
                     continue;
                 }
 
@@ -48,7 +52,7 @@ function getData(tickerSymbols) {
                 lastFilteredTickerSymbols.push({
                     symbol: tickerSymbol,
                     startDate: startDateAfterLastDateInCollection.format(),
-                    endDate: yesterday.format(),
+                    endDate: lastTradingDay.format(),
                 });
             }
 
@@ -74,6 +78,17 @@ function getData(tickerSymbols) {
                 ))
                 // Finally update the ignored ticker symbol with invalid symbols
                 .then(() => alpacaAPI.recordInvalidTickerSymbol());
+        })
+        .then(() => {
+            const algo = new GeneticAlgo();
+            return algo
+                .createUniverse()
+                .then(universe => {
+                    algo.writeToJSONFile({
+                        jsonfilepath: './data/universe/universe.json',
+                        data: universe.map(world => Object.fromEntries(world)),
+                    });
+                });
         })
         .catch(error => {
             console.log(`Error: ${error}`);
