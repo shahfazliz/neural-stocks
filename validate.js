@@ -1,119 +1,126 @@
-import App from './app.js';
+import GeneticAlgo from './GeneticAlgo.js';
 
-const app = new App();
+let universe;
+const numberOfOutputs = 7;
+let layers;
+let candidate;
+const candidateNumber = 0;
 
-Promise
-    .all(app
-        .getListOfTickers()
-        .map(tickerSymbol => app
-            .readJSONFileAsCandlestickCollection(`./data/tickers/${tickerSymbol}.json`)
-            .then(candlestickCollection => app.createTrainingData({
-                tickerSymbol,
-                candlestickCollection,
-            }))
-        )
-    )
-    // Combine multiple training data sets
-    .then(multipleTrainingData => {
-        console.log(`Combine multiple ticker training data sets`);
-        const accumulator = [];
-        multipleTrainingData.forEach(trainingDataSet => {
-            trainingDataSet.forEach((trainingSet, index) => {
+const algo = new GeneticAlgo();
+algo
+    .readJSONFileAsUniverse('./data/universe/universe.json')
+    .then(u => universe = u)
+    .then(() => algo.readJSONFileAsCandidate(`./data/candidates/${candidateNumber}.json`))
+    .then(c => candidate = c)
+    .then(() => {
+        candidate.reset();
 
-                // Initialize new training set to be combined
-                if (!accumulator[index]) {
-                    accumulator[index] = {
-                        input: {},
-                        output: {},
-                    };
+        layers = [...algo.__layers, numberOfOutputs];
+        return Array
+            .from({ length: universe.length - algo.__numberOfCandles }, (_, k) => k)
+            .reduce((promise, dayNumber) => promise.then(() => {
+                console.log(`Candidate: ${candidateNumber}, Day: ${dayNumber}`);
+                // Only trade on Monday, Wednesday, and Friday
+                let tomorrow = universe[dayNumber + algo.__numberOfCandles].get('Day');
+                if (candidate.getCapital() > 0
+                    && (tomorrow === 1
+                        || tomorrow === 3
+                        || tomorrow === 5)
+                ) {
+                    // Get 50 candles as input set from universe
+                    let inputSet = universe
+                        .slice(dayNumber, dayNumber + algo.__numberOfCandles)
+                        .reduce((acc, map) => {
+                            let valueIterator = map.values();
+                            let value = valueIterator.next().value;
+                            while (value !== undefined) {
+                                acc.push(value);
+                                value = valueIterator.next().value;
+                            }
+                            return acc;
+                        }, []);
+
+                    // Add capital as part of decision making
+                    inputSet.unshift(candidate.getCapital());
+
+                    // Execute candidate
+                    let output = algo.runCandidate({
+                        id: candidate.getId(),
+                        genome: candidate.getGenome(),
+                        input: inputSet,
+                        layers,
+                    });
+                    console.log(`Output: ${output}`);
+
+                    let sumOfOutputs = output.reduce((acc, val) => acc + val) - output[output.length - 1];
+
+                    let profit = 0;
+                    // Long SPY
+                    let longSpy = -universe[dayNumber + algo.__numberOfCandles - 1].get('SPY_StandardDeviation') < universe[dayNumber + algo.__numberOfCandles].get('SPY_ClosePrice')
+                        ? candidate.getCapital() * (output[0] / sumOfOutputs) * algo.__reward - algo.__costOfTrade
+                        : candidate.getCapital() * -(output[0] / sumOfOutputs) - algo.__costOfTrade;
+                    // console.log(`candidate.getCapital(): ${candidate.getCapital()}`);
+                    // console.log(`output[(0]: ${output[(0]}`);
+                    // console.log(`algo.__reward: ${algo.__reward}`);
+                    // console.log(`algo.__costOfTrade: ${algo.__costOfTrade}`);
+                    console.log(`profit long spy: ${longSpy}`);
+                    profit = algo.currency(profit + longSpy);
+
+                    // Short SPY
+                    let shortSpy = universe[dayNumber + algo.__numberOfCandles - 1].get('SPY_StandardDeviation') > universe[dayNumber + algo.__numberOfCandles].get('SPY_ClosePrice')
+                        ? candidate.getCapital() * (output[1] / sumOfOutputs) * algo.__reward - algo.__costOfTrade
+                        : candidate.getCapital() * -(output[1] / sumOfOutputs) - algo.__costOfTrade;
+                    console.log(`profit short spy: ${shortSpy}`);
+                    profit = algo.currency(profit + shortSpy);
+
+                    // Long QQQ
+                    let longQqq = -universe[dayNumber + algo.__numberOfCandles - 1].get('QQQ_StandardDeviation') < universe[dayNumber + algo.__numberOfCandles].get('QQQ_ClosePrice')
+                        ? candidate.getCapital() * (output[2] / sumOfOutputs) * algo.__reward - algo.__costOfTrade
+                        : candidate.getCapital() * -(output[2] / sumOfOutputs) - algo.__costOfTrade;
+                    console.log(`profit long qqq: ${longQqq}`);
+                    profit = algo.currency(profit + longQqq);
+
+                    // Short QQQ
+                    let shortQqq = universe[dayNumber + algo.__numberOfCandles - 1].get('QQQ_StandardDeviation') > universe[dayNumber + algo.__numberOfCandles].get('QQQ_ClosePrice')
+                        ? candidate.getCapital() * (output[3] / sumOfOutputs) * algo.__reward - algo.__costOfTrade
+                        : candidate.getCapital() * -(output[3] / sumOfOutputs) - algo.__costOfTrade;
+                    console.log(`profit short qqq: ${shortQqq}`);
+                    profit = algo.currency(profit + shortQqq);
+
+                    // Long IWM
+                    let longIwm = -universe[dayNumber + algo.__numberOfCandles - 1].get('IWM_StandardDeviation') < universe[dayNumber + algo.__numberOfCandles].get('IWM_ClosePrice')
+                        ? candidate.getCapital() * (output[4] / sumOfOutputs) * algo.__reward - algo.__costOfTrade
+                        : candidate.getCapital() * -(output[4] / sumOfOutputs) - algo.__costOfTrade;
+                    console.log(`profit long iwm: ${longIwm}`);
+                    profit = algo.currency(profit + longIwm);
+
+                    // Short IWM
+                    let shortIwm = universe[dayNumber + algo.__numberOfCandles - 1].get('IWM_StandardDeviation') > universe[dayNumber + algo.__numberOfCandles].get('IWM_ClosePrice')
+                        ? candidate.getCapital() * (output[5] / sumOfOutputs) * algo.__reward - algo.__costOfTrade
+                        : candidate.getCapital() * -(output[5] / sumOfOutputs) - algo.__costOfTrade;
+                    console.log(`profit short iwm: ${shortIwm}`);
+                    profit = algo.currency(profit + shortIwm);
+
+                    // Record total profits so far
+                    candidate.setProfit(candidate.getProfit() + profit);
+                    console.log(`total profit: ${profit}`);
+
+                    // Update capital
+                    candidate.setCapital(candidate.getCapital() + profit);
+
+                    // Every month trade withdraw
+                    if (universe[dayNumber + algo.__numberOfCandles].get('Month') !== universe[dayNumber + algo.__numberOfCandles - 1].get('Month')) {
+                        let withdrawal = algo.currency(candidate.getCapital() - 1000); // * output[6]);
+                        console.log(`withdrawal: ${withdrawal}`);
+
+                        candidate.setCapital(candidate.getCapital() - withdrawal);
+                        candidate.setWithdrawal(candidate.getWithdrawal() + withdrawal);
+                    }   
+
+                    candidate.setTradeDuration(dayNumber);
                 }
-
-                // Set input
-                Object
-                    .keys(trainingSet.input)
-                    .forEach(key => { // eg. key: SPY_OpenPrice_1
-                        accumulator[index]['input'][key] = trainingSet.input[key];
-                    });
-
-                // Set output
-                Object
-                    .keys(trainingSet.output)
-                    .forEach(key => { // eg. key: SPY_Long
-                        accumulator[index]['output'][key] = trainingSet.output[key];
-                    });
-            });
-        });
-        return accumulator;
+            }), Promise.resolve());
     })
-    .then(trainingDataSet => {
-        // Initialize test result
-        const testResult = app
-            .getListOfTickers()
-            .reduce((accumulator, tickerSymbol) => {
-                accumulator[tickerSymbol] = {
-                    correct: 0,
-                    error: 0,
-                };
-                return accumulator;
-            }, {});
-
-        const treshold = 0.6;
-
-        app
-            .loadTrainedModel()
-            .then(model => {
-                trainingDataSet.forEach(dataSet => {
-                    // Run trained model against all ticker data in json files
-                    const trainingResult = model.run(dataSet.input);
-
-                    // Take scores
-                    ['SPY', 'QQQ', 'IWM'] // I'm only interested in SPY, QQQ, and IWM
-                        .forEach(tickerSymbol => {
-
-                            if (trainingResult[`${tickerSymbol}_Long`] >= treshold) {
-                                if (dataSet.output[`${tickerSymbol}_Long`] === 1) {
-                                    testResult[tickerSymbol].correct += 1;
-                                } else {
-                                    testResult[tickerSymbol].error += 1;
-                                }
-                            }
-
-                            if (trainingResult[`${tickerSymbol}_Long`] < treshold) {
-                                if (dataSet.output[`${tickerSymbol}_Long`] === 0) {
-                                    testResult[tickerSymbol].correct += 1;
-                                } else {
-                                    testResult[tickerSymbol].error += 1;
-                                }
-                            }
-
-                            if (trainingResult[`${tickerSymbol}_Short`] >= treshold) {
-                                if (dataSet.output[`${tickerSymbol}_Short`] === 1) {
-                                    testResult[tickerSymbol].correct += 1;
-                                } else {
-                                    testResult[tickerSymbol].error += 1;
-                                }
-                            }
-
-                            if (trainingResult[`${tickerSymbol}_Short`] < treshold) {
-                                if (dataSet.output[`${tickerSymbol}_Short`] === 0) {
-                                    testResult[tickerSymbol].correct += 1;
-                                } else {
-                                    testResult[tickerSymbol].error += 1;
-                                }
-                            }
-                        });
-                });
-
-                // Print scores
-                ['SPY', 'QQQ', 'IWM'] // I'm only interested in SPY, QQQ, and IWM
-                    .forEach(tickerSymbol => {
-                        const predictedCorrectly = testResult[tickerSymbol].correct;
-                        const predictedWrongly = testResult[tickerSymbol].error;
-                        const totalTrades = predictedCorrectly + predictedWrongly;
-
-                        console.log(`${tickerSymbol} correct: ${predictedCorrectly}`);
-                        console.log(`${tickerSymbol} error: ${predictedWrongly}`);
-                        console.log(`${tickerSymbol} % error: ${predictedWrongly / totalTrades * 100} %`);
-                    });
-            });
+    .then(() => {
+        console.log(candidate.scoreToString())
     });

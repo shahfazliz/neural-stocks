@@ -63,6 +63,22 @@ export default class VolumeProfile {
     getVolumeProfile(price) {
         return this.__volumeProfile.get(`${price}`);
     }
+
+    update(candlestick) {
+        const temp = [];
+        for (let i = candlestick.getLow(); i <= candlestick.getHigh(); i = this.precision(i + 0.01)) {
+            temp.push(i);
+        }
+        const averageVolume = candlestick.getVolume() / temp.length;
+        new Set(temp).forEach(price => {
+            this.__volumeProfile.set(
+                price, 
+                this.__volumeProfile.has(price)
+                    ? this.precision(this.__volumeProfile.get(price) + averageVolume)
+                    : this.precision(averageVolume)
+            );
+        });
+    }
 }
 
 // const test = new VolumeProfile();

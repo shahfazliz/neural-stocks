@@ -1,115 +1,136 @@
 import App from './app.js';
-import ArrayFn from './util/ArrayFn.js';
-import axios from 'axios';
 import Candlestick from './model/Candlestick.js';
+import CollectionService from './resource/CollectionService.js';
+import GeneticAlgo from './GeneticAlgo.js';
+import VolumeProfile from './model/VolumeProfile.js';
+import AlpacaAPI from './resource/AlpacaAPI.js';
 
+const alpacaAPI = new AlpacaAPI();
 const app = new App();
+const collectionService = new CollectionService();
 
-// Predict for today
-Promise
-    .all(app
-        .getListOfTickers()
-        .map(tickerSymbol => app
-            .readJSONFileAsCandlestickCollection(`./data/tickers/${tickerSymbol}.json`)
-            .then(candlestickCollection => app.createLastInput({
-                tickerSymbol,
-                candlestickCollection,
-            }))
-        )
-    )
-    // Combine multiple ticker training data sets
-    .then(multipleTickerLastDataSet => multipleTickerLastDataSet.reduce((accumulator, tickerLastDataSet) => {
-        Object
-            .keys(tickerLastDataSet)
-            .forEach(key => { // eg. key: SPX_OpenPrice_1
-                accumulator[key] = tickerLastDataSet[key];
-            });
-        return accumulator;
-    }, {}))
-    .then(lastInput => app
-        .loadTrainedModel()
-        .then(model => {
-            const result = model.run(lastInput);
-            Object
-                .keys(result)
-                .forEach(key => result[key] = result[key].toFixed(4));
-            console.log("Today's result:", result);
-        })
-    )
-    .catch(error => console.log(`Error: ${error}`));
+let universe;
+const numberOfOutputs = 7;
+let layers;
+let candidate;
+const candidateNumber = 0;
 
-// Predict for tomorrow
-Promise
-    .all(app
-        .getListOfTickers()
-        .map(tickerSymbol => app
-            .readJSONFileAsCandlestickCollection(`./data/tickers/${tickerSymbol}.json`)
-            // Hijack data by adding today's daily quote
-            .then(candlestickCollection => axios
-                .get(`https://data.alpaca.markets/v2/stocks/${tickerSymbol}/snapshot`, {
-                    headers: {
-                        'APCA-API-KEY-ID': process.env.APCA_API_KEY_ID,
-                        'APCA-API-SECRET-KEY': process.env.APCA_API_SECRET_KEY,
-                    }
-                })
-                .then(response => candlestickCollection
-                    .clone()
-                    .push(new Candlestick({
-                        timestamp: response.data.dailyBar.t,
-                        open: response.data.dailyBar.o,
-                        close: response.data.dailyBar.c,
-                        high: response.data.dailyBar.h,
-                        low: response.data.dailyBar.l,
-                        volume: response.data.dailyBar.v,
-                        n: response.data.dailyBar.n,
-                        vw: response.data.dailyBar.vw,
-                    }))
+const algo = new GeneticAlgo();
+algo
+    .readJSONFileAsUniverse('./data/universe/universe.json')
+    .then(u => universe = u)
+    // get data to update universe
+    .then(() => {
+        return Promise
+            .all(app
+                .getListOfTickers()
+                .map(tickerSymbol => collectionService
+                    .readJSONFileAsCandlestickCollection(`./data/tickers/${tickerSymbol}.json`)
+                    // Hijack data by adding today's daily quote
+                    .then(candlestickCollection => alpacaAPI
+                        .getLatestQuote(tickerSymbol)
+                        // .then(data => {
+                        //     console.log(`${tickerSymbol}: ${JSON.stringify(data)}`);
+                        //     return data;
+                        // })
+                        .then(data => {
+                            const candlestick = new Candlestick({
+                                timestamp: data.bars[0].t,
+                                open: algo.currency(data.bars[0].o),
+                                close: algo.currency(data.bars[0].c),
+                                high: algo.currency(data.bars[0].h),
+                                low: algo.currency(data.bars[0].l),
+                                volume: data.bars[0].v,
+                                n: data.bars[0].n,
+                                vw: data.bars[0].vw,
+                            });
+
+                            const tickerVolumeProfile = new VolumeProfile();
+                            return tickerVolumeProfile
+                                .init(tickerSymbol)
+                                .then(() => {
+                                    tickerVolumeProfile.update(candlestick);
+
+                                    candlestick.setVolumeProfile(tickerVolumeProfile.getVolumeProfile(candlestick.getClose()));
+                                    candlestickCollection.push(candlestick);
+                                    return candlestickCollection;
+                                });
+                        })
+                        .then(candlestickCollection => {
+                            const obj = {
+                                tickerSymbol,
+                                candlestickCollection
+                            };
+                            return obj;
+                        })
+                    )
                 )
             )
-            .then(candlestickCollection => app.createTrainingData({
-                tickerSymbol,
-                candlestickCollection,
-            }))
-        )
-    )
-    // Combine multiple ticker training data sets
-    .then(multipleTrainingData => {
-        const accumulator = [];
-        multipleTrainingData.forEach(trainingData => {
-            trainingData.forEach((trainingSet, index) => {
+            // Combine multiple ticker training data sets
+            .then(multipleTrainingData => {
+                const map = new Map();
+                multipleTrainingData.forEach(obj => {
+                    const tickerSymbol = obj.tickerSymbol;
+                    const candlestick = obj.candlestickCollection.getLastElement();
 
-                // Initialize new training set to be combined
-                if (!accumulator[index]) {
-                    accumulator[index] = {
-                        input: {},
-                        output: {},
-                    };
-                }
-
-                Object
-                    .keys(trainingSet.input)
-                    .forEach(key => { // eg. key: SPY_OpenPrice_1
-                        accumulator[index]['input'][key] = trainingSet.input[key];
-                    });
-
-                Object
-                    .keys(trainingSet.output)
-                    .forEach(key => { // eg. key: SPY_Long
-                        accumulator[index]['output'][key] = trainingSet.output[key];
-                    });
-            });
-        });
-        return accumulator;
+                    // For debugging, see the dates
+                    // map.set(`${tickerSymbol}_Timestamp_${replaceDateWithCount}`, candlestick.getTimestamp());
+                    // map.set(`${tickerSymbol}_Day_${replaceDateWithCount}`, candlestick.getDay());
+                    // map.set(`${tickerSymbol}_Month_${replaceDateWithCount}`, candlestick.getMonth());
+                    map.set(`Day`, candlestick.getDay());
+                    map.set(`Month`, candlestick.getMonth());
+                    map.set(`${tickerSymbol}_OpenPrice`, algo.precision(candlestick.getOpenDiff()));
+                    map.set(`${tickerSymbol}_ClosePrice`, algo.precision(candlestick.getCloseDiff()));
+                    map.set(`${tickerSymbol}_Volume`, algo.precision(candlestick.getVolumeDiff()));
+                    map.set(`${tickerSymbol}_HighPrice`, algo.precision(candlestick.getHighDiff()));
+                    map.set(`${tickerSymbol}_LowPrice`, algo.precision(candlestick.getLowDiff()));
+                    map.set(`${tickerSymbol}_VolumeProfile`, algo.precision(candlestick.getVolumeProfile()));
+                    map.set(`${tickerSymbol}_StandardDeviation`, candlestick.getStandardDeviation());
+                });
+                universe.push(map);
+            })
+            // .then(() => console.log(universe[universe.length - 1]))
     })
-    // Load from saved training
-    .then(trainingData => app
-        .continueTraining(trainingData)
-        .then(model => {
-            const result = model.run(ArrayFn.getLastElement(trainingData).input);
-            Object
-                .keys(result)
-                .forEach(key => result[key] = result[key].toFixed(4));
-            console.log("Tomorrow's result:", result);
-        })
-    )
-    .catch(error => console.log(`Error: ${error}`));
+.then(() => algo.readJSONFileAsCandidate(`./data/candidates/${candidateNumber}.json`))
+.then(c => candidate = c)
+.then(() => {
+    candidate.reset();
+
+    layers = [...algo.__layers, numberOfOutputs];
+    // Get 50 candles as input set from universe
+    let inputSet = universe
+        .slice(universe.length - algo.__numberOfCandles)
+        .reduce((acc, map) => {
+            let valueIterator = map.values();
+            let value = valueIterator.next().value;
+            while (value !== undefined) {
+                acc.push(value);
+                value = valueIterator.next().value;
+            }
+            return acc;
+        }, []);
+
+    // Add capital as part of decision making
+    inputSet.unshift(candidate.getCapital());
+
+    // Execute candidate
+    let output = algo.runCandidate({
+        id: candidate.getId(),
+        genome: candidate.getGenome(),
+        input: inputSet,
+        layers,
+    });
+
+    let sumOfOutputs = output.reduce((acc, val) => acc + val) - output[output.length - 1];
+    [
+        'Long SPY',
+        'Short SPY',
+        'Long QQQ',
+        'Short QQQ',
+        'Long IWM',
+        'Short IWM',
+    ].forEach((string, index) => {
+        console.log(`${string}: ${algo.currency(output[index] / sumOfOutputs)}`);
+    });
+    console.log(`Withdraw: ${algo.currency(output[output.length - 1])}`);
+});

@@ -1,0 +1,667 @@
+import Candidate from './model/Candidate.js';
+import CollectionService from './resource/CollectionService.js';
+import FileService from './util/FileService.js';
+import fs from 'fs/promises';
+
+const collectionService = new CollectionService();
+const fileService = new FileService();
+
+export default class GeneticAlgo {
+    __totalCandidates = 30;
+    __layers = [15, 15, 15, 15];
+
+    __numberOfCandles = 20;
+    __numberOfCandlesAYear = 252;
+    __listOfTickers = [
+        'BAL',
+        'CYB',
+        'DBA', 'DIA',
+        'EEM',
+        'FXA', 'FXB', 'FXC', 'FXE', 'FXF', 'FXI', 'FXY',
+        'GDX', 'GDXJ', 'GLD', 'GOVT',
+        'IEF', 'IEI',
+        'IWM',
+        'IYT',
+        'NIB',
+        'QQQ',
+        'RJA', 'RJI',
+        'SHY',
+        'SPY',
+        'TIP', 'TLH', 'TLT',
+        'UNG', 'USO', 'UUP',
+        'VXX',
+        'XHB', 'XLB', 'XLE', 'XLF', 'XLI', 'XLK', 'XLP', 'XLRE', 'XLU', 'XLV', 'XRT', 'XTL', 'XTN',
+    ];
+
+    __maxGenerationCount = 100;
+    __costOfTrade = 1.74;
+    __reward = 0.6; // 6%
+
+    precision(value) {
+        return parseFloat(value.toFixed(5));
+    }
+
+    currency(value) {
+        return parseFloat(value.toFixed(2));
+    }
+
+    /**
+     * Node structure
+     * --------------
+     *
+     *   x0 - 2 - 4
+     *      X   X   > 6
+     *   x1 - 3 - 5
+     *
+     * const nodes = [
+     *      x0, x1, // inputs
+     *      [w02, w12, c2], // hidden node 2
+     *      [w03, w13, c3], // hidden node 3
+     *      [w24, w34, c4], // hidden node 4
+     *      [w25, w35, c5], // hidden node 5
+     *      [w46, w56, c6], // output node 6
+     * ];
+     *
+     *
+     * Some other rules?
+     * -----------------
+     * 1. number of nodes per layer === number of inputs
+     * 2. number of hidden layers = Math.floor((length of nodes - number of inputs) / number of inputs)
+     * 3. number of output nodes = (length of nodes - number of inputs) - (number of hidden layers * number of inputs)
+     * 4. hidden nodes use swish activation function (x) => x*sigmoid(x)
+     * 5. output nodes use sigmoid activation function (x) => 1/(1+Math.exp(-x))
+     *
+     * Sample input
+     * ------------
+     * const input = [13,14];
+     * const nodes = [
+     *  [1,1,1], // node 1
+     *  [2,2,2], // node 2
+     *  [3,3,3], // node 3
+     *  [4,4,4], // node 4
+     *  [5,5,5], // output node
+     * ];
+     */
+    runCandidate({
+        id,
+        input,
+        genome,
+        layers,
+    }) {
+        console.log(`Run candidate ${id} with input length of ${input.length}`);
+
+        const model = [...input, ...genome];
+
+        let outputNode = undefined;
+        for (let i = input.length; i < model.length; i++) {
+            // Calculate hidden layer number
+            const layerNumber = this.isInLayer(layers, i - input.length);
+
+            // Sum all multiplication with weights
+            let result = 0;
+            for (let j = 0; j < model[i].length - 1; j++) { // don't use the last number, that is for bias
+                // console.log(`model[${layerNumber} - 1 + ${j}]: ${model[layerNumber - 1 + j]}`)
+                result += model[i][j] * model[layerNumber - 1 + j]; // weight * input
+            }
+
+            // Add bias
+            result += model[i][model[i].length - 1];
+
+            // Determine if current node is in output layer
+            const isOutputLayer = layerNumber === layers.length;
+
+            // Apply activation function and save result
+            model[i] = isOutputLayer
+                ? this.precision(this.sigmoid(result))
+                : this.precision(result); // this.swish(result);
+
+            // Save the output node number
+            if (isOutputLayer && outputNode === undefined) {
+                outputNode = i;
+            }
+        }
+
+        // Only return the output nodes, remove the rest to save memory space
+        model.splice(0, outputNode);
+        return model;
+    }
+
+    swish(val) {
+        return val * this.sigmoid(val);
+    }
+
+    sigmoid(val) {
+        return 1 / (1 + Math.exp(-val));
+    }
+
+    /**
+     * Find the target resides in which layer. Not zero index
+     */
+    isInLayer(layers, target) {
+        for (let i = 0; i < layers.length; i++) {
+            let sum = layers
+                .slice(0, i + 1)
+                .reduce((acc, val) => acc + val);
+
+            if (target < sum) {
+                return i + 1; // Not zero index
+            }
+        }
+    }
+
+    /**
+     * Initial genome
+     */
+    randomGenome({
+        numberOfInputs = 1,
+        layers = [3, 3, 3],
+    }) {
+        console.log(`Generating random genome with ${layers[0]} input nodes, ${layers[layers.length - 1]} output nodes, and ${layers.length - 2} hidden layers`);
+
+        let weights = [];
+        layers.forEach((numberOfNode, index) => {
+            let numberOfWeightsPerNode = index === 0
+                ? numberOfInputs
+                : layers[index - 1];
+
+            Array.from(
+                { length: numberOfNode },
+                () => Array.from(
+                    { length: numberOfWeightsPerNode + 1 }, // +1 for bias
+                    () => this.randomWeight()
+                )
+            ).forEach(val => weights.push(val));
+        });
+
+        // console.log(weights);
+        return weights;
+    }
+
+    randomWeight() {
+        return this.precision(Math.random() * 0.02 - 0.01);
+    }
+
+    /**
+     * Crossover genome
+     */
+    crossoverGenome({
+        candidateA,
+        candidateB,
+    }) {
+        return new Promise((resolve, reject) => {
+            // Direct access to the private attibute (genome) to save memory space
+            let minimumGenomeLength = candidateA.__genome.length <= candidateB.__genome.length
+                ? candidateA.__genome.length
+                : candidateB.__genome.length;
+
+            let startSplice = Math.floor(Math.random() * minimumGenomeLength);
+            let numberOfGenesToCross = Math.ceil(Math.random() * (minimumGenomeLength - startSplice));
+            console.log(`startSplice: ${startSplice}`);
+            console.log(`numberOfGenesToCross: ${numberOfGenesToCross}`);
+
+            let candidateAGenome = candidateA
+                .__genome
+                .slice(startSplice, startSplice + numberOfGenesToCross);
+            let candidateBGenome = candidateB
+                .__genome
+                .slice(startSplice, startSplice + numberOfGenesToCross);
+
+            candidateA.__genome.splice(startSplice, numberOfGenesToCross, ...candidateBGenome);
+            candidateB.__genome.splice(startSplice, numberOfGenesToCross, ...candidateAGenome);
+
+            resolve([candidateA, candidateB]);
+        });
+    }
+
+
+    /**
+     * Genome mutation
+     * @param {Candidate} candidate
+     * @returns undefined
+     */
+    mutateGenome(candidate) {
+        // Direct access to the private attibute (genome) to save memory space
+        let nodePos = Math.floor(Math.random() * candidate.__genome.length);
+        let startSpliceWeight = Math.floor(Math.random() * candidate.__genome[nodePos].length);
+        candidate
+            .__genome[nodePos]
+            .splice(startSpliceWeight, 1, this.randomWeight());
+        return candidate;
+    }
+
+    /**
+     *
+     * Inputs
+     * ------
+     * 1. 50 candles (open, close, high, low, volume profile, 1 standard deviation until yesterday)
+     * 2. 40 tickers
+     * 3. x cash in hand
+     * 4. cost of trade
+     * 5. withdrawal
+     *
+     *
+     * Output nodes
+     * ------------
+     * 1. spx long with how much risk
+     * 2. spx short with how much risk
+     * 3. ndx long with how much risk
+     * 4. ndx short with how much risk
+     * 5. rut long with how much risk
+     * 6. rut short with how much risk
+     *
+     *
+     * Option pricing rules?
+     * ---------------------
+     * 1. Selling put or calls at 1 td deviation, max profit is 6~7% of risk
+     */
+
+    createTickerWorld({
+        candlestickCollection,
+        numberOfCandles = this.__numberOfCandles,
+        tickerSymbol = 'N/A',
+    }) {
+        return new Promise((resolve, reject) => {
+            console.log(`Create world for ${tickerSymbol}`);
+            // Test the minimum amount of required candles
+            const totalCandlestick = candlestickCollection.length();
+            if (totalCandlestick < numberOfCandles + this.__numberOfCandlesAYear) {
+                return reject(`number of candle is ${totalCandlestick}, it is less than required candle of ${numberOfCandles}`);
+            }
+
+            return resolve(candlestickCollection
+                .map((candlestick, index) => {
+                    if (index > this.__numberOfCandlesAYear) {
+                        // const replaceDateWithCount = (index - this.__numberOfCandlesAYear) % numberOfCandles;
+                        const map = new Map();
+
+                        // For debugging, see the dates
+                        // map.set(`${tickerSymbol}_Timestamp_${replaceDateWithCount}`, candlestick.getTimestamp());
+                        // map.set(`${tickerSymbol}_Day_${replaceDateWithCount}`, candlestick.getDay());
+                        // map.set(`${tickerSymbol}_Month_${replaceDateWithCount}`, candlestick.getMonth());
+                        map.set(`Day`, candlestick.getDay());
+                        map.set(`Month`, candlestick.getMonth());
+                        map.set(`${tickerSymbol}_OpenPrice`, this.precision(candlestick.getOpenDiff()));
+                        map.set(`${tickerSymbol}_ClosePrice`, this.precision(candlestick.getCloseDiff()));
+                        map.set(`${tickerSymbol}_Volume`, this.precision(candlestick.getVolumeDiff()));
+                        map.set(`${tickerSymbol}_HighPrice`, this.precision(candlestick.getHighDiff()));
+                        map.set(`${tickerSymbol}_LowPrice`, this.precision(candlestick.getLowDiff()));
+                        map.set(`${tickerSymbol}_VolumeProfile`, this.precision(candlestick.getVolumeProfile()));
+                        map.set(`${tickerSymbol}_StandardDeviation`, candlestick.getStandardDeviation());
+
+                        return map;
+                    }
+                })
+                .filter(val => val !== undefined)
+            );
+        });
+    }
+
+    createUniverse() {
+        return Promise
+            .all(this
+                .__listOfTickers
+                .map(tickerSymbol => collectionService
+                    .readJSONFileAsCandlestickCollection(`./data/tickers/${tickerSymbol}.json`)
+                    .then(candlestickCollection => {
+                        // console.log(candlestickCollection);
+                        return this.createTickerWorld({
+                            candlestickCollection,
+                            tickerSymbol,
+                        });
+                    })
+                )
+            )
+            // Combine multiple worlds
+            .then(multipleWorlds => {
+                console.log(`Combine worlds to a universe`);
+                const result = [];
+                const totalMapsPerWorld = multipleWorlds[0].length;
+
+                // Check if all worlds have same amount of entries
+                for (let i = 0; i < multipleWorlds.length; i++) {
+                    if (multipleWorlds[i].length !== totalMapsPerWorld) {
+                        return Promise.reject(`Worlds does not have the same amount of entries ${totalMapsPerWorld} vs. ${multipleWorlds[i].length}`);
+                    }
+                }
+
+                for (let originalMapIndex = 0; originalMapIndex < totalMapsPerWorld; originalMapIndex++) {
+                    let map = new Map();
+
+                    for (let tickerIndex = 0; tickerIndex < multipleWorlds.length; tickerIndex++) {
+                        let entry = multipleWorlds[tickerIndex][originalMapIndex].entries();
+                        let value = entry.next().value;
+
+                        // Copy to new map
+                        while (value !== undefined) {
+                            map.set(...value);
+                            value = entry.next().value;
+                        }
+
+                        // Delete the old map to save memory space
+                        multipleWorlds[tickerIndex][originalMapIndex].clear();
+                    }
+                    result.push(map);
+                }
+
+                return result;
+            })
+            .catch(error => console.log(`Error: ${error}`));
+    }
+
+    /**
+     * Fitness test/score
+     * ------------------
+     * 1. profit + cash in hand - withdrawal - cost to open - cost to close
+     * 2. how long can it trade until it runs out ot cash
+     *
+     * AI should notice the longer they can trade, the more they can profit,
+     * then the more they can withdraw to score higher
+     * @returns {Number}
+     */
+    fitnessTest(candidate) {
+        // console.log(`candidate ${candidate.getId()}: ${JSON.stringify({
+        //     profit: candidate.getProfit(),
+        //     withdrawal: candidate.getWithdrawal(),
+        //     tradeDuration: candidate.getTradeDuration(),
+        // })}`);
+        return candidate.getProfit() > 0
+            ? (candidate.getWithdrawal() * candidate.getTradeDuration()) / candidate.getProfit()
+            : 0;
+    }
+
+    /**
+     * Read from json file as Universe
+     */
+    readJSONFileAsUniverse(jsonfilepath) {
+        return fs
+            .readFile(jsonfilepath)
+            .then(rawJson => {
+                console.log(`Reading from ${jsonfilepath} to CandlestickCollection`);
+                // console.log(JSON.parse(rawJson));
+                return JSON
+                    .parse(rawJson)
+                    .map(world => new Map(Object.entries(world)));
+            });
+    }
+
+    /**
+     * Read json file as candidate
+     * @returns {Promise}
+     */
+    readJSONFileAsCandidate(jsonfilepath) {
+        return fs
+            .readFile(jsonfilepath)
+            .then(rawJson => {
+                console.log(`Reading from ${jsonfilepath}`);
+                // console.log(JSON.parse(rawJson));
+                return new Candidate(JSON.parse(rawJson));
+            })
+            // If file does not exist, create one
+            .catch(() => this
+                .writeToJSONFile({
+                    jsonfilepath,
+                })
+                .then(() => new Candidate({}))
+            );
+    }
+
+    factorial(number) {
+        return (number === 1 || number === 0) 
+            ? 1
+            : number * this.factorial(number - 1);
+    }
+
+    run() {
+        let universe;
+        let candidates = [];
+        const numberOfOutputs = 7;
+        let layers;
+        const bestCandidateCount = 3;
+        let numberOfInputs;
+
+        this
+            // Load universe
+            .readJSONFileAsUniverse('./data/universe/universe.json')
+            .then(u => universe = u)
+            // Load candidates
+            .then(() => Promise
+                .all(Array
+                    .from({ length: this.__totalCandidates }, (_, k) => k)
+                    .map(candidateNumber => {
+
+                        numberOfInputs = (universe[0].size * this.__numberOfCandles) + 1; // 1 more is the capital
+
+                        return this
+                            .readJSONFileAsCandidate(`./data/candidates/${candidateNumber}.json`)
+                            .then(candidate => {
+                                candidate.reset();
+
+                                layers = [...this.__layers, numberOfOutputs];
+                                // If candidate is empty, generate one
+                                if (candidate.isGenomeEmpty()) {
+                                    candidate
+                                        .setId(candidateNumber)
+                                        .setGenome(this.randomGenome({
+                                            numberOfInputs,
+                                            layers,
+                                        }));
+                                }
+
+                                candidates[candidateNumber] = candidate;
+                            });
+                    })
+                )
+            )
+            // Loop generations
+            .then(() => Array
+                .from({ length: this.__maxGenerationCount }, (_, k) => k) // 100 generations
+                .reduce((promise, generationNumber) => promise.then(() => {
+                    
+                    return Array
+                        .from({ length: candidates.length }, (_, k) => k)
+                        .reduce((promise, candidateNumber) => promise.then(() => {
+                            
+                            let candidate = candidates[candidateNumber];
+                            candidate
+                                .reset()
+                                .setGeneration(generationNumber);
+
+                            // Run the candidates
+                            return Array
+                                .from({ length: universe.length - this.__numberOfCandles }, (_, k) => k)
+                                .reduce((promise, dayNumber) => promise.then(() => {
+                                    console.log(`Generation: ${generationNumber}, Candidate: ${candidateNumber}, Day: ${dayNumber}`);
+                                    // Only trade on Monday, Wednesday, and Friday
+                                    let tomorrow = universe[dayNumber + this.__numberOfCandles].get('Day');
+                                    if (candidate.getCapital() > 0
+                                        && (tomorrow === 1
+                                            || tomorrow === 3
+                                            || tomorrow === 5)
+                                    ) {
+                                        // Get 50 candles as input set from universe
+                                        let inputSet = universe
+                                            .slice(dayNumber, dayNumber + this.__numberOfCandles)
+                                            .reduce((acc, map) => {
+                                                let valueIterator = map.values();
+                                                let value = valueIterator.next().value;
+                                                while (value !== undefined) {
+                                                    acc.push(value);
+                                                    value = valueIterator.next().value;
+                                                }
+                                                return acc;
+                                            }, []);
+
+                                        // Add capital as part of decision making
+                                        inputSet.unshift(candidate.getCapital());
+
+                                        // Execute candidate
+                                        let output = this.runCandidate({
+                                            id: candidate.getId(),
+                                            genome: candidate.getGenome(),
+                                            input: inputSet,
+                                            layers,
+                                        });
+                                        console.log(`Output: ${output}`);
+
+                                        let sumOfOutputs = output.reduce((acc, val) => acc + val) - output[output.length - 1];
+
+                                        let profit = 0;
+                                        // Long SPY
+                                        let longSpy = -universe[dayNumber + this.__numberOfCandles - 1].get('SPY_StandardDeviation') < universe[dayNumber + this.__numberOfCandles].get('SPY_ClosePrice')
+                                            ? candidate.getCapital() * (output[0] / sumOfOutputs) * this.__reward - this.__costOfTrade
+                                            : candidate.getCapital() * -(output[0] / sumOfOutputs) - this.__costOfTrade;
+                                        // console.log(`candidate.getCapital(): ${candidate.getCapital()}`);
+                                        // console.log(`output[(0]: ${output[(0]}`);
+                                        // console.log(`this.__reward: ${this.__reward}`);
+                                        // console.log(`this.__costOfTrade: ${this.__costOfTrade}`);
+                                        console.log(`profit long spy: ${longSpy}`);
+                                        profit = this.currency(profit + longSpy);
+
+                                        // Short SPY
+                                        let shortSpy = universe[dayNumber + this.__numberOfCandles - 1].get('SPY_StandardDeviation') > universe[dayNumber + this.__numberOfCandles].get('SPY_ClosePrice')
+                                            ? candidate.getCapital() * (output[1] / sumOfOutputs) * this.__reward - this.__costOfTrade
+                                            : candidate.getCapital() * -(output[1] / sumOfOutputs) - this.__costOfTrade;
+                                        console.log(`profit short spy: ${shortSpy}`);
+                                        profit = this.currency(profit + shortSpy);
+
+                                        // Long QQQ
+                                        let longQqq = -universe[dayNumber + this.__numberOfCandles - 1].get('QQQ_StandardDeviation') < universe[dayNumber + this.__numberOfCandles].get('QQQ_ClosePrice')
+                                            ? candidate.getCapital() * (output[2] / sumOfOutputs) * this.__reward - this.__costOfTrade
+                                            : candidate.getCapital() * -(output[2] / sumOfOutputs) - this.__costOfTrade;
+                                        console.log(`profit long qqq: ${longQqq}`);
+                                        profit = this.currency(profit + longQqq);
+
+                                        // Short QQQ
+                                        let shortQqq = universe[dayNumber + this.__numberOfCandles - 1].get('QQQ_StandardDeviation') > universe[dayNumber + this.__numberOfCandles].get('QQQ_ClosePrice')
+                                            ? candidate.getCapital() * (output[3] / sumOfOutputs) * this.__reward - this.__costOfTrade
+                                            : candidate.getCapital() * -(output[3] / sumOfOutputs) - this.__costOfTrade;
+                                        console.log(`profit short qqq: ${shortQqq}`);
+                                        profit = this.currency(profit + shortQqq);
+
+                                        // Long IWM
+                                        let longIwm = -universe[dayNumber + this.__numberOfCandles - 1].get('IWM_StandardDeviation') < universe[dayNumber + this.__numberOfCandles].get('IWM_ClosePrice')
+                                            ? candidate.getCapital() * (output[4] / sumOfOutputs) * this.__reward - this.__costOfTrade
+                                            : candidate.getCapital() * -(output[4] / sumOfOutputs) - this.__costOfTrade;
+                                        console.log(`profit long iwm: ${longIwm}`);
+                                        profit = this.currency(profit + longIwm);
+
+                                        // Short IWM
+                                        let shortIwm = universe[dayNumber + this.__numberOfCandles - 1].get('IWM_StandardDeviation') > universe[dayNumber + this.__numberOfCandles].get('IWM_ClosePrice')
+                                            ? candidate.getCapital() * (output[5] / sumOfOutputs) * this.__reward - this.__costOfTrade
+                                            : candidate.getCapital() * -(output[5] / sumOfOutputs) - this.__costOfTrade;
+                                        console.log(`profit short iwm: ${shortIwm}`);
+                                        profit = this.currency(profit + shortIwm);
+
+                                        // Record total profits so far
+                                        candidate.setProfit(candidate.getProfit() + profit);
+                                        console.log(`total profit: ${profit}`);
+
+                                        // Update capital
+                                        candidate.setCapital(candidate.getCapital() + profit);
+
+                                        // Every month trade withdraw
+                                        if (universe[dayNumber + this.__numberOfCandles].get('Month') !== universe[dayNumber + this.__numberOfCandles - 1].get('Month')) {
+                                            let withdrawal = this.currency(candidate.getCapital() - 1000); // * output[6]);
+                                            console.log(`withdrawal: ${withdrawal}`);
+
+                                            candidate.setCapital(candidate.getCapital() - withdrawal);
+                                            candidate.setWithdrawal(candidate.getWithdrawal() + withdrawal);
+                                        }
+
+                                        candidate.setTradeDuration(dayNumber);
+                                    }
+                                }), Promise.resolve());
+                        }), Promise.resolve())
+                        .then(() => {
+                            // Fitness test
+                            console.log(`Fitness test`);
+                            return Promise.resolve(candidates.sort((candidateA, candidateB) => {
+                                console.log(`Sorting...`);
+                                return this.fitnessTest(candidateB) - this.fitnessTest(candidateA)
+                            }));
+                        })
+                        .then(() => {
+                            // Crossover gene
+                            console.log(`Crossover gene`);
+                            let crossoverPromises = [];
+                            let leftPos = 0;
+                            let savePosition = bestCandidateCount;
+                            while (leftPos < bestCandidateCount) {
+                                let rightPos = 0;
+                                while (rightPos < bestCandidateCount) {
+                                    rightPos = leftPos === rightPos
+                                        ? rightPos + 1
+                                        : rightPos;
+
+                                    if (rightPos >= bestCandidateCount) {
+                                        break;
+                                    }
+
+                                    // Crossover
+                                    candidates[savePosition].setGenome(candidates[leftPos].getGenome());
+                                    candidates[savePosition + 1].setGenome(candidates[rightPos].getGenome());
+                                    crossoverPromises
+                                        .push(this
+                                            .crossoverGenome({
+                                                candidateA: candidates[savePosition],
+                                                candidateB: candidates[savePosition + 1],
+                                            })
+                                        );
+                                    rightPos += 1;
+                                    savePosition += 2;
+                                }
+                                leftPos += 1;
+                            }
+
+                            return Promise.all(crossoverPromises);
+                        })
+                        .then(() => {
+                            const genomeCrossoverCount = 2 * (this.factorial(bestCandidateCount) / this.factorial(bestCandidateCount - 2)) + bestCandidateCount;
+                            return Array
+                                .from({length: this.__totalCandidates}, (_, k) => k)
+                                .reduce((promise, index) => promise.then(() => {
+                                    if (candidates[index].getId() >= genomeCrossoverCount) {
+                                        candidates[index].setGenome(this.randomGenome({
+                                            numberOfInputs,
+                                            layers,
+                                        }));
+                                    }
+                                }), Promise.resolve())
+                        })
+                        .then(() => {
+                            // Mutate gene
+                            console.log(`mutate gene`);
+                            const genomeCrossoverCount = 2 * (this.factorial(bestCandidateCount) / this.factorial(bestCandidateCount - 2)) + bestCandidateCount;
+                            let luckyCandidateNumber = 1 + Math.floor(Math.random() * genomeCrossoverCount - 2); // bestCandidateCount + Math.floor(Math.random() * this.__totalCandidates - bestCandidateCount);
+                            return Array
+                                .from({length: this.__totalCandidates}, (_, k) => k)
+                                .reduce((promise, index) => promise.then(() => {
+                                    if (candidates[index].getId() === luckyCandidateNumber) {
+                                        this.mutateGenome(candidates[luckyCandidateNumber]);
+                                    }
+                                }), Promise.resolve());
+                        });
+
+                }), Promise.resolve())
+            )
+            // Save the candidates
+            .then(() => {
+                console.log(`end of generation`);
+                return candidates
+                    .forEach(candidate => fileService.writeToJSONFile({
+                        jsonfilepath: `./data/candidates/${candidate.getId()}.json`,
+                        data: candidate.toString(),
+                    }));
+            });
+
+    }
+}
+
+// const algo = new GeneticAlgo();
+// // algo
+// //     .createUniverse()
+// //     .then(universe => console.log(universe))
+// // algo
+// //     .readJSONFileAsUniverse('./data/universe/universe.json')
+// //     .then(universe => console.log(universe[0]));
+// algo.run();

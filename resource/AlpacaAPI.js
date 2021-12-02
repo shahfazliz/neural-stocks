@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Candlestick from '../model/Candlestick.js';
 import FileService from '../util/FileService.js';
+import MomentAdaptor from '../util/MomentAdaptor.js';
 
 const fileService = new FileService();
 export default class AlpacaAPI {
@@ -92,4 +93,28 @@ export default class AlpacaAPI {
             })
             .then(response => response.data);
     }
+
+    getLatestQuote(tickerSymbol) {
+        return this
+            .getClock()
+            .then(clock => axios
+                .get(`https://data.alpaca.markets/v2/stocks/${tickerSymbol}/bars`, {
+                    headers: {
+                        'APCA-API-KEY-ID': process.env.APCA_API_KEY_ID,
+                        'APCA-API-SECRET-KEY': process.env.APCA_API_SECRET_KEY,
+                    },
+                    params: {
+                        start: new MomentAdaptor(clock.timestamp, 'YYYY-MM-DD')
+                            // .subtractBusinessDay(1)
+                            .format(),
+                        end: new MomentAdaptor(clock.timestamp, 'YYYY-MM-DD')
+                            .addBusinessDays(1)
+                            .format(),
+                        timeframe: '1Day',
+                    },
+                })
+                .then(response => response.data));
+    }
 }
+
+// new AlpacaAPI().getLatestQuote('QQQ').then(data => console.log(data));
