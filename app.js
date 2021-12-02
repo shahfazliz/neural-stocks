@@ -1,7 +1,5 @@
-import { csvToJson } from './util/AdaptorCSV2JSON.js';
 import { polynomial } from 'everpolate';
 import brain from 'brain.js';
-import CandlestickCollection from './model/CandlestickCollection.js';
 import fs from 'fs/promises';
 
 export default class App {
@@ -55,70 +53,6 @@ export default class App {
         return this
             .__listOfTickersOfInterest
             .includes(tickerSymbol);
-    }
-
-    /**
-     * Read csv file then convert into json.
-     */
-    readFromCSVFileToJson(csvfilepath) {
-        return csvToJson(csvfilepath);
-    }
-
-    /**
-     * Read from json file as CandlestickCollection
-     */
-    readJSONFileAsCandlestickCollection(jsonfilepath) {
-        console.log(`Reading from ${jsonfilepath}`);
-        return fs
-            .readFile(jsonfilepath)
-            .then(rawJson => new CandlestickCollection(JSON.parse(rawJson)))
-            // If file does not exist, create one
-            .catch(() => this
-                .writeToJSONFile({
-                    jsonfilepath,
-                })
-                .then(() => new CandlestickCollection([]))
-            );
-    }
-
-    /**
-     * Read from json file as object
-     */
-     readJSONFile(jsonfilepath) {
-        console.log(`Reading from ${jsonfilepath}`);
-        return fs
-            .readFile(jsonfilepath)
-            .then(rawJson => JSON.parse(rawJson))
-            // If file does not exist, create one
-            .catch(() => this
-                .writeToJSONFile({
-                    jsonfilepath,
-                    data: [],
-                })
-                .then(data => data)
-            );
-    }
-
-    /**
-     * Write json file
-     */
-    writeToJSONFile({
-        jsonfilepath,
-        data = [],
-    }) {
-        console.log(`Writing to ${jsonfilepath}`);
-        return fs
-            .writeFile(
-                jsonfilepath,
-                typeof data === 'string'
-                    ? data
-                    : JSON.stringify(
-                        data,
-                        undefined,
-                        4
-                    )
-            )
-            .then(data);
     }
 
     /**

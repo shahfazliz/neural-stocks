@@ -3,9 +3,11 @@ import App from './app.js';
 import MomentAdaptor from './util/MomentAdaptor.js';
 import ArrayFn from './util/ArrayFn.js';
 import GeneticAlgo from './trainGeneticAlgo.js';
+import FileService from './util/FileService.js';
 
 const app = new App();
 const alpacaAPI = new AlpacaAPI();
+const fileService = new FileService();
 
 getData(app.getListOfTickers());
 
@@ -16,7 +18,7 @@ async function getData(tickerSymbols) {
 
     Promise
         .all(tickerSymbols
-            .map(tickerSymbol => app
+            .map(tickerSymbol => fileService
                 .readJSONFile(`./data/tickers/${tickerSymbol}.json`)
                 .then(candlestickCollection => ({[`${tickerSymbol}`]: candlestickCollection}))
             )
@@ -70,7 +72,7 @@ async function getData(tickerSymbols) {
 
                         candlesticks.forEach(candlestick => candlestickCollection.push(candlestick));
 
-                        return app.writeToJSONFile({
+                        return fileService.writeToJSONFile({
                             jsonfilepath: `./data/tickers/${lastFilteredTickerSymbol.symbol}.json`,
                             data: candlestickCollection.stringify(),
                         });
@@ -83,12 +85,10 @@ async function getData(tickerSymbols) {
             const algo = new GeneticAlgo();
             return algo
                 .createUniverse()
-                .then(universe => {
-                    algo.writeToJSONFile({
-                        jsonfilepath: './data/universe/universe.json',
-                        data: universe.map(world => Object.fromEntries(world)),
-                    });
-                });
+                .then(universe => fileService.writeToJSONFile({
+                    jsonfilepath: './data/universe/universe.json',
+                    data: universe.map(world => Object.fromEntries(world)),
+                }));
         })
         .catch(error => {
             console.log(`Error: ${error}`);

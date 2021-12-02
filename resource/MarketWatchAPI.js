@@ -1,14 +1,13 @@
-import App from '../app.js';
 import axios from 'axios';
 import fs from 'fs';
+import FileService from '../util/FileService.js';
+
+const fileService = new FileService();
 export default class MarketWatchAPI {
     __ignoreTickerSymbols = [];
 
-    app = new App();
-
     constructor() {
-        this
-            .app
+        fileService
             .readJSONFile('./data/tickers/ignoreTicker.json')
             .then(ignoreTickerSymbols => this.__ignoreTickerSymbols = ignoreTickerSymbols);
     }
@@ -35,14 +34,10 @@ export default class MarketWatchAPI {
                 const filepath = `./csv_sample/${tickerSymbol}.csv`;
                 response.data.pipe(fs.createWriteStream(filepath));
 
-                return this
-                    .app
-                    .readFromCSVFileToJson(filepath);
+                return fileService.readFromCSVFileToJson(filepath);
             });
 
         // const filepath = `./csv_sample/${tickerSymbol}.csv`;
-        // return this
-        //     .app
-        //     .readFromCSVFileToJson(filepath);
+        // return fileService.readFromCSVFileToJson(filepath);
     }
 }

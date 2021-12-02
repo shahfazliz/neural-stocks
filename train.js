@@ -1,12 +1,14 @@
 import App from './app.js';
 import ArrayFn from './util/ArrayFn.js';
+import FileService from './util/FileService.js';
 
 const app = new App();
+const fileService = new FileService();
 
 Promise
     .all(app
         .getListOfTickers()
-        .map(tickerSymbol => app
+        .map(tickerSymbol => fileService
             .readJSONFileAsCandlestickCollection(`./data/tickers/${tickerSymbol}.json`)
             .then(candlestickCollection => app.createTrainingData({
                 tickerSymbol,

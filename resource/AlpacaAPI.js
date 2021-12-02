@@ -1,17 +1,15 @@
-import App from '../app.js';
 import axios from 'axios';
 import Candlestick from '../model/Candlestick.js';
+import FileService from '../util/FileService.js';
 
+const fileService = new FileService();
 export default class AlpacaAPI {
     __MAX_NUMBER_OF_REQUESTS = 200;
     __numberOfRequestCounter = 0;
     __ignoreTickerSymbols = [];
 
-    app = new App();
-
     constructor() {
-        this
-            .app
+        fileService
             .readJSONFile('./data/tickers/ignoreTicker.json')
             .then(ignoreTickerSymbols => this.__ignoreTickerSymbols = ignoreTickerSymbols);
     }
@@ -29,12 +27,10 @@ export default class AlpacaAPI {
     recordInvalidTickerSymbol() {
         // Record so that we don't call that ticker anymore
         const jsonfilepath = './data/tickers/ignoreTicker.json';
-        return this
-            .app
-            .writeToJSONFile({
-                jsonfilepath,
-                data: [...new Set(this.__ignoreTickerSymbols)],
-            });
+        return fileService.writeToJSONFile({
+            jsonfilepath,
+            data: [...new Set(this.__ignoreTickerSymbols)],
+        });
     }
 
     getCandlesticks({
