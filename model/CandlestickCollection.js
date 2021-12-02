@@ -73,19 +73,12 @@ export default class CandlestickCollection {
 
                 const oneYearCollection = this
                     .__collection
-                    .slice(this.__collection.length - this.__numberOfCandlesAYear, this.__collection.length);
+                    .slice(this.__collection.length - this.__numberOfCandlesAYear);
 
-                candlestick
-                    .setStandardDeviation(this
-                        .precision(this
-                            .calculateStandardDeviation(oneYearCollection
-                                .map(candlestickOfYear => {
-                                    // console.log(candlestickOfYear.getCloseDiff());
-                                    return candlestickOfYear.getCloseDiff();
-                                })
-                            )
-                        )
-                    );
+                candlestick.setStandardDeviation(this.calculateStandardDeviation(oneYearCollection.map(candlestickOfYear => {
+                    // console.log(candlestickOfYear.getCloseDiff());
+                    return candlestickOfYear.getCloseDiff();
+                })));
 
                 // Build volume profile using polynomial interpolation
                 const volumeProfile = {};
@@ -120,7 +113,7 @@ export default class CandlestickCollection {
 
     calculateStandardDeviation(numbers) {
         const mean = numbers.reduce((acc, value) => acc + value) / numbers.length;
-        return Math.sqrt(numbers.reduce((acc, value) => acc += (value - mean) ** 2, 0) / numbers.length);
+        return this.precision(Math.sqrt(numbers.reduce((acc, value) => acc += (value - mean) ** 2, 0) / numbers.length));
     }
 
     length() {
