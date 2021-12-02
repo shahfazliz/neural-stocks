@@ -16,6 +16,10 @@ export default class AlpacaAPI {
             .then(ignoreTickerSymbols => this.__ignoreTickerSymbols = ignoreTickerSymbols);
     }
 
+    currency(value) {
+        return parseFloat(value.toFixed(2));
+    }
+
     removeIgnoredTickerSymbol(tickerSymbols) {
         return tickerSymbols.filter(tickerSymbol => !this
             .__ignoreTickerSymbols
@@ -70,11 +74,11 @@ export default class AlpacaAPI {
                     .data
                     .bars
                     .map(obj => new Candlestick({
-                        close: obj.c,
-                        high: obj.h,
-                        low: obj.l,
+                        close: this.currency(obj.c),
+                        high: this.currency(obj.h),
+                        low: this.currency(obj.l),
                         n: obj.n,
-                        open: obj.o,
+                        open: this.currency(obj.o),
                         timestamp: obj.t,
                         volume: obj.v,
                         vw: obj.vw,
