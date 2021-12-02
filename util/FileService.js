@@ -1,5 +1,5 @@
-import CandlestickCollection from '../model/CandlestickCollection.js';
-import { csvToJson } from './util/AdaptorCSV2JSON.js';
+import { csvToJson } from '../util/AdaptorCSV2JSON.js';
+import fs from 'fs/promises';
 
 export default class FileService {
     /**
@@ -25,16 +25,6 @@ export default class FileService {
                 })
                 .then(data => data)
             );
-    }
-
-    /**
-     * Read from json file as CandlestickCollection
-     */
-     readJSONFileAsCandlestickCollection(jsonfilepath) {
-        console.log(`Reading from ${jsonfilepath}`);
-        return this
-            .readJSONFile(jsonfilepath)
-            .then(json => new CandlestickCollection(json));
     }
 
     /**

@@ -1,4 +1,3 @@
-import { linearRegression } from 'everpolate';
 import ArrayFn from '../util/ArrayFn.js';
 import Candlestick from './Candlestick.js';
 import MomentAdaptor from '../util/MomentAdaptor.js';
@@ -6,6 +5,7 @@ import MomentAdaptor from '../util/MomentAdaptor.js';
 export default class CandlestickCollection {
     __collection = [];
     __numberOfCandlesAYear = 252;
+    __volumeProfile = {};
 
     constructor(rawCandlestickArrayOfObj) {
         // Sort the data by date ascending (older first, newer last)
@@ -68,7 +68,7 @@ export default class CandlestickCollection {
                 .setLong(candlestick.getClose() - previousCandlestick.getLow() >= 0)
                 .setShort(candlestick.getClose() - previousCandlestick.getHigh() <= 0);
 
-            // Set standard deviation and volume profile
+            // Set standard deviation
             if (this.__collection.length > this.__numberOfCandlesAYear) {
 
                 const oneYearCollection = this
@@ -79,28 +79,6 @@ export default class CandlestickCollection {
                     // console.log(candlestickOfYear.getCloseDiff());
                     return candlestickOfYear.getCloseDiff();
                 })));
-
-                // Build volume profile using polynomial interpolation
-                const volumeProfile = {};
-                oneYearCollection.forEach(candlestickOfYear => {
-
-                    const maxPrice = Math.ceil(candlestickOfYear.getHigh());
-                    const minPrice = Math.floor(candlestickOfYear.getLow());
-                    const numberOfPriceLevels = (maxPrice - minPrice + 1) * 100;
-                    const averageVolume = Math.floor(candlestickOfYear.getVolume() / numberOfPriceLevels);
-
-                    for (let h = minPrice; h <= maxPrice; h+=0.01) {
-                        volumeProfile[h] = volumeProfile[h] + averageVolume || averageVolume;
-                    }
-                });
-
-                let interpolatedVolumeProfile = linearRegression(
-                    Object.keys(volumeProfile).map(val => parseFloat(val)),
-                    Object.values(volumeProfile)
-                ).evaluate([candlestick.getClose()])[0];
-
-
-                candlestick.setVolumeProfile(this.precision(interpolatedVolumeProfile));
             }
         }
 
@@ -224,5 +202,9 @@ export default class CandlestickCollection {
 
     map(callbackFunction) {
         return this.__collection.map(callbackFunction);
+    }
+
+    forEach(callbackFunction) {
+        return this.__collection.forEach(callbackFunction);
     }
 }

@@ -1,12 +1,14 @@
 import App from './app.js';
 import ArrayFn from './util/ArrayFn.js';
+import CollectionService from './resource/CollectionService.js';
+import FileService from './util/FileService.js';
 import MarketWatchAPI from './resource/MarketWatchAPI.js';
 import MomentAdaptor from './util/MomentAdaptor.js';
-import FileService from './util/FileService.js';
 
 const app = new App();
-const marketWatchAPI = new MarketWatchAPI();
+const collectionService = new CollectionService();
 const fileService = new FileService();
+const marketWatchAPI = new MarketWatchAPI();
 
 fileService
     .readFromCSVFileToJson('./data/csv_sample/cboesymboldirweeklys.csv')
@@ -20,7 +22,7 @@ fileService
 function fixMissingData(tickerSymbols) {
     Promise
         .all(tickerSymbols
-            .map(tickerSymbol => fileService
+            .map(tickerSymbol => collectionService
                 .readJSONFileAsCandlestickCollection(`./data/tickers/${tickerSymbol}.json`)
                 .then(candlestickCollection => ({[`${tickerSymbol}`]: candlestickCollection}))
             )

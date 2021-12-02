@@ -1,12 +1,12 @@
 import AlpacaAPI from './resource/AlpacaAPI.js';
 import App from './app.js';
-import MomentAdaptor from './util/MomentAdaptor.js';
 import ArrayFn from './util/ArrayFn.js';
-import GeneticAlgo from './trainGeneticAlgo.js';
 import FileService from './util/FileService.js';
+import GeneticAlgo from './trainGeneticAlgo.js';
+import MomentAdaptor from './util/MomentAdaptor.js';
 
-const app = new App();
 const alpacaAPI = new AlpacaAPI();
+const app = new App();
 const fileService = new FileService();
 
 getData(app.getListOfTickers());
