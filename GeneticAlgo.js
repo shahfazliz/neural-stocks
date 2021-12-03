@@ -8,6 +8,11 @@ const fileService = new FileService();
 
 export default class GeneticAlgo {
     __totalCandidates = 30;
+    __bestCandidatesCount = 3; // 3->6+6+3=15, 5->20+20+5=45, 7->42+42+7=91, 10->90+90+10=180
+    __maxGenerationCount = 100;
+    __costOfTrade = 1.74;
+    __reward = 0.6; // 6%
+
     __layers = [15, 15, 15, 15];
 
     __numberOfCandles = 20;
@@ -32,10 +37,6 @@ export default class GeneticAlgo {
         'VXX',
         'XHB', 'XLB', 'XLE', 'XLF', 'XLI', 'XLK', 'XLP', 'XLRE', 'XLU', 'XLV', 'XRT', 'XTL', 'XTN',
     ];
-
-    __maxGenerationCount = 100;
-    __costOfTrade = 1.74;
-    __reward = 0.6; // 6%
 
     precision(value) {
         return parseFloat(value.toFixed(5));
@@ -397,7 +398,7 @@ export default class GeneticAlgo {
                 return new Candidate(JSON.parse(rawJson));
             })
             // If file does not exist, create one
-            .catch(() => this
+            .catch(() => fileService
                 .writeToJSONFile({
                     jsonfilepath,
                 })
@@ -416,7 +417,6 @@ export default class GeneticAlgo {
         let candidates = [];
         const numberOfOutputs = 7;
         let layers;
-        const bestCandidateCount = 3;
         let numberOfInputs;
 
         this
@@ -585,15 +585,15 @@ export default class GeneticAlgo {
                             console.log(`Crossover gene`);
                             let crossoverPromises = [];
                             let leftPos = 0;
-                            let savePosition = bestCandidateCount;
-                            while (leftPos < bestCandidateCount) {
+                            let savePosition = this.__bestCandidatesCount;
+                            while (leftPos < this.__bestCandidatesCount) {
                                 let rightPos = 0;
-                                while (rightPos < bestCandidateCount) {
+                                while (rightPos < this.__bestCandidatesCount) {
                                     rightPos = leftPos === rightPos
                                         ? rightPos + 1
                                         : rightPos;
 
-                                    if (rightPos >= bestCandidateCount) {
+                                    if (rightPos >= this.__bestCandidatesCount) {
                                         break;
                                     }
 
@@ -616,7 +616,7 @@ export default class GeneticAlgo {
                             return Promise.all(crossoverPromises);
                         })
                         .then(() => {
-                            const genomeCrossoverCount = 2 * (this.factorial(bestCandidateCount) / this.factorial(bestCandidateCount - 2)) + bestCandidateCount;
+                            const genomeCrossoverCount = 2 * (this.factorial(this.__bestCandidatesCount) / this.factorial(this.__bestCandidatesCount - 2)) + this.__bestCandidatesCount;
                             return Array
                                 .from({length: this.__totalCandidates}, (_, k) => k)
                                 .reduce((promise, index) => promise.then(() => {
@@ -631,8 +631,8 @@ export default class GeneticAlgo {
                         .then(() => {
                             // Mutate gene
                             console.log(`mutate gene`);
-                            const genomeCrossoverCount = 2 * (this.factorial(bestCandidateCount) / this.factorial(bestCandidateCount - 2)) + bestCandidateCount;
-                            let luckyCandidateNumber = 1 + Math.floor(Math.random() * genomeCrossoverCount - 2); // bestCandidateCount + Math.floor(Math.random() * this.__totalCandidates - bestCandidateCount);
+                            const genomeCrossoverCount = 2 * (this.factorial(this.__bestCandidatesCount) / this.factorial(this.__bestCandidatesCount - 2)) + this.__bestCandidatesCount;
+                            let luckyCandidateNumber = 1 + Math.floor(Math.random() * genomeCrossoverCount - 2); // this.__bestCandidatesCount + Math.floor(Math.random() * this.__totalCandidates - this.__bestCandidatesCount);
                             return Array
                                 .from({length: this.__totalCandidates}, (_, k) => k)
                                 .reduce((promise, index) => promise.then(() => {
@@ -658,10 +658,10 @@ export default class GeneticAlgo {
 }
 
 // const algo = new GeneticAlgo();
-// // algo
-// //     .createUniverse()
-// //     .then(universe => console.log(universe))
-// // algo
-// //     .readJSONFileAsUniverse('./data/universe/universe.json')
-// //     .then(universe => console.log(universe[0]));
 // algo.run();
+// algo
+//     .createUniverse()
+//     .then(universe => console.log(universe))
+// algo
+//     .readJSONFileAsUniverse('./data/universe/universe.json')
+//     .then(universe => console.log(universe[0]));
