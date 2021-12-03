@@ -2,12 +2,14 @@ import AlpacaAPI from './resource/AlpacaAPI.js';
 import App from './app.js';
 import ArrayFn from './util/ArrayFn.js';
 import FileService from './util/FileService.js';
-import GeneticAlgo from './trainGeneticAlgo.js';
+import GeneticAlgo from './GeneticAlgo.js';
 import MomentAdaptor from './util/MomentAdaptor.js';
+import CollectionService from './resource/CollectionService.js';
 
 const alpacaAPI = new AlpacaAPI();
 const app = new App();
 const fileService = new FileService();
+const collectionService = new CollectionService();
 
 getData(app.getListOfTickers());
 
@@ -18,8 +20,8 @@ async function getData(tickerSymbols) {
 
     Promise
         .all(tickerSymbols
-            .map(tickerSymbol => fileService
-                .readJSONFile(`./data/tickers/${tickerSymbol}.json`)
+            .map(tickerSymbol => collectionService
+                .readJSONFileAsCandlestickCollection(`./data/tickers/${tickerSymbol}.json`)
                 .then(candlestickCollection => ({[`${tickerSymbol}`]: candlestickCollection}))
             )
         )
@@ -39,14 +41,14 @@ async function getData(tickerSymbols) {
                 const startDateAfterLastDateInCollection = ArrayFn.isEmpty(candlestickCollection)
                     ? new MomentAdaptor('2016-08-10', 'YYYY-MM-DD')
                     : new MomentAdaptor(
-                        ArrayFn
-                            .getLastElement(candlestickCollection)
-                            .Timestamp,
+                        candlestickCollection
+                            .getLastElement()
+                            .getTimestamp(),
                         'YYYY-MM-DD'
                     ).addBusinessDays(1);
 
-                if (startDateAfterLastDateInCollection.isSameOrAfter(lastTradingDay)) {
-                    console.log(`For ${tickerSymbol}, the last day in collection is the same or after lastTradingDay`);
+                if (startDateAfterLastDateInCollection.isAfter(lastTradingDay)) {
+                    console.log(`${tickerSymbol}, the last day in collection is ${startDateAfterLastDateInCollection.format()} after lastTradingDay ${lastTradingDay.format()}`);
                     continue;
                 }
 

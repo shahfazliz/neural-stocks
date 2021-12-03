@@ -2,7 +2,7 @@ import moment from 'moment';
 
 export default class MomentAdaptor {
     constructor(strDate, strFormat) {
-        this.__moment = moment(strDate, strFormat);
+        this.__moment = moment.utc(strDate);
     }
 
     add(number, timeframe) {
