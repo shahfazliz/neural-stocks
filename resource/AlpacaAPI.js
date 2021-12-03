@@ -97,6 +97,19 @@ export default class AlpacaAPI {
     getLatestQuote(tickerSymbol) {
         return this
             .getClock()
+            // .then(clock => {
+            //     console.log(JSON.stringify({
+            //         start: new MomentAdaptor(clock.next_close, 'YYYY-MM-DD')
+            //             .utcOffset(-5)
+            //             .subtractBusinessDay(2)
+            //             .format(),
+            //         end: new MomentAdaptor(clock.next_close, 'YYYY-MM-DD')
+            //             .utcOffset(-5)
+            //             .subtractBusinessDay(1)
+            //             .format(),
+            //         timeframe: '1Day',
+            //     }));
+            // })
             .then(clock => axios
                 .get(`https://data.alpaca.markets/v2/stocks/${tickerSymbol}/bars`, {
                     headers: {
@@ -104,16 +117,19 @@ export default class AlpacaAPI {
                         'APCA-API-SECRET-KEY': process.env.APCA_API_SECRET_KEY,
                     },
                     params: {
-                        start: new MomentAdaptor(clock.timestamp, 'YYYY-MM-DD')
-                            // .subtractBusinessDay(1)
+                        start: new MomentAdaptor(clock.next_close, 'YYYY-MM-DD')
+                            .utcOffset(-5)
+                            .subtractBusinessDay(2)
                             .format(),
-                        end: new MomentAdaptor(clock.timestamp, 'YYYY-MM-DD')
-                            .addBusinessDays(1)
+                        end: new MomentAdaptor(clock.next_close, 'YYYY-MM-DD')
+                            .utcOffset(-5)
+                            .subtractBusinessDay(1)
                             .format(),
                         timeframe: '1Day',
                     },
                 })
                 .then(response => response.data));
+                // .then(data => console.log(data));
     }
 }
 

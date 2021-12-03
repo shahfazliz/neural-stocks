@@ -108,4 +108,12 @@ export default class MomentAdaptor {
             .__moment
             .valueOf();
     }
+
+    utcOffset(zone) {
+        this
+            .__moment
+            .utcOffset(zone);
+
+        return this;
+    }
 }
