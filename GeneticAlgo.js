@@ -572,16 +572,23 @@ export default class GeneticAlgo {
                                     }
                                 }), Promise.resolve());
                         }), Promise.resolve())
+                        // Fitness test
                         .then(() => {
-                            // Fitness test
                             console.log(`Fitness test`);
                             return Promise.resolve(candidates.sort((candidateA, candidateB) => {
                                 console.log(`Sorting...`);
                                 return this.fitnessTest(candidateB) - this.fitnessTest(candidateA)
                             }));
                         })
+                        // Have to re assign the id so that we save to the right file
                         .then(() => {
-                            // Crossover gene
+                            return Promise.all(candidates.map((candidate, index) => {
+                                candidate.setId(index);
+                                console.log(`candidate ${candidate.getId()}, score: ${this.fitnessTest(candidate)}`);
+                            }));
+                        })
+                        // Crossover gene
+                        .then(() => {
                             console.log(`Crossover gene`);
                             let crossoverPromises = [];
                             let leftPos = 0;
@@ -628,8 +635,8 @@ export default class GeneticAlgo {
                                     }
                                 }), Promise.resolve())
                         })
+                        // Mutate gene
                         .then(() => {
-                            // Mutate gene
                             console.log(`mutate gene`);
                             const genomeCrossoverCount = 2 * (this.factorial(this.__bestCandidatesCount) / this.factorial(this.__bestCandidatesCount - 2)) + this.__bestCandidatesCount;
                             let luckyCandidateNumber = 1 + Math.floor(Math.random() * genomeCrossoverCount - 2); // this.__bestCandidatesCount + Math.floor(Math.random() * this.__totalCandidates - this.__bestCandidatesCount);

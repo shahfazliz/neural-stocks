@@ -122,5 +122,6 @@ algo
             }), Promise.resolve());
     })
     .then(() => {
+        console.log(`Score: ${algo.fitnessTest(candidate)}`)
         console.log(candidate.scoreToString())
     });
