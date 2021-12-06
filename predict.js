@@ -93,6 +93,50 @@ algo
     })
 .then(() => algo.readJSONFileAsCandidate(`./data/candidates/${candidateNumber}.json`))
 .then(c => candidate = c)
+// Predict today
+.then(() => {
+    candidate.reset();
+
+    layers = [...algo.__layers, numberOfOutputs];
+    // Get 50 candles as input set from universe
+    let inputSet = universe
+        .slice(universe.length - algo.__numberOfCandles - 1, universe.length - 1)
+        .reduce((acc, map) => {
+            let valueIterator = map.values();
+            let value = valueIterator.next().value;
+            while (value !== undefined) {
+                acc.push(value);
+                value = valueIterator.next().value;
+            }
+            return acc;
+        }, []);
+
+    // Add capital as part of decision making
+    inputSet.unshift(candidate.getCapital());
+
+    // Execute candidate
+    let output = algo.runCandidate({
+        id: candidate.getId(),
+        genome: candidate.getGenome(),
+        input: inputSet,
+        layers,
+    });
+
+    console.log('Today:');
+    let sumOfOutputs = output.reduce((acc, val) => acc + val) - output[output.length - 1];
+    [
+        'Long SPY',
+        'Short SPY',
+        'Long QQQ',
+        'Short QQQ',
+        'Long IWM',
+        'Short IWM',
+    ].forEach((string, index) => {
+        console.log(`${string}: ${algo.currency(output[index] / sumOfOutputs)}`);
+    });
+    console.log(`Withdraw: ${algo.currency(output[output.length - 1])}`);
+})
+// Predict tomorrow
 .then(() => {
     candidate.reset();
 
@@ -121,6 +165,7 @@ algo
         layers,
     });
 
+    console.log('Tomorrow:');
     let sumOfOutputs = output.reduce((acc, val) => acc + val) - output[output.length - 1];
     [
         'Long SPY',
