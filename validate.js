@@ -13,6 +13,7 @@ algo
     .then(() => algo.readJSONFileAsCandidate(`./data/candidates/${candidateNumber}.json`))
     .then(c => candidate = c)
     .then(() => {
+        
         candidate.reset();
 
         layers = [...algo.__layers, numberOfOutputs];
@@ -21,7 +22,7 @@ algo
             .reduce((promise, dayNumber) => promise.then(() => {
                 console.log(`Candidate: ${candidateNumber}, Day: ${dayNumber}`);
                 // Only trade on Monday, Wednesday, and Friday
-                let tomorrow = universe[dayNumber + algo.__numberOfCandles].get('Day');
+                let tomorrow = universe[dayNumber].get('Day');
                 if (candidate.getCapital() > 0
                     && (tomorrow === 1
                         || tomorrow === 3
@@ -111,17 +112,22 @@ algo
                     // Every month trade withdraw
                     if (universe[dayNumber + algo.__numberOfCandles].get('Month') !== universe[dayNumber + algo.__numberOfCandles - 1].get('Month')) {
                         let withdrawal = algo.currency(candidate.getCapital() - 1000); // * output[6]);
-                        console.log(`withdrawal: ${withdrawal}`);
-
-                        candidate.setCapital(candidate.getCapital() - withdrawal);
-                        candidate.setWithdrawal(candidate.getWithdrawal() + withdrawal);
-                    }   
+                        
+                        if (withdrawal > 0) {
+                            console.log(`Withdrawal: ${withdrawal}`);
+                            candidate.setCapital(candidate.getCapital() - withdrawal);
+                            candidate.setWithdrawal(candidate.getWithdrawal() + withdrawal);
+                        } 
+                        else {
+                            console.log(`Withdrawal: 0`);
+                        }
+                    }
 
                     candidate.setTradeDuration(dayNumber);
+                    console.log(`Score: ${algo.fitnessTest(candidate)}`)
                 }
             }), Promise.resolve());
     })
     .then(() => {
-        console.log(`Score: ${algo.fitnessTest(candidate)}`)
         console.log(candidate.scoreToString())
     });
