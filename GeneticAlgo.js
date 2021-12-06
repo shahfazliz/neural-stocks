@@ -7,13 +7,13 @@ const collectionService = new CollectionService();
 const fileService = new FileService();
 
 export default class GeneticAlgo {
-    __totalCandidates = 30;
+    __totalCandidates = 45;
     __bestCandidatesCount = 3; // 3->6+6+3=15, 5->20+20+5=45, 7->42+42+7=91, 10->90+90+10=180
     __maxGenerationCount = 100;
     __costOfTrade = 1.74;
     __reward = 0.6; // 6%
 
-    __layers = [15, 15, 15, 15];
+    __layers = [10, 10, 10, 10, 10];
 
     __numberOfCandles = 20;
     __numberOfCandlesAYear = 252;
@@ -470,7 +470,7 @@ export default class GeneticAlgo {
                                 .reduce((promise, dayNumber) => promise.then(() => {
                                     console.log(`Generation: ${generationNumber}, Candidate: ${candidateNumber}, Day: ${dayNumber}`);
                                     // Only trade on Monday, Wednesday, and Friday
-                                    let tomorrow = universe[dayNumber + this.__numberOfCandles].get('Day');
+                                    let tomorrow = universe[dayNumber].get('Day');
                                     if (candidate.getCapital() > 0
                                         && (tomorrow === 1
                                             || tomorrow === 3
@@ -560,17 +560,23 @@ export default class GeneticAlgo {
                                         // Every month trade withdraw
                                         if (universe[dayNumber + this.__numberOfCandles].get('Month') !== universe[dayNumber + this.__numberOfCandles - 1].get('Month')) {
                                             let withdrawal = this.currency(candidate.getCapital() - 1000); // * output[6]);
-                                            console.log(`withdrawal: ${withdrawal}`);
 
-                                            candidate.setCapital(candidate.getCapital() - withdrawal);
-                                            candidate.setWithdrawal(candidate.getWithdrawal() + withdrawal);
+                                            if (withdrawal > 0) {
+                                                console.log(`Withdrawal: ${withdrawal}`);
+                                                candidate.setCapital(candidate.getCapital() - withdrawal);
+                                                candidate.setWithdrawal(candidate.getWithdrawal() + withdrawal);
+                                            }
+                                            else {
+                                                console.log(`Withdrawal: 0`);
+                                            }
                                         }
 
                                         candidate.setTradeDuration(dayNumber);
+                                        console.log(`Score: ${algo.fitnessTest(candidate)}`);
                                     }
                                 }), Promise.resolve());
                         }), Promise.resolve())
-                        // Fitness test
+                        // Fitness test, then sort by best first
                         .then(() => {
                             console.log(`Fitness test`);
                             return Promise.resolve(candidates.sort((candidateA, candidateB) => {
@@ -578,6 +584,20 @@ export default class GeneticAlgo {
                                 return this.fitnessTest(candidateB) - this.fitnessTest(candidateA)
                             }));
                         })
+                        // Divide into 3 (this.__bestCandidatesCount) groups, then get the best of each into top 3
+                        .then(() => {
+                            return new Promise((resolve, reject) => {
+                                let next = (this.__totalCandidates / this.__bestCandidatesCount);
+                                let newPosition = 1;
+                                for (let i = next; i < this.__totalCandidates; i += next) {
+                                    let temp = candidates[newPosition];
+                                    candidates[newPosition] = candidates[i];
+                                    candidates[i] = temp;
+                                    newPosition += 1;
+                                }
+                                resolve(candidates);
+                            });
+                        }) 
                         // Have to re assign the id so that we save to the right file
                         .then(() => {
                             return Promise.all(candidates.map((candidate, index) => {
@@ -602,9 +622,10 @@ export default class GeneticAlgo {
                                         break;
                                     }
 
-                                    // Crossover
+                                    // Copy genome first then crossover
                                     candidates[savePosition].setGenome(candidates[leftPos].getGenome());
                                     candidates[savePosition + 1].setGenome(candidates[rightPos].getGenome());
+                                    // Crossover
                                     crossoverPromises
                                         .push(this
                                             .crossoverGenome({
@@ -625,7 +646,7 @@ export default class GeneticAlgo {
                             return Array
                                 .from({length: this.__totalCandidates}, (_, k) => k)
                                 .reduce((promise, index) => promise.then(() => {
-                                    if (candidates[index].getId() >= genomeCrossoverCount) {
+                                    if (index >= genomeCrossoverCount) {
                                         candidates[index].setGenome(this.randomGenome({
                                             numberOfInputs,
                                             layers,
@@ -646,7 +667,6 @@ export default class GeneticAlgo {
                                     }
                                 }), Promise.resolve());
                         });
-
                 }), Promise.resolve())
             )
             // Save the candidates
