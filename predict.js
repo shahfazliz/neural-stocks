@@ -1,9 +1,9 @@
+import AlpacaAPI from './resource/AlpacaAPI.js';
 import App from './app.js';
 import Candlestick from './model/Candlestick.js';
 import CollectionService from './resource/CollectionService.js';
 import GeneticAlgo from './GeneticAlgo.js';
 import VolumeProfile from './model/VolumeProfile.js';
-import AlpacaAPI from './resource/AlpacaAPI.js';
 
 const alpacaAPI = new AlpacaAPI();
 const app = new App();
