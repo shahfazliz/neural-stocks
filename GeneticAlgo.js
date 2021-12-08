@@ -7,16 +7,16 @@ const collectionService = new CollectionService();
 const fileService = new FileService();
 
 export default class GeneticAlgo {
-    __totalCandidates = 45;
-    __bestCandidatesCount = 3; // 3->6+6+3=15, 5->20+20+5=45, 7->42+42+7=91, 10->90+90+10=180
-    __maxGenerationCount = 100;
+    __totalCandidates = 18; // pick candidates at 0, 6, 12
+    __bestCandidatesCount = 3; // 3->6+6=12, 5->20+20=40, 7->42+42+7=84, 10->90+90+10=180
+    __maxGenerationCount = 300;
     __costOfTrade = 1.74;
     __reward = 0.06; // 6%
 
     __numberOfOutputs = 6;
     __layers = [10, 10, 10, 10, 10];
 
-    __numberOfCandles = 20;
+    __numberOfCandles = 50;
     __numberOfCandlesAYear = 252;
     __listOfTickers = [
         'BAL',
@@ -502,7 +502,7 @@ export default class GeneticAlgo {
                                             genome: candidate.getGenome(),
                                             input: inputSet,
                                             layers,
-                                        }).map(o => this.currency(o));
+                                        });
                                         
                                         // let sumOfOutputs = output.reduce((acc, val) => acc + val) - output[output.length - 1];
                                         console.log(`Output: ${JSON.stringify(output, undefined, 4)}`);
@@ -703,8 +703,8 @@ export default class GeneticAlgo {
     }
 }
 
-// const algo = new GeneticAlgo();
-// algo.run();
+const algo = new GeneticAlgo();
+algo.run();
 // algo
 //     .createUniverse()
 //     .then(universe => console.log(universe))
