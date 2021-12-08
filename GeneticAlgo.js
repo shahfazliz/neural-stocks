@@ -11,7 +11,7 @@ export default class GeneticAlgo {
     __bestCandidatesCount = 3; // 3->6+6+3=15, 5->20+20+5=45, 7->42+42+7=91, 10->90+90+10=180
     __maxGenerationCount = 100;
     __costOfTrade = 1.74;
-    __reward = 0.6; // 6%
+    __reward = 0.06; // 6%
 
     __numberOfOutputs = 6;
     __layers = [10, 10, 10, 10, 10];
@@ -501,68 +501,58 @@ export default class GeneticAlgo {
                                             genome: candidate.getGenome(),
                                             input: inputSet,
                                             layers,
-                                        });
-                                        console.log(`Output: ${output}`);
-
-                                        let sumOfOutputs = output.reduce((acc, val) => acc + val) - output[output.length - 1];
-
+                                        }).map(o => this.currency(o));
+                                        
+                                        // let sumOfOutputs = output.reduce((acc, val) => acc + val) - output[output.length - 1];
+                                        console.log(`Output: ${JSON.stringify(output, undefined, 4)}`);
+                                        
+                                        let originalCapital = candidate.getCapital();
                                         let profit = 0;
-                                        // Long SPY
-                                        let longSpy = -universe[dayNumber + this.__numberOfCandles - 1].get('SPY_StandardDeviation') < universe[dayNumber + this.__numberOfCandles].get('SPY_ClosePrice')
-                                            ? candidate.getCapital() * (output[0] / sumOfOutputs) * this.__reward - this.__costOfTrade
-                                            : candidate.getCapital() * -(output[0] / sumOfOutputs) - this.__costOfTrade;
-                                        // console.log(`candidate.getCapital(): ${candidate.getCapital()}`);
-                                        // console.log(`output[(0]: ${output[(0]}`);
-                                        // console.log(`this.__reward: ${this.__reward}`);
-                                        // console.log(`this.__costOfTrade: ${this.__costOfTrade}`);
-                                        console.log(`profit long spy: ${longSpy}`);
-                                        profit = this.currency(profit + longSpy);
 
-                                        // Short SPY
-                                        let shortSpy = universe[dayNumber + this.__numberOfCandles - 1].get('SPY_StandardDeviation') > universe[dayNumber + this.__numberOfCandles].get('SPY_ClosePrice')
-                                            ? candidate.getCapital() * (output[1] / sumOfOutputs) * this.__reward - this.__costOfTrade
-                                            : candidate.getCapital() * -(output[1] / sumOfOutputs) - this.__costOfTrade;
-                                        console.log(`profit short spy: ${shortSpy}`);
-                                        profit = this.currency(profit + shortSpy);
+                                        ['SPY', 'QQQ', 'IWM']
+                                            .forEach((tickerSymbol, index) => {
+                                                let expectedStandardDeviation = universe[dayNumber + this.__numberOfCandles - 1].get(`${tickerSymbol}_StandardDeviation`);
+                                                let closePriceToday = universe[dayNumber + this.__numberOfCandles].get(`${tickerSymbol}_ClosePrice`);
 
-                                        // Long QQQ
-                                        let longQqq = -universe[dayNumber + this.__numberOfCandles - 1].get('QQQ_StandardDeviation') < universe[dayNumber + this.__numberOfCandles].get('QQQ_ClosePrice')
-                                            ? candidate.getCapital() * (output[2] / sumOfOutputs) * this.__reward - this.__costOfTrade
-                                            : candidate.getCapital() * -(output[2] / sumOfOutputs) - this.__costOfTrade;
-                                        console.log(`profit long qqq: ${longQqq}`);
-                                        profit = this.currency(profit + longQqq);
-
-                                        // Short QQQ
-                                        let shortQqq = universe[dayNumber + this.__numberOfCandles - 1].get('QQQ_StandardDeviation') > universe[dayNumber + this.__numberOfCandles].get('QQQ_ClosePrice')
-                                            ? candidate.getCapital() * (output[3] / sumOfOutputs) * this.__reward - this.__costOfTrade
-                                            : candidate.getCapital() * -(output[3] / sumOfOutputs) - this.__costOfTrade;
-                                        console.log(`profit short qqq: ${shortQqq}`);
-                                        profit = this.currency(profit + shortQqq);
-
-                                        // Long IWM
-                                        let longIwm = -universe[dayNumber + this.__numberOfCandles - 1].get('IWM_StandardDeviation') < universe[dayNumber + this.__numberOfCandles].get('IWM_ClosePrice')
-                                            ? candidate.getCapital() * (output[4] / sumOfOutputs) * this.__reward - this.__costOfTrade
-                                            : candidate.getCapital() * -(output[4] / sumOfOutputs) - this.__costOfTrade;
-                                        console.log(`profit long iwm: ${longIwm}`);
-                                        profit = this.currency(profit + longIwm);
-
-                                        // Short IWM
-                                        let shortIwm = universe[dayNumber + this.__numberOfCandles - 1].get('IWM_StandardDeviation') > universe[dayNumber + this.__numberOfCandles].get('IWM_ClosePrice')
-                                            ? candidate.getCapital() * (output[5] / sumOfOutputs) * this.__reward - this.__costOfTrade
-                                            : candidate.getCapital() * -(output[5] / sumOfOutputs) - this.__costOfTrade;
-                                        console.log(`profit short iwm: ${shortIwm}`);
-                                        profit = this.currency(profit + shortIwm);
+                                                // Long
+                                                let availableCapital = candidate.getCapital();
+                                                let capitalToUse = availableCapital * output[index * 2];
+                                                let costOfTradeLong = capitalToUse > 0 
+                                                    ? this.__costOfTrade 
+                                                    : 0;
+                                                let rewardLong = capitalToUse * this.__reward - costOfTradeLong;
+                                                let long = -expectedStandardDeviation < closePriceToday
+                                                    ? this.currency(rewardLong)
+                                                    : this.currency(rewardLong - capitalToUse);    
+                                                candidate.setCapital(availableCapital - capitalToUse);
+                                                console.log(`  profit long ${tickerSymbol}: ${long}`);
+                                                profit += long;
+                                                
+                                                // Short
+                                                availableCapital = candidate.getCapital();
+                                                capitalToUse = availableCapital * output[index * 2 + 1];
+                                                let costOfTradeShort = capitalToUse > 0 
+                                                    ? this.__costOfTrade 
+                                                    : 0;
+                                                let rewardShort = capitalToUse * this.__reward - costOfTradeShort;
+                                                let short = expectedStandardDeviation > closePriceToday
+                                                    ? this.currency(rewardShort)
+                                                    : this.currency(rewardShort - capitalToUse);
+                                                candidate.setCapital(availableCapital - capitalToUse);
+                                                console.log(`  profit short ${tickerSymbol}: ${short}`);
+                                                profit += short;                            
+                                            });
 
                                         // Record total profits so far
                                         candidate.setProfit(candidate.getProfit() + profit);
-                                        console.log(`total profit: ${profit}`);
+                                        console.log(`Total profit/loss: ${profit} from ${originalCapital} capital`);
 
                                         // Update capital
-                                        candidate.setCapital(candidate.getCapital() + profit);
+                                        candidate.setCapital(originalCapital + profit);
 
                                         // Every month trade withdraw
                                         if (universe[dayNumber + this.__numberOfCandles].get('Month') !== universe[dayNumber + this.__numberOfCandles - 1].get('Month')) {
-                                            let withdrawal = this.currency(candidate.getCapital() - 1000); // * output[6]);
+                                            let withdrawal = this.currency(candidate.getCapital() - 1000);
 
                                             if (withdrawal > 0) {
                                                 console.log(`Withdrawal: ${withdrawal}`);

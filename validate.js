@@ -53,64 +53,54 @@ algo
                         genome: candidate.getGenome(),
                         input: inputSet,
                         layers,
-                    });
-                    console.log(`Output: ${output}`);
-
-                    let sumOfOutputs = output.reduce((acc, val) => acc + val) - output[output.length - 1];
-
+                    }).map(o => algo.currency(o));
+                    
+                    // let sumOfOutputs = output.reduce((acc, val) => acc + val) - output[output.length - 1];
+                    console.log(`Output: ${JSON.stringify(output, undefined, 4)}`);
+                    
+                    let originalCapital = candidate.getCapital();
                     let profit = 0;
-                    // Long SPY
-                    let longSpy = -universe[dayNumber + algo.__numberOfCandles - 1].get('SPY_StandardDeviation') < universe[dayNumber + algo.__numberOfCandles].get('SPY_ClosePrice')
-                        ? candidate.getCapital() * (output[0] / sumOfOutputs) * algo.__reward - algo.__costOfTrade
-                        : candidate.getCapital() * -(output[0] / sumOfOutputs) - algo.__costOfTrade;
-                    // console.log(`candidate.getCapital(): ${candidate.getCapital()}`);
-                    // console.log(`output[(0]: ${output[(0]}`);
-                    // console.log(`algo.__reward: ${algo.__reward}`);
-                    // console.log(`algo.__costOfTrade: ${algo.__costOfTrade}`);
-                    console.log(`profit long spy: ${longSpy}`);
-                    profit = algo.currency(profit + longSpy);
 
-                    // Short SPY
-                    let shortSpy = universe[dayNumber + algo.__numberOfCandles - 1].get('SPY_StandardDeviation') > universe[dayNumber + algo.__numberOfCandles].get('SPY_ClosePrice')
-                        ? candidate.getCapital() * (output[1] / sumOfOutputs) * algo.__reward - algo.__costOfTrade
-                        : candidate.getCapital() * -(output[1] / sumOfOutputs) - algo.__costOfTrade;
-                    console.log(`profit short spy: ${shortSpy}`);
-                    profit = algo.currency(profit + shortSpy);
+                    ['SPY', 'QQQ', 'IWM']
+                        .forEach((tickerSymbol, index) => {
+                            let expectedStandardDeviation = universe[dayNumber + algo.__numberOfCandles - 1].get(`${tickerSymbol}_StandardDeviation`);
+                            let closePriceToday = universe[dayNumber + algo.__numberOfCandles].get(`${tickerSymbol}_ClosePrice`);
 
-                    // Long QQQ
-                    let longQqq = -universe[dayNumber + algo.__numberOfCandles - 1].get('QQQ_StandardDeviation') < universe[dayNumber + algo.__numberOfCandles].get('QQQ_ClosePrice')
-                        ? candidate.getCapital() * (output[2] / sumOfOutputs) * algo.__reward - algo.__costOfTrade
-                        : candidate.getCapital() * -(output[2] / sumOfOutputs) - algo.__costOfTrade;
-                    console.log(`profit long qqq: ${longQqq}`);
-                    profit = algo.currency(profit + longQqq);
-
-                    // Short QQQ
-                    let shortQqq = universe[dayNumber + algo.__numberOfCandles - 1].get('QQQ_StandardDeviation') > universe[dayNumber + algo.__numberOfCandles].get('QQQ_ClosePrice')
-                        ? candidate.getCapital() * (output[3] / sumOfOutputs) * algo.__reward - algo.__costOfTrade
-                        : candidate.getCapital() * -(output[3] / sumOfOutputs) - algo.__costOfTrade;
-                    console.log(`profit short qqq: ${shortQqq}`);
-                    profit = algo.currency(profit + shortQqq);
-
-                    // Long IWM
-                    let longIwm = -universe[dayNumber + algo.__numberOfCandles - 1].get('IWM_StandardDeviation') < universe[dayNumber + algo.__numberOfCandles].get('IWM_ClosePrice')
-                        ? candidate.getCapital() * (output[4] / sumOfOutputs) * algo.__reward - algo.__costOfTrade
-                        : candidate.getCapital() * -(output[4] / sumOfOutputs) - algo.__costOfTrade;
-                    console.log(`profit long iwm: ${longIwm}`);
-                    profit = algo.currency(profit + longIwm);
-
-                    // Short IWM
-                    let shortIwm = universe[dayNumber + algo.__numberOfCandles - 1].get('IWM_StandardDeviation') > universe[dayNumber + algo.__numberOfCandles].get('IWM_ClosePrice')
-                        ? candidate.getCapital() * (output[5] / sumOfOutputs) * algo.__reward - algo.__costOfTrade
-                        : candidate.getCapital() * -(output[5] / sumOfOutputs) - algo.__costOfTrade;
-                    console.log(`profit short iwm: ${shortIwm}`);
-                    profit = algo.currency(profit + shortIwm);
+                            // Long
+                            let availableCapital = candidate.getCapital();
+                            let capitalToUse = availableCapital * output[index * 2];
+                            let costOfTradeLong = capitalToUse > 0 
+                                ? algo.__costOfTrade 
+                                : 0;
+                            let rewardLong = capitalToUse * algo.__reward - costOfTradeLong;
+                            let long = -expectedStandardDeviation < closePriceToday
+                                ? algo.currency(rewardLong)
+                                : algo.currency(rewardLong - capitalToUse);    
+                            candidate.setCapital(availableCapital - capitalToUse);
+                            console.log(`  profit long ${tickerSymbol}: ${long}`);
+                            profit += long;
+                            
+                            // Short
+                            availableCapital = candidate.getCapital();
+                            capitalToUse = availableCapital * output[index * 2 + 1];
+                            let costOfTradeShort = capitalToUse > 0 
+                                ? algo.__costOfTrade 
+                                : 0;
+                            let rewardShort = capitalToUse * algo.__reward - costOfTradeShort;
+                            let short = expectedStandardDeviation > closePriceToday
+                                ? algo.currency(rewardShort)
+                                : algo.currency(rewardShort - capitalToUse);
+                            candidate.setCapital(availableCapital - capitalToUse);
+                            console.log(`  profit short ${tickerSymbol}: ${short}`);
+                            profit += short;                            
+                        });
 
                     // Record total profits so far
                     candidate.setProfit(candidate.getProfit() + profit);
-                    console.log(`total profit: ${profit}`);
+                    console.log(`Total profit/loss: ${profit} from ${originalCapital} capital`);
 
                     // Update capital
-                    candidate.setCapital(candidate.getCapital() + profit);
+                    candidate.setCapital(originalCapital + profit);
 
                     // Every month trade withdraw
                     if (universe[dayNumber + algo.__numberOfCandles].get('Month') !== universe[dayNumber + algo.__numberOfCandles - 1].get('Month')) {
