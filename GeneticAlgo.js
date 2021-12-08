@@ -364,8 +364,8 @@ export default class GeneticAlgo {
         //     profit: candidate.getProfit(),
         //     withdrawal: candidate.getWithdrawal(),
         //     tradeDuration: candidate.getTradeDuration(),
-        // })}`);
-        return candidate.getWithdrawal() * candidate.getTradeDuration();
+        // }, undefined, 4)}`);
+        return (candidate.getProfit() + candidate.getWithdrawal()) * candidate.getTradeDuration();
     }
 
     /**
@@ -468,7 +468,10 @@ export default class GeneticAlgo {
                             return Array
                                 .from({ length: universe.length - this.__numberOfCandles }, (_, k) => k)
                                 .reduce((promise, dayNumber) => promise.then(() => {
+                                    console.log('------------------------------------------------');
                                     console.log(`Generation: ${generationNumber}, Candidate: ${candidateNumber}, Day: ${dayNumber}`);
+                                    console.log('------------------------------------------------');
+                                    
                                     // Only trade on Monday, Wednesday, and Friday
                                     let tomorrow = universe[dayNumber].get('Day');
                                     if (candidate.getCapital() > 0
@@ -572,7 +575,7 @@ export default class GeneticAlgo {
                                         }
 
                                         candidate.setTradeDuration(dayNumber);
-                                        console.log(`Score: ${algo.fitnessTest(candidate)}`);
+                                        console.log(`Score: ${this.fitnessTest(candidate)}`);
                                     }
                                 }), Promise.resolve());
                         }), Promise.resolve())

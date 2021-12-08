@@ -30,7 +30,7 @@ algo
                     .then(candlestickCollection => alpacaAPI
                         .getLatestQuote(tickerSymbol)
                         // .then(data => {
-                        //     console.log(`${tickerSymbol}: ${JSON.stringify(data)}`);
+                        //     console.log(`${tickerSymbol}: ${JSON.stringify(data, undefined, 4)}`);
                         //     return data;
                         // })
                         .then(data => {

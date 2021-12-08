@@ -16,11 +16,14 @@ algo
         
         candidate.reset();
 
-        layers = [...algo.__layers, numberOfOutputs];
+        // Run the candidates
         return Array
             .from({ length: universe.length - algo.__numberOfCandles }, (_, k) => k)
             .reduce((promise, dayNumber) => promise.then(() => {
+                console.log('------------------------------------------------');
                 console.log(`Candidate: ${candidateNumber}, Day: ${dayNumber}`);
+                console.log('------------------------------------------------');
+                
                 // Only trade on Monday, Wednesday, and Friday
                 let tomorrow = universe[dayNumber].get('Day');
                 if (candidate.getCapital() > 0
@@ -111,23 +114,26 @@ algo
 
                     // Every month trade withdraw
                     if (universe[dayNumber + algo.__numberOfCandles].get('Month') !== universe[dayNumber + algo.__numberOfCandles - 1].get('Month')) {
-                        let withdrawal = algo.currency(candidate.getCapital() - 1000); // * output[6]);
-                        
+                        let withdrawal = algo.currency(candidate.getCapital() - 1000);
+
                         if (withdrawal > 0) {
                             console.log(`Withdrawal: ${withdrawal}`);
                             candidate.setCapital(candidate.getCapital() - withdrawal);
                             candidate.setWithdrawal(candidate.getWithdrawal() + withdrawal);
-                        } 
+                        }
                         else {
                             console.log(`Withdrawal: 0`);
                         }
                     }
 
                     candidate.setTradeDuration(dayNumber);
-                    console.log(`Score: ${algo.fitnessTest(candidate)}`)
+                    console.log(`Score: ${algo.fitnessTest(candidate)}`);
                 }
             }), Promise.resolve());
     })
     .then(() => {
+        console.log('------------------------------------------------');
+        console.log('Candidate Summary');
+        console.log('------------------------------------------------');
         console.log(candidate.scoreToString())
     });

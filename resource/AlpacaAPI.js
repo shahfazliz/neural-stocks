@@ -108,7 +108,7 @@ export default class AlpacaAPI {
             //             .subtractBusinessDay(1)
             //             .format(),
             //         timeframe: '1Day',
-            //     }));
+            //     }, undefined, 4));
             // })
             .then(clock => axios
                 .get(`https://data.alpaca.markets/v2/stocks/${tickerSymbol}/bars`, {

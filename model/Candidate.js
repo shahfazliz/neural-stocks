@@ -112,14 +112,14 @@ export default class Candidate {
 
     toString() {
         return JSON.stringify({
-            genome: this.getGenome(),
             id: this.getId(),
             tradeDuration: this.getTradeDuration(),
             capital: this.getCapital(),
             profit: this.getProfit(),
             withdrawal: this.getWithdrawal(),
             generation: this.getGeneration(),
-        });
+            genome: this.getGenome(),
+        }, undefined, 4);
     }
 
     scoreToString() {
@@ -130,6 +130,6 @@ export default class Candidate {
             profit: this.getProfit(),
             withdrawal: this.getWithdrawal(),
             generation: this.getGeneration(),
-        });
+        }, undefined, 4);
     }
 }
