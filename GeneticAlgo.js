@@ -13,6 +13,7 @@ export default class GeneticAlgo {
     __costOfTrade = 1.74;
     __reward = 0.6; // 6%
 
+    __numberOfOutputs = 6;
     __layers = [10, 10, 10, 10, 10];
 
     __numberOfCandles = 20;
@@ -413,7 +414,6 @@ export default class GeneticAlgo {
     run() {
         let universe;
         let candidates = [];
-        const numberOfOutputs = 7;
         let layers;
         let numberOfInputs;
 
@@ -434,7 +434,7 @@ export default class GeneticAlgo {
                             .then(candidate => {
                                 candidate.reset();
 
-                                layers = [...this.__layers, numberOfOutputs];
+                                layers = [...this.__layers, this.__numberOfOutputs];
                                 // If candidate is empty, generate one
                                 if (candidate.isGenomeEmpty()) {
                                     candidate

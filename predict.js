@@ -10,7 +10,6 @@ const app = new App();
 const collectionService = new CollectionService();
 
 let universe;
-const numberOfOutputs = 7;
 let layers;
 let candidate;
 const candidateNumber = 0;
@@ -97,7 +96,7 @@ algo
 .then(() => {
     candidate.reset();
 
-    layers = [...algo.__layers, numberOfOutputs];
+    layers = [...algo.__layers, algo.__numberOfOutputs];
     // Get 50 candles as input set from universe
     let inputSet = universe
         .slice(universe.length - algo.__numberOfCandles - 1, universe.length - 1)
@@ -134,13 +133,12 @@ algo
     ].forEach((string, index) => {
         console.log(`${string}: ${algo.currency(output[index] / sumOfOutputs)}`);
     });
-    console.log(`Withdraw: ${algo.currency(output[output.length - 1])}`);
 })
 // Predict tomorrow
 .then(() => {
     candidate.reset();
 
-    layers = [...algo.__layers, numberOfOutputs];
+    layers = [...algo.__layers, algo.__numberOfOutputs];
     // Get 50 candles as input set from universe
     let inputSet = universe
         .slice(universe.length - algo.__numberOfCandles)

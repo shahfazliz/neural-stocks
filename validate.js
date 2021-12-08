@@ -1,7 +1,6 @@
 import GeneticAlgo from './GeneticAlgo.js';
 
 let universe;
-const numberOfOutputs = 7;
 let layers;
 let candidate;
 const candidateNumber = 0;
@@ -16,6 +15,7 @@ algo
         
         candidate.reset();
 
+        layers = [...algo.__layers, algo.__numberOfOutputs];
         // Run the candidates
         return Array
             .from({ length: universe.length - algo.__numberOfCandles }, (_, k) => k)
