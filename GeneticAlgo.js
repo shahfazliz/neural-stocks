@@ -416,6 +416,7 @@ export default class GeneticAlgo {
         let candidates = [];
         let layers;
         let numberOfInputs;
+        let tempCandidate;
 
         this
             // Load universe
@@ -577,6 +578,21 @@ export default class GeneticAlgo {
                                 return this.fitnessTest(candidateB) - this.fitnessTest(candidateA)
                             }));
                         })
+                        // Save the best into backup
+                        .then(() => {
+                            return new Promise((resolve, reject) => {
+                                tempCandidate = new Candidate({
+                                    id: 0,
+                                    tradeDuration: candidates[0].getTradeDuration(),
+                                    capital: candidates[0].getCapital(),
+                                    profit: candidates[0].getProfit(),
+                                    withdrawal: candidates[0].getWithdrawal(),
+                                    generation: candidates[0].getGeneration(),
+                                    genome: candidates[0].getGenome(),
+                                });
+                                resolve(tempCandidate);
+                            });
+                        })
                         // Divide into 3 (this.__bestCandidatesCount) groups, then get the best of each into top 3
                         .then(() => {
                             return new Promise((resolve, reject) => {
@@ -632,26 +648,34 @@ export default class GeneticAlgo {
                                 leftPos += 1;
                             }
 
-                            return Promise.all(crossoverPromises);
+                            return Promise
+                                .all(crossoverPromises)
+                                // Remove the parents
+                                .then(() => {
+                                    return Array
+                                        .from({length: this.__bestCandidatesCount}, (_, k) => k)
+                                        .reduce((promise, index) => promise.then(() => {
+                                            candidates.push(candidates.shift());
+                                        }), Promise.resolve());
+                                });
                         })
+                        // Re populate new genes
                         .then(() => {
-                            const genomeCrossoverCount = 2 * (this.factorial(this.__bestCandidatesCount) / this.factorial(this.__bestCandidatesCount - 2)) + this.__bestCandidatesCount;
+                            const genomeCrossoverCount = 2 * (this.factorial(this.__bestCandidatesCount) / this.factorial(this.__bestCandidatesCount - 2));
                             return Array
-                                .from({length: this.__totalCandidates}, (_, k) => k)
+                                .from({length: this.__totalCandidates - genomeCrossoverCount}, (_, k) => genomeCrossoverCount + k)
                                 .reduce((promise, index) => promise.then(() => {
-                                    if (index >= genomeCrossoverCount) {
-                                        candidates[index].setGenome(this.randomGenome({
-                                            numberOfInputs,
-                                            layers,
-                                        }));
-                                    }
+                                    candidates[index].setGenome(this.randomGenome({
+                                        numberOfInputs,
+                                        layers,
+                                    }));
                                 }), Promise.resolve())
                         })
                         // Mutate gene
                         .then(() => {
                             console.log(`mutate gene`);
-                            const genomeCrossoverCount = 2 * (this.factorial(this.__bestCandidatesCount) / this.factorial(this.__bestCandidatesCount - 2)) + this.__bestCandidatesCount;
-                            let luckyCandidateNumber = 1 + Math.floor(Math.random() * genomeCrossoverCount - 2); // this.__bestCandidatesCount + Math.floor(Math.random() * this.__totalCandidates - this.__bestCandidatesCount);
+                            const genomeCrossoverCount = 2 * (this.factorial(this.__bestCandidatesCount) / this.factorial(this.__bestCandidatesCount - 2));
+                            let luckyCandidateNumber = Math.floor(Math.random() * genomeCrossoverCount - 1);
                             return Array
                                 .from({length: this.__totalCandidates}, (_, k) => k)
                                 .reduce((promise, index) => promise.then(() => {
@@ -665,6 +689,10 @@ export default class GeneticAlgo {
             // Save the candidates
             .then(() => {
                 console.log(`end of generation`);
+                fileService.writeToJSONFile({
+                    jsonfilepath: './data/backup/0.json',
+                    data: tempCandidate.toString(),
+                });
                 return candidates
                     .forEach(candidate => fileService.writeToJSONFile({
                         jsonfilepath: `./data/candidates/${candidate.getId()}.json`,

@@ -9,7 +9,7 @@ const algo = new GeneticAlgo();
 algo
     .readJSONFileAsUniverse('./data/universe/universe.json')
     .then(u => universe = u)
-    .then(() => algo.readJSONFileAsCandidate(`./data/candidates/${candidateNumber}.json`))
+    .then(() => algo.readJSONFileAsCandidate(`./data/backup/${candidateNumber}.json`))
     .then(c => candidate = c)
     .then(() => {
         

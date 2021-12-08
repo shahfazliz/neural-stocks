@@ -90,7 +90,7 @@ algo
             })
             // .then(() => console.log(universe[universe.length - 1]))
     })
-.then(() => algo.readJSONFileAsCandidate(`./data/candidates/${candidateNumber}.json`))
+.then(() => algo.readJSONFileAsCandidate(`./data/backup/${candidateNumber}.json`))
 .then(c => candidate = c)
 // Predict today
 .then(() => {
