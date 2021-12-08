@@ -1,4 +1,3 @@
-import brain from 'brain.js';
 import fs from 'fs/promises';
 
 export default class App {
@@ -124,19 +123,6 @@ export default class App {
             }
 
             return resolve(result);
-        });
-    }
-
-    startTraining(trainingData) {
-        console.log(`Start training`);
-        return new Promise((resolve, reject) => {
-            const model = new brain.NeuralNetwork(this.__trainingOptions);
-            model.train(trainingData);
-
-            return this
-                .saveTraining(model)
-                .then(model => resolve(model))
-                .catch(error => reject(error));
         });
     }
 
