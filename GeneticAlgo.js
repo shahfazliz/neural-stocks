@@ -7,14 +7,14 @@ const collectionService = new CollectionService();
 const fileService = new FileService();
 
 export default class GeneticAlgo {
-    __totalCandidates = 18; // pick candidates at 0, 6, 12
-    __bestCandidatesCount = 3; // 3->6+6=12, 5->20+20=40, 7->42+42+7=84, 10->90+90+10=180
-    __maxGenerationCount = 300;
+    __totalCandidates = 32; // pick candidates at 0, 8, 16, 24
+    __bestCandidatesCount = 4; // 3->6+6=12, 4->12+12=24, 5->20+20=40, 7->42+42+7=84, 10->90+90+10=180
+    __maxGenerationCount = 100;
     __costOfTrade = 1.74;
     __reward = 0.06; // 6%
 
     __numberOfOutputs = 6;
-    __layers = [10, 10, 10, 10, 10];
+    __layers = [20, 20, 20, 20, 20];
 
     __numberOfCandles = 50;
     __numberOfCandlesAYear = 252;
@@ -114,8 +114,8 @@ export default class GeneticAlgo {
 
             // Apply activation function and save result
             model[i] = isOutputLayer
-                ? this.precision(this.sigmoid(result))
-                : this.precision(result); // this.swish(result);
+                ? this.sigmoid(result)
+                : result; // this.swish(result);
 
             // Save the output node number
             if (isOutputLayer && outputNode === undefined) {
@@ -180,7 +180,7 @@ export default class GeneticAlgo {
     }
 
     randomWeight() {
-        return this.precision(Math.random() * 0.02 - 0.01);
+        return Math.random() * 0.02 - 0.01;
     }
 
     /**
@@ -282,12 +282,12 @@ export default class GeneticAlgo {
                         // map.set(`${tickerSymbol}_Month_${replaceDateWithCount}`, candlestick.getMonth());
                         map.set(`Day`, candlestick.getDay());
                         map.set(`Month`, candlestick.getMonth());
-                        map.set(`${tickerSymbol}_OpenPrice`, this.precision(candlestick.getOpenDiff()));
-                        map.set(`${tickerSymbol}_ClosePrice`, this.precision(candlestick.getCloseDiff()));
-                        map.set(`${tickerSymbol}_Volume`, this.precision(candlestick.getVolumeDiff()));
-                        map.set(`${tickerSymbol}_HighPrice`, this.precision(candlestick.getHighDiff()));
-                        map.set(`${tickerSymbol}_LowPrice`, this.precision(candlestick.getLowDiff()));
-                        map.set(`${tickerSymbol}_VolumeProfile`, this.precision(candlestick.getVolumeProfile()));
+                        map.set(`${tickerSymbol}_OpenPrice`, candlestick.getOpenDiff());
+                        map.set(`${tickerSymbol}_ClosePrice`, candlestick.getCloseDiff());
+                        map.set(`${tickerSymbol}_Volume`, candlestick.getVolumeDiff());
+                        map.set(`${tickerSymbol}_HighPrice`, candlestick.getHighDiff());
+                        map.set(`${tickerSymbol}_LowPrice`, candlestick.getLowDiff());
+                        map.set(`${tickerSymbol}_VolumeProfile`, candlestick.getVolumeProfile());
                         map.set(`${tickerSymbol}_StandardDeviation`, candlestick.getStandardDeviation());
 
                         return map;
@@ -503,9 +503,9 @@ export default class GeneticAlgo {
                                             input: inputSet,
                                             layers,
                                         });
-                                        
-                                        // let sumOfOutputs = output.reduce((acc, val) => acc + val) - output[output.length - 1];
-                                        console.log(`Output: ${JSON.stringify(output, undefined, 4)}`);
+
+                                        let sumOfOutputs = output.reduce((acc, val) => acc + val);
+                                        console.log(`Output: ${JSON.stringify(output.map(val => val / sumOfOutputs || 0), undefined, 4)}`);
                                         
                                         let originalCapital = candidate.getCapital();
                                         let profit = 0;
@@ -517,7 +517,8 @@ export default class GeneticAlgo {
 
                                                 // Long
                                                 let availableCapital = candidate.getCapital();
-                                                let capitalToUse = availableCapital * output[index * 2];
+                                                let risk = (output[index * 2] / sumOfOutputs) || 0;
+                                                let capitalToUse = availableCapital * risk;
                                                 let costOfTradeLong = capitalToUse > 0 
                                                     ? this.__costOfTrade 
                                                     : 0;
@@ -531,7 +532,8 @@ export default class GeneticAlgo {
                                                 
                                                 // Short
                                                 availableCapital = candidate.getCapital();
-                                                capitalToUse = availableCapital * output[index * 2 + 1];
+                                                risk = (output[index * 2 + 1] / sumOfOutputs) || 0;
+                                                capitalToUse = availableCapital * risk;
                                                 let costOfTradeShort = capitalToUse > 0 
                                                     ? this.__costOfTrade 
                                                     : 0;
@@ -541,7 +543,7 @@ export default class GeneticAlgo {
                                                     : this.currency(rewardShort - capitalToUse);
                                                 candidate.setCapital(availableCapital - capitalToUse);
                                                 console.log(`  profit short ${tickerSymbol}: ${short}`);
-                                                profit += short;                            
+                                                profit += short;
                                             });
 
                                         // Record total profits so far

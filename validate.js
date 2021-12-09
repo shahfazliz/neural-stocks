@@ -53,11 +53,11 @@ algo
                         genome: candidate.getGenome(),
                         input: inputSet,
                         layers,
-                    }).map(o => algo.currency(o));
+                    });
                     
-                    // let sumOfOutputs = output.reduce((acc, val) => acc + val) - output[output.length - 1];
-                    console.log(`Output: ${JSON.stringify(output, undefined, 4)}`);
-                    
+                    let sumOfOutputs = output.reduce((acc, val) => acc + val);
+                    console.log(`Output: ${JSON.stringify(output.map(val => val / sumOfOutputs || 0), undefined, 4)}`);
+
                     let originalCapital = candidate.getCapital();
                     let profit = 0;
 
@@ -68,7 +68,8 @@ algo
 
                             // Long
                             let availableCapital = candidate.getCapital();
-                            let capitalToUse = availableCapital * output[index * 2];
+                            let risk = (output[index * 2] / sumOfOutputs) || 0;
+                            let capitalToUse = availableCapital * risk;
                             let costOfTradeLong = capitalToUse > 0 
                                 ? algo.__costOfTrade 
                                 : 0;
@@ -82,7 +83,8 @@ algo
                             
                             // Short
                             availableCapital = candidate.getCapital();
-                            capitalToUse = availableCapital * output[index * 2 + 1];
+                            risk = (output[index * 2 + 1] / sumOfOutputs) || 0;
+                            capitalToUse = availableCapital * risk;
                             let costOfTradeShort = capitalToUse > 0 
                                 ? algo.__costOfTrade 
                                 : 0;
@@ -92,7 +94,7 @@ algo
                                 : algo.currency(rewardShort - capitalToUse);
                             candidate.setCapital(availableCapital - capitalToUse);
                             console.log(`  profit short ${tickerSymbol}: ${short}`);
-                            profit += short;                            
+                            profit += short;                           
                         });
 
                     // Record total profits so far
