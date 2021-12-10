@@ -167,7 +167,7 @@ export default class GeneticAlgo {
             Array.from(
                 { length: numberOfNode },
                 () => Array.from(
-                    { length: numberOfWeightsPerNode + 1 }, // +1 for bias
+                    { length: numberOfWeightsPerNode },
                     () => this.randomWeight()
                 )
             ).forEach(val => weights.push(val));
@@ -414,12 +414,18 @@ export default class GeneticAlgo {
         let candidates = [];
         let layers;
         let numberOfInputs;
-        let tempCandidate;
+        let bestCandidate;
 
         this
             // Load universe
             .readJSONFileAsUniverse('./data/universe/universe.json')
             .then(u => universe = u)
+            // Load best candidate
+            .then(() => {
+                return this
+                    .readJSONFileAsCandidate(`./data/backup/0.json`)
+                    .then(candidate => bestCandidate = candidate);
+            })
             // Load candidates
             .then(() => Promise
                 .all(Array
@@ -581,7 +587,7 @@ export default class GeneticAlgo {
                         // Save the best into backup
                         .then(() => {
                             return new Promise((resolve, reject) => {
-                                tempCandidate = new Candidate({
+                                let newTempCandidate = new Candidate({
                                     id: 0,
                                     tradeDuration: candidates[0].getTradeDuration(),
                                     capital: candidates[0].getCapital(),
@@ -590,23 +596,15 @@ export default class GeneticAlgo {
                                     generation: candidates[0].getGeneration(),
                                     genome: candidates[0].getGenome(),
                                 });
-                                resolve(tempCandidate);
+
+                                if (bestCandidate === undefined
+                                    || this.fitnessTest(newTempCandidate) >= this.fitnessTest(bestCandidate)
+                                ) {
+                                    bestCandidate = newTempCandidate;
+                                }
+                                resolve(bestCandidate);
                             });
                         })
-                        // Divide into 3 (this.__bestCandidatesCount) groups, then get the best of each into top 3
-                        .then(() => {
-                            return new Promise((resolve, reject) => {
-                                let next = (this.__totalCandidates / this.__bestCandidatesCount);
-                                let newPosition = 1;
-                                for (let i = next; i < this.__totalCandidates; i += next) {
-                                    let temp = candidates[newPosition];
-                                    candidates[newPosition] = candidates[i];
-                                    candidates[i] = temp;
-                                    newPosition += 1;
-                                }
-                                resolve(candidates);
-                            });
-                        }) 
                         // Have to re assign the id so that we save to the right file
                         .then(() => {
                             return Promise.all(candidates.map((candidate, index) => {
@@ -686,7 +684,7 @@ export default class GeneticAlgo {
                 console.log(`end of generation`);
                 fileService.writeToJSONFile({
                     jsonfilepath: './data/backup/0.json',
-                    data: tempCandidate.toString(),
+                    data: bestCandidate.toString(),
                 });
                 return candidates
                     .forEach(candidate => fileService.writeToJSONFile({
