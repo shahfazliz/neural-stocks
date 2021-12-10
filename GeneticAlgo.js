@@ -102,13 +102,10 @@ export default class GeneticAlgo {
 
             // Sum all multiplication with weights
             let result = 0;
-            for (let j = 0; j < model[i].length - 1; j++) { // don't use the last number, that is for bias
+            for (let j = 0; j < model[i].length; j++) {
                 // console.log(`model[${layerNumber} - 1 + ${j}]: ${model[layerNumber - 1 + j]}`)
                 result += model[i][j] * model[layerNumber - 1 + j]; // weight * input
             }
-
-            // Add bias
-            result += model[i][model[i].length - 1];
 
             // Determine if current node is in output layer
             const isOutputLayer = layerNumber === layers.length;
