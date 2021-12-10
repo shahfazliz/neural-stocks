@@ -636,16 +636,8 @@ export default class GeneticAlgo {
                             let leftPos = 0;
                             let savePosition = this.__bestCandidatesCount;
                             while (leftPos < this.__bestCandidatesCount) {
-                                let rightPos = 0;
+                                let rightPos = leftPos + 1;
                                 while (rightPos < this.__bestCandidatesCount) {
-                                    rightPos = leftPos === rightPos
-                                        ? rightPos + 1
-                                        : rightPos;
-
-                                    if (rightPos >= this.__bestCandidatesCount) {
-                                        break;
-                                    }
-
                                     // Copy genome first then crossover
                                     candidates[savePosition].setGenome(candidates[leftPos].getGenome());
                                     candidates[savePosition + 1].setGenome(candidates[rightPos].getGenome());
@@ -658,21 +650,22 @@ export default class GeneticAlgo {
                                             })
                                         );
                                     rightPos += 1;
-                                    savePosition += 2;
+                                    // savePosition += 2;
+                                    savePosition += 1;
                                 }
                                 leftPos += 1;
                             }
 
                             return Promise
-                                .all(crossoverPromises)
+                                .all(crossoverPromises);
                                 // Remove the parents
-                                .then(() => {
-                                    return Array
-                                        .from({length: this.__bestCandidatesCount}, (_, k) => k)
-                                        .reduce((promise, index) => promise.then(() => {
-                                            candidates.push(candidates.shift());
-                                        }), Promise.resolve());
-                                });
+                                // .then(() => {
+                                //     return Array
+                                //         .from({length: this.__bestCandidatesCount}, (_, k) => k)
+                                //         .reduce((promise, index) => promise.then(() => {
+                                //             candidates.push(candidates.shift());
+                                //         }), Promise.resolve());
+                                // });
                         })
                         // Re populate new genes
                         .then(() => {
