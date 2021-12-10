@@ -584,6 +584,23 @@ export default class GeneticAlgo {
                                 return this.fitnessTest(candidateB) - this.fitnessTest(candidateA)
                             }));
                         })
+                        // Move the same fitnessTest result to the back. We will only propogate new solution
+                        .then(() => {
+                            return new Promise((resolve, reject) => {
+                                let index = 1;
+                                while (index < this.__bestCandidatesCount) {
+                                    if (this.fitnessTest(candidates[index]) === this.fitnessTest(candidates[index - 1])) {
+                                        let tempCandidate = candidates[index];
+                                        candidates.splice(index, 1);
+                                        candidates.push(tempCandidate);
+                                    }
+                                    else {
+                                        index += 1;
+                                    }
+                                }
+                                resolve(candidates);
+                            });
+                        })
                         // Save the best into backup
                         .then(() => {
                             return new Promise((resolve, reject) => {
