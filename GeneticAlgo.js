@@ -7,14 +7,15 @@ const collectionService = new CollectionService();
 const fileService = new FileService();
 
 export default class GeneticAlgo {
-    __totalCandidates = 32; // pick candidates at 0, 8, 16, 24
-    __bestCandidatesCount = 4; // 3->6+6=12, 4->12+12=24, 5->20+20=40, 7->42+42+7=84, 10->90+90+10=180
-    __maxGenerationCount = 100;
+    __totalCandidates = 7;
+    __bestCandidatesCount = 2; // 2->1, 3->3, 4->6, 5->10 Combinations without repetition order not important
+    __totalChildren = (this.factorial(this.__bestCandidatesCount) / (this.factorial(2) * this.factorial(this.__bestCandidatesCount - 2)));
+    __maxGenerationCount = 500;
     __costOfTrade = 1.74;
     __reward = 0.06; // 6%
 
     __numberOfOutputs = 6;
-    __layers = [20, 20, 20, 20, 20];
+    __layers = [10, 10, 10, 10, 10];
 
     __numberOfCandles = 50;
     __numberOfCandlesAYear = 252;
@@ -663,9 +664,8 @@ export default class GeneticAlgo {
                         })
                         // Re populate new genes
                         .then(() => {
-                            const genomeCrossoverCount = 2 * (this.factorial(this.__bestCandidatesCount) / this.factorial(this.__bestCandidatesCount - 2));
                             return Array
-                                .from({length: this.__totalCandidates - genomeCrossoverCount}, (_, k) => genomeCrossoverCount + k)
+                                .from({length: this.__totalCandidates - this.__bestCandidatesCount - this.__totalChildren}, (_, k) => this.__totalChildren + this.__bestCandidatesCount + k)
                                 .reduce((promise, index) => promise.then(() => {
                                     candidates[index].setGenome(this.randomGenome({
                                         numberOfInputs,
@@ -675,15 +675,11 @@ export default class GeneticAlgo {
                         })
                         // Mutate gene
                         .then(() => {
-                            console.log(`mutate gene`);
-                            const genomeCrossoverCount = 2 * (this.factorial(this.__bestCandidatesCount) / this.factorial(this.__bestCandidatesCount - 2));
-                            let luckyCandidateNumber = Math.floor(Math.random() * genomeCrossoverCount - 1);
                             return Array
-                                .from({length: this.__totalCandidates}, (_, k) => k)
-                                .reduce((promise, index) => promise.then(() => {
-                                    if (candidates[index].getId() === luckyCandidateNumber) {
-                                        this.mutateGenome(candidates[luckyCandidateNumber]);
-                                    }
+                                .from({length: this.__totalChildren}, (_, k) => this.__bestCandidatesCount + k)
+                                .reduce((promise, luckyCandidateNumber) => promise.then(() => {
+                                    console.log(`mutate cadidate ${luckyCandidateNumber} gene`);
+                                    this.mutateGenome(candidates[luckyCandidateNumber]);
                                 }), Promise.resolve());
                         });
                 }), Promise.resolve())
