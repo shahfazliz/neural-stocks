@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Candlestick from '../model/Candlestick.js';
 import FileService from '../util/FileService.js';
+import MathFn from '../util/MathFn.js';
 import MomentAdaptor from '../util/MomentAdaptor.js';
 
 const fileService = new FileService();
@@ -13,10 +14,6 @@ export default class AlpacaAPI {
         fileService
             .readJSONFile('./data/tickers/ignoreTicker.json')
             .then(ignoreTickerSymbols => this.__ignoreTickerSymbols = ignoreTickerSymbols);
-    }
-
-    currency(value) {
-        return parseFloat(value.toFixed(2));
     }
 
     removeIgnoredTickerSymbol(tickerSymbols) {
@@ -71,11 +68,11 @@ export default class AlpacaAPI {
                     .data
                     .bars
                     .map(obj => new Candlestick({
-                        close: this.currency(obj.c),
-                        high: this.currency(obj.h),
-                        low: this.currency(obj.l),
+                        close: MathFn.currency(obj.c),
+                        high: MathFn.currency(obj.h),
+                        low: MathFn.currency(obj.l),
                         n: obj.n,
-                        open: this.currency(obj.o),
+                        open: MathFn.currency(obj.o),
                         timestamp: obj.t,
                         volume: obj.v,
                         vw: obj.vw,

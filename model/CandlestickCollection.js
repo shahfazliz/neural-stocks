@@ -1,5 +1,6 @@
 import ArrayFn from '../util/ArrayFn.js';
 import Candlestick from './Candlestick.js';
+import MathFn from '../util/MathFn.js';
 import MomentAdaptor from '../util/MomentAdaptor.js';
 
 export default class CandlestickCollection {
@@ -19,24 +20,16 @@ export default class CandlestickCollection {
             .forEach((rawCandleStickObj, index) => {
                 // console.log(`Pushing candlestick ${index}`)
                 this.push(new Candlestick({
-                    close: this.currency(rawCandleStickObj.ClosePrice),
-                    high: this.currency(rawCandleStickObj.HighPrice),
-                    low: this.currency(rawCandleStickObj.LowPrice),
+                    close: MathFn.currency(rawCandleStickObj.ClosePrice),
+                    high: MathFn.currency(rawCandleStickObj.HighPrice),
+                    low: MathFn.currency(rawCandleStickObj.LowPrice),
                     n: rawCandleStickObj.n,
-                    open: this.currency(rawCandleStickObj.OpenPrice),
+                    open: MathFn.currency(rawCandleStickObj.OpenPrice),
                     timestamp: rawCandleStickObj.Timestamp,
                     volume: rawCandleStickObj.Volume,
                     vw: rawCandleStickObj.vw,
                 }));
             });
-    }
-
-    currency(value) {
-        return parseFloat(value.toFixed(2));
-    }
-
-    precision(value) {
-        return parseFloat(value.toFixed(5));
     }
 
     getByIndex(index) {
@@ -91,7 +84,7 @@ export default class CandlestickCollection {
 
     calculateStandardDeviation(numbers) {
         const mean = numbers.reduce((acc, value) => acc + value) / numbers.length;
-        return this.precision(Math.sqrt(numbers.reduce((acc, value) => acc += (value - mean) ** 2, 0) / numbers.length));
+        return MathFn.precision(Math.sqrt(numbers.reduce((acc, value) => acc += (value - mean) ** 2, 0) / numbers.length));
     }
 
     length() {

@@ -1,4 +1,5 @@
 import GeneticAlgo from './GeneticAlgo.js';
+import MathFn from './util/MathFn.js';
 
 let universe;
 let layers;
@@ -20,17 +21,17 @@ algo
         return Array
             .from({ length: universe.length - algo.__numberOfCandles }, (_, k) => k)
             .reduce((promise, dayNumber) => promise.then(() => {
-                console.log('------------------------------------------------');
-                console.log(`Candidate: ${candidateNumber}, Day: ${dayNumber}`);
-                console.log('------------------------------------------------');
-                
                 // Only trade on Monday, Wednesday, and Friday
                 let tomorrow = universe[dayNumber].get('Day');
-                if (candidate.getCapital() > 0
+                if (candidate.getCapital() >= 1000
                     && (tomorrow === 1
                         || tomorrow === 3
                         || tomorrow === 5)
                 ) {
+                    console.log('------------------------------------------------');
+                    console.log(`Candidate: ${candidateNumber}, Day: ${dayNumber}`);
+                    console.log('------------------------------------------------');
+                    
                     // Get 50 candles as input set from universe
                     let inputSet = universe
                         .slice(dayNumber, dayNumber + algo.__numberOfCandles)
@@ -54,59 +55,36 @@ algo
                         input: inputSet,
                         layers,
                     });
-                    
+
                     let sumOfOutputs = output.reduce((acc, val) => acc + val);
                     console.log(`Output: ${JSON.stringify(output.map(val => val / sumOfOutputs || 0), undefined, 4)}`);
 
                     let originalCapital = candidate.getCapital();
-                    let profit = 0;
 
-                    ['SPY', 'QQQ', 'IWM']
-                        .forEach((tickerSymbol, index) => {
-                            let expectedStandardDeviation = universe[dayNumber + algo.__numberOfCandles - 1].get(`${tickerSymbol}_StandardDeviation`);
-                            let closePriceToday = universe[dayNumber + algo.__numberOfCandles].get(`${tickerSymbol}_ClosePrice`);
-
-                            // Long
-                            let availableCapital = candidate.getCapital();
-                            let risk = (output[index * 2] / sumOfOutputs) || 0;
-                            let capitalToUse = availableCapital * risk;
-                            let costOfTradeLong = capitalToUse > 0 
-                                ? algo.__costOfTrade 
-                                : 0;
-                            let rewardLong = capitalToUse * algo.__reward - costOfTradeLong;
-                            let long = -expectedStandardDeviation < closePriceToday
-                                ? algo.currency(rewardLong)
-                                : algo.currency(rewardLong - capitalToUse);    
-                            candidate.setCapital(availableCapital - capitalToUse);
-                            console.log(`  profit long ${tickerSymbol}: ${long}`);
-                            profit += long;
-                            
-                            // Short
-                            availableCapital = candidate.getCapital();
-                            risk = (output[index * 2 + 1] / sumOfOutputs) || 0;
-                            capitalToUse = availableCapital * risk;
-                            let costOfTradeShort = capitalToUse > 0 
-                                ? algo.__costOfTrade 
-                                : 0;
-                            let rewardShort = capitalToUse * algo.__reward - costOfTradeShort;
-                            let short = expectedStandardDeviation > closePriceToday
-                                ? algo.currency(rewardShort)
-                                : algo.currency(rewardShort - capitalToUse);
-                            candidate.setCapital(availableCapital - capitalToUse);
-                            console.log(`  profit short ${tickerSymbol}: ${short}`);
-                            profit += short;                           
-                        });
+                    let profit = algo
+                        .getListTickersOfInterest()
+                        .reduce((profit, tickerSymbol, tickerSymbolIndex) => {
+                            return profit + candidate.executeTrade({
+                                model: output,
+                                modelIndex: tickerSymbolIndex,
+                                perTradeComission: algo.__costOfTrade,
+                                perTradeReward: algo.__reward,
+                                priceCloseToday: universe[dayNumber + algo.__numberOfCandles].get(`${tickerSymbol}_ClosePrice`),
+                                priceExpectedMove: universe[dayNumber + algo.__numberOfCandles - 1].get(`${tickerSymbol}_StandardDeviation`),
+                                tickerSymbol,
+                            });
+                        }, 0);
 
                     // Record total profits so far
                     candidate.setProfit(candidate.getProfit() + profit);
-                    console.log(`Total profit/loss: ${profit} from ${originalCapital} capital`);
+                    console.log(`Total profit/loss: ${MathFn.currency(profit)} from ${originalCapital} capital`);
 
                     // Update capital
                     candidate.setCapital(originalCapital + profit);
 
                     // Every month trade withdraw
                     if (universe[dayNumber + algo.__numberOfCandles].get('Month') !== universe[dayNumber + algo.__numberOfCandles - 1].get('Month')) {
-                        let withdrawal = algo.currency(candidate.getCapital() - 1000);
+                        let withdrawal = MathFn.currency(candidate.getCapital() - 1000);
 
                         if (withdrawal > 0) {
                             console.log(`Withdrawal: ${withdrawal}`);

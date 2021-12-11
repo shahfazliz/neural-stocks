@@ -4,6 +4,7 @@ import Candlestick from './model/Candlestick.js';
 import CollectionService from './resource/CollectionService.js';
 import GeneticAlgo from './GeneticAlgo.js';
 import VolumeProfile from './model/VolumeProfile.js';
+import MathFn from './util/MathFn.js';
 
 const alpacaAPI = new AlpacaAPI();
 const app = new App();
@@ -35,10 +36,10 @@ algo
                         .then(data => {
                             const candlestick = new Candlestick({
                                 timestamp: data.bars[0].t,
-                                open: algo.currency(data.bars[0].o),
-                                close: algo.currency(data.bars[0].c),
-                                high: algo.currency(data.bars[0].h),
-                                low: algo.currency(data.bars[0].l),
+                                open: MathFn.currency(data.bars[0].o),
+                                close: MathFn.currency(data.bars[0].c),
+                                high: MathFn.currency(data.bars[0].h),
+                                low: MathFn.currency(data.bars[0].l),
                                 volume: data.bars[0].v,
                                 n: data.bars[0].n,
                                 vw: data.bars[0].vw,
@@ -78,12 +79,12 @@ algo
                     // map.set(`${tickerSymbol}_Month_${replaceDateWithCount}`, candlestick.getMonth());
                     map.set(`Day`, candlestick.getDay());
                     map.set(`Month`, candlestick.getMonth());
-                    map.set(`${tickerSymbol}_OpenPrice`, algo.precision(candlestick.getOpenDiff()));
-                    map.set(`${tickerSymbol}_ClosePrice`, algo.precision(candlestick.getCloseDiff()));
-                    map.set(`${tickerSymbol}_Volume`, algo.precision(candlestick.getVolumeDiff()));
-                    map.set(`${tickerSymbol}_HighPrice`, algo.precision(candlestick.getHighDiff()));
-                    map.set(`${tickerSymbol}_LowPrice`, algo.precision(candlestick.getLowDiff()));
-                    map.set(`${tickerSymbol}_VolumeProfile`, algo.precision(candlestick.getVolumeProfile()));
+                    map.set(`${tickerSymbol}_OpenPrice`, candlestick.getOpenDiff());
+                    map.set(`${tickerSymbol}_ClosePrice`, candlestick.getCloseDiff());
+                    map.set(`${tickerSymbol}_Volume`, candlestick.getVolumeDiff());
+                    map.set(`${tickerSymbol}_HighPrice`, candlestick.getHighDiff());
+                    map.set(`${tickerSymbol}_LowPrice`, candlestick.getLowDiff());
+                    map.set(`${tickerSymbol}_VolumeProfile`, candlestick.getVolumeProfile());
                     map.set(`${tickerSymbol}_StandardDeviation`, candlestick.getStandardDeviation());
                 });
                 universe.push(map);
@@ -131,7 +132,7 @@ algo
         'Long IWM',
         'Short IWM',
     ].forEach((string, index) => {
-        console.log(`${string}: ${algo.currency(output[index] / sumOfOutputs)}`);
+        console.log(`${string}: ${MathFn.currency(output[index] / sumOfOutputs)}`);
     });
 })
 // Predict tomorrow
@@ -173,7 +174,7 @@ algo
         'Long IWM',
         'Short IWM',
     ].forEach((string, index) => {
-        console.log(`${string}: ${algo.currency(output[index] / sumOfOutputs)}`);
+        console.log(`${string}: ${MathFn.currency(output[index] / sumOfOutputs)}`);
     });
-    console.log(`Withdraw: ${algo.currency(output[output.length - 1])}`);
+    console.log(`Withdraw: ${MathFn.currency(output[output.length - 1])}`);
 });

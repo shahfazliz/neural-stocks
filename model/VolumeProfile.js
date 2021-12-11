@@ -1,4 +1,5 @@
 import FileService from '../util/FileService.js';
+import MathFn from '../util/MathFn.js';
 
 const fileService = new FileService();
 
@@ -35,7 +36,7 @@ export default class VolumeProfile {
                 return candlestickCollection
                     .reduce((promise, rawCandlestick) => promise.then(() => {
                         const temp = [];
-                        for (let i = rawCandlestick.LowPrice; i <= rawCandlestick.HighPrice; i = this.precision(i + 0.01)) {
+                        for (let i = rawCandlestick.LowPrice; i <= rawCandlestick.HighPrice; i = MathFn.precision(i + 0.01)) {
                             temp.push(i);
                         }
                         const averageVolume = rawCandlestick.Volume / temp.length;
@@ -43,8 +44,8 @@ export default class VolumeProfile {
                             this.__volumeProfile.set(
                                 price, 
                                 this.__volumeProfile.has(price)
-                                    ? this.precision(this.__volumeProfile.get(price) + averageVolume)
-                                    : this.precision(averageVolume)
+                                    ? MathFn.precision(this.__volumeProfile.get(price) + averageVolume)
+                                    : MathFn.precision(averageVolume)
                             );
                         });
                     }), Promise.resolve());
@@ -56,17 +57,13 @@ export default class VolumeProfile {
             }));
     }
 
-    precision(value) {
-        return parseFloat(value.toFixed(5));
-    }
-
     getVolumeProfile(price) {
         return this.__volumeProfile.get(`${price}`);
     }
 
     update(candlestick) {
         const temp = [];
-        for (let i = candlestick.getLow(); i <= candlestick.getHigh(); i = this.precision(i + 0.01)) {
+        for (let i = candlestick.getLow(); i <= candlestick.getHigh(); i = MathFn.precision(i + 0.01)) {
             temp.push(i);
         }
         const averageVolume = candlestick.getVolume() / temp.length;
@@ -74,8 +71,8 @@ export default class VolumeProfile {
             this.__volumeProfile.set(
                 price, 
                 this.__volumeProfile.has(price)
-                    ? this.precision(this.__volumeProfile.get(price) + averageVolume)
-                    : this.precision(averageVolume)
+                    ? MathFn.precision(this.__volumeProfile.get(price) + averageVolume)
+                    : MathFn.precision(averageVolume)
             );
         });
     }

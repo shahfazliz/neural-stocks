@@ -1,3 +1,5 @@
+import MathFn from "../util/MathFn.js";
+
 export default class Candidate {
     __id = 0;
     __genome = [];
@@ -39,14 +41,6 @@ export default class Candidate {
         return this.__genome.length === 0;
     }
 
-    precision(value) {
-        return parseFloat(value.toFixed(5));
-    }
-
-    currency(value) {
-        return parseFloat(value.toFixed(2));
-    }
-
     getId() {
         return this.__id;
     }
@@ -70,7 +64,7 @@ export default class Candidate {
     }
 
     setCapital(capital) {
-        this.__capital = this.currency(capital);
+        this.__capital = MathFn.currency(capital);
         return this;
     }
 
@@ -79,7 +73,7 @@ export default class Candidate {
     }
 
     setProfit(profit) {
-        this.__profit = this.currency(profit);
+        this.__profit = MathFn.currency(profit);
         return this;
     }
 
@@ -97,7 +91,7 @@ export default class Candidate {
     }
 
     setWithdrawal(withdrawal) {
-        this.__withdrawal = this.currency(withdrawal);
+        this.__withdrawal = MathFn.currency(withdrawal);
         return this;
     }
 
@@ -131,5 +125,52 @@ export default class Candidate {
             withdrawal: this.getWithdrawal(),
             generation: this.getGeneration(),
         }, undefined, 4);
+    }
+
+    executeTrade({
+        model,
+        modelIndex,
+        perTradeComission,
+        perTradeReward,
+        priceCloseToday,
+        priceExpectedMove,
+        tickerSymbol,
+    }) {
+        let profit = 0;
+        const sumOfModelOutput = model.reduce((acc, val) => acc + val);
+        
+        // Long
+        let availableCapital = this.getCapital();
+        let risk = (model[modelIndex * 2] / sumOfModelOutput) || 0;
+        // let risk = model[modelIndex * 2];
+        let capitalToUse = availableCapital * risk;
+        let costOfTradeLong = capitalToUse > 0 
+            ? perTradeComission
+            : 0;
+        let rewardLong = capitalToUse * perTradeReward - costOfTradeLong;
+        let long = -priceExpectedMove < priceCloseToday
+            ? MathFn.currency(rewardLong)
+            : MathFn.currency(rewardLong - capitalToUse);    
+        this.setCapital(availableCapital - capitalToUse);
+        console.log(`  profit long ${tickerSymbol}: ${long}`);
+        profit += long;
+        
+        // Short
+        availableCapital = this.getCapital();
+        risk = (model[modelIndex * 2 + 1] / sumOfModelOutput) || 0;
+        // risk = model[modelIndex * 2 + 1];
+        capitalToUse = availableCapital * risk;
+        let costOfTradeShort = capitalToUse > 0 
+            ? perTradeComission
+            : 0;
+        let rewardShort = capitalToUse * perTradeReward - costOfTradeShort;
+        let short = priceExpectedMove > priceCloseToday
+            ? MathFn.currency(rewardShort)
+            : MathFn.currency(rewardShort - capitalToUse);
+        this.setCapital(availableCapital - capitalToUse);
+        console.log(`  profit short ${tickerSymbol}: ${short}`);
+        profit += short;
+
+        return profit;
     }
 }
