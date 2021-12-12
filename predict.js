@@ -84,7 +84,7 @@ algo
                     map.set(`${tickerSymbol}_Volume`, candlestick.getVolumeDiff());
                     map.set(`${tickerSymbol}_HighPrice`, candlestick.getHighDiff());
                     map.set(`${tickerSymbol}_LowPrice`, candlestick.getLowDiff());
-                    map.set(`${tickerSymbol}_VolumeProfile`, candlestick.getVolumeProfile());
+                    map.set(`${tickerSymbol}_VolumeProfile`, candlestick.getVolumeProfileDiff());
                     map.set(`${tickerSymbol}_StandardDeviation`, candlestick.getStandardDeviation());
                 });
                 universe.push(map);

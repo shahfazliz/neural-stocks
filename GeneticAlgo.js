@@ -8,15 +8,15 @@ const collectionService = new CollectionService();
 const fileService = new FileService();
 
 export default class GeneticAlgo {
-    __totalCandidates = 11;
-    __bestCandidatesCount = 4; // 2->1, 3->3, 4->6, 5->10 Combinations without repetition order not important
+    __totalCandidates = 12;
+    __bestCandidatesCount = 3; // 2->1, 3->3, 4->6, 5->10 Combinations without repetition order not important
     __totalChildren = (this.factorial(this.__bestCandidatesCount) / (this.factorial(2) * this.factorial(this.__bestCandidatesCount - 2)));
-    __maxGenerationCount = 50;
+    __maxGenerationCount = 100;
     __costOfTrade = 1.74;
     __reward = 0.06; // 6%
 
     __numberOfOutputs = 6;
-    __layers = [500];
+    __layers = [200];
 
     __numberOfCandles = 50;
     __numberOfCandlesAYear = 252;
@@ -277,14 +277,14 @@ export default class GeneticAlgo {
                         // map.set(`${tickerSymbol}_Timestamp_${replaceDateWithCount}`, candlestick.getTimestamp());
                         // map.set(`${tickerSymbol}_Day_${replaceDateWithCount}`, candlestick.getDay());
                         // map.set(`${tickerSymbol}_Month_${replaceDateWithCount}`, candlestick.getMonth());
-                        map.set(`Day`, candlestick.getDay());
-                        map.set(`Month`, candlestick.getMonth());
+                        map.set(`Day`, candlestick.getDay()); // Need days to know Mon, Wed, Fri trading days
+                        map.set(`Month`, candlestick.getMonth()); // Need month to know when to withdraw
                         map.set(`${tickerSymbol}_OpenPrice`, candlestick.getOpenDiff());
                         map.set(`${tickerSymbol}_ClosePrice`, candlestick.getCloseDiff());
                         map.set(`${tickerSymbol}_Volume`, candlestick.getVolumeDiff());
                         map.set(`${tickerSymbol}_HighPrice`, candlestick.getHighDiff());
                         map.set(`${tickerSymbol}_LowPrice`, candlestick.getLowDiff());
-                        map.set(`${tickerSymbol}_VolumeProfile`, candlestick.getVolumeProfile());
+                        map.set(`${tickerSymbol}_VolumeProfile`, candlestick.getVolumeProfileDiff());
                         map.set(`${tickerSymbol}_StandardDeviation`, candlestick.getStandardDeviation());
 
                         return map;

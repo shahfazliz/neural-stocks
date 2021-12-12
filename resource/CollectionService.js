@@ -8,7 +8,7 @@ export default class CollectionService {
     /**
      * Read from json file as CandlestickCollection
      */
-     readJSONFileAsCandlestickCollection(jsonfilepath) {
+    readJSONFileAsCandlestickCollection(jsonfilepath) {
         console.log(`Reading from ${jsonfilepath}`);
         const tickerSymbol = jsonfilepath
             .replace(/\.\/data\/tickers\//g, '')
@@ -23,11 +23,19 @@ export default class CollectionService {
                     .readJSONFile(jsonfilepath)
                     .then(json => {
                         const candlestickCollection = new CandlestickCollection(json);
-                        candlestickCollection.forEach(candlestick => {
+                        candlestickCollection.forEach((candlestick, index) => {
                             candlestick
                                 .setVolumeProfile(tickerVolumeProfile
                                     .getVolumeProfile(candlestick
                                         .getClose()));
+                            
+                            if (index > 0) {
+                                const yesterdayVolumeProfile = candlestickCollection
+                                    .getByIndex(index - 1)
+                                    .getVolumeProfile();
+                                candlestick
+                                    .setVolumeProfileDiff(Math.log(candlestick.getVolumeProfile() / yesterdayVolumeProfile));
+                            }
                         });
                         return candlestickCollection;
                     });

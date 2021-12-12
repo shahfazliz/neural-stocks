@@ -6,6 +6,7 @@ export default class Candlestick {
     __highDiff = 'N/A';
     __lowDiff = 'N/A';
     __volumeDiff = 'N/A';
+    __volumeProfileDiff = 'N/A';
     __vwDiff = 'N/A';
     __nDiff = 'N/A';
     __long = false;
@@ -101,6 +102,15 @@ export default class Candlestick {
 
     setVolumeProfile(volumeProfile) {
         this.__volumeProfile = volumeProfile;
+        return this;
+    }
+
+    getVolumeProfileDiff() {
+        return this.__volumeProfileDiff;
+    }
+
+    setVolumeProfileDiff(volumeProfileDiff) {
+        this.__volumeProfileDiff = volumeProfileDiff;
         return this;
     }
 

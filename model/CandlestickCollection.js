@@ -6,7 +6,6 @@ import MomentAdaptor from '../util/MomentAdaptor.js';
 export default class CandlestickCollection {
     __collection = [];
     __numberOfCandlesAYear = 252;
-    __volumeProfile = {};
 
     constructor(rawCandlestickArrayOfObj) {
         // Sort the data by date ascending (older first, newer last)
@@ -68,10 +67,15 @@ export default class CandlestickCollection {
                     .__collection
                     .slice(this.__collection.length - this.__numberOfCandlesAYear);
 
-                candlestick.setStandardDeviation(this.calculateStandardDeviation(oneYearCollection.map(candlestickOfYear => {
-                    // console.log(candlestickOfYear.getCloseDiff());
-                    return candlestickOfYear.getCloseDiff();
-                })));
+                candlestick
+                    .setStandardDeviation(this
+                        .calculateStandardDeviation(oneYearCollection
+                            .map(candlestickOfYear => {
+                                // console.log(candlestickOfYear.getCloseDiff());
+                                return candlestickOfYear.getCloseDiff();
+                            })
+                        )
+                    );
             }
         }
 
