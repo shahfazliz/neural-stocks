@@ -589,6 +589,13 @@ export default class GeneticAlgo {
                                     resolve(bestCandidate);
                                 });
                             })
+                            // Have to re assign the id so that we save to the right file
+                            .then(() => {
+                                return Promise.all(candidates.map((candidate, index) => {
+                                    candidate.setId(index);
+                                    console.log(`candidate ${candidate.getId()}, score: ${this.fitnessTest(candidate)}`);
+                                }));
+                            })
                             // Crossover gene
                             .then(() => {
                                 console.log(`Crossover gene`);
@@ -636,6 +643,17 @@ export default class GeneticAlgo {
                                         }));
                                     }), Promise.resolve())
                             })
+                            // Mutate gene
+                            .then(() => {
+                                return Array
+                                    .from({length: this.__totalChildren}, (_, k) => this.__bestCandidatesCount + k)
+                                    .reduce((promise, luckyCandidateNumber) => promise.then(() => {
+                                        console.log(`mutate cadidate ${luckyCandidateNumber} gene`);
+                                        this.mutateGenome(candidates[luckyCandidateNumber]);
+                                    }), Promise.resolve());
+                            });
+                    }), Promise.resolve());
+            })
             // Save the candidates
             .then(() => {
                 console.log(`end of generation`);
