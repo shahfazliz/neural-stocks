@@ -152,8 +152,9 @@ export default class GeneticAlgo {
      * Initial genome
      */
     randomGenome({
-        numberOfInputs = 1,
         layers = [3, 3, 3],
+        numberOfInputs = 1,
+        seed,
     }) {
         console.log(`Generating random genome with ${layers[0]} input nodes, ${layers[layers.length - 1]} output nodes, and ${layers.length - 2} hidden layers`);
 
@@ -171,6 +172,13 @@ export default class GeneticAlgo {
                 )
             ).forEach(val => weights.push(val));
         });
+
+        if (seed && seed.length > 0) {
+            console.log('with seed');
+            for (let index = 0; index < weights.length; index += 2) {
+                weights[index] = seed[index];
+            }
+        }
 
         // console.log(weights);
         return weights;
@@ -444,10 +452,9 @@ export default class GeneticAlgo {
                                     candidate
                                         .setId(candidateNumber)
                                         .setGenome(this.randomGenome({
-                                            numberOfInputs,
-                                            layers,
-                                        }));
-                                }
+                                                layers,
+                                                numberOfInputs,
+                                                seed: copyGenomeBestCandidate,
 
                                 candidates[candidateNumber] = candidate;
                             });
@@ -649,20 +656,9 @@ export default class GeneticAlgo {
                                 .from({length: this.__totalCandidates - this.__bestCandidatesCount - this.__totalChildren}, (_, k) => this.__totalChildren + this.__bestCandidatesCount + k)
                                 .reduce((promise, index) => promise.then(() => {
                                     candidates[index].setGenome(this.randomGenome({
-                                        numberOfInputs,
-                                        layers,
-                                    }));
-                                }), Promise.resolve())
-                        })
-                        // Mutate gene
-                        .then(() => {
-                            return Array
-                                .from({length: this.__totalChildren}, (_, k) => this.__bestCandidatesCount + k)
-                                .reduce((promise, luckyCandidateNumber) => promise.then(() => {
-                                    console.log(`mutate cadidate ${luckyCandidateNumber} gene`);
-                                    this.mutateGenome(candidates[luckyCandidateNumber]);
-                                }), Promise.resolve());
-                        });
+                                            layers,
+                                            numberOfInputs,
+                                            seed: copyGenomeBestCandidate,
                 }), Promise.resolve())
             )
             // Save the candidates
