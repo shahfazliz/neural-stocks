@@ -196,27 +196,23 @@ export default class GeneticAlgo {
         candidateB,
     }) {
         return new Promise((resolve, reject) => {
-            // Direct access to the private attibute (genome) to save memory space
-            let minimumGenomeLength = candidateA.__genome.length <= candidateB.__genome.length
-                ? candidateA.__genome.length
-                : candidateB.__genome.length;
+            for (let index = 0; index < candidateA.__genome.length; index++) {
+                // Direct access to the private attibute (genome) to save memory space
+                let minimumGenomeLength = candidateA.__genome[index].length;
 
-            let startSplice = Math.floor(Math.random() * minimumGenomeLength);
-            let numberOfGenesToCross = Math.ceil(Math.random() * (minimumGenomeLength - startSplice));
-            console.log(`startSplice: ${startSplice}`);
-            console.log(`numberOfGenesToCross: ${numberOfGenesToCross}`);
+                let startSplice = Math.floor(Math.random() * minimumGenomeLength);
+                let numberOfGenesToCross = Math.ceil(Math.random() * (minimumGenomeLength - startSplice));
 
-            let candidateAGenome = candidateA
-                .__genome
-                .slice(startSplice, startSplice + numberOfGenesToCross);
-            let candidateBGenome = candidateB
-                .__genome
-                .slice(startSplice, startSplice + numberOfGenesToCross);
+                let candidateBGenome = candidateB
+                    .__genome[index]
+                    .slice(startSplice, startSplice + numberOfGenesToCross);
 
-            candidateA.__genome.splice(startSplice, numberOfGenesToCross, ...candidateBGenome);
-            candidateB.__genome.splice(startSplice, numberOfGenesToCross, ...candidateAGenome);
+                candidateA
+                    .__genome[index]
+                    .splice(startSplice, numberOfGenesToCross, ...candidateBGenome);
+            }
 
-            resolve([candidateA, candidateB]);
+            resolve();
         });
     }
 
