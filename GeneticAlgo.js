@@ -430,10 +430,12 @@ export default class GeneticAlgo {
                     .then(candidate => bestCandidate = candidate);
             })
             // Load candidates
-            .then(() => Promise
-                .all(Array
-                    .from({ length: this.__totalCandidates }, (_, k) => k)
-                    .map(candidateNumber => {
+            .then(() => {
+                let copyGenomeBestCandidate = bestCandidate.getCopyGenome();
+                return Promise
+                    .all(Array
+                        .from({ length: this.__totalCandidates }, (_, k) => k)
+                        .map(candidateNumber => {
 
                         numberOfInputs = (universe[0].size * this.__numberOfCandles) + 1; // 1 more is the capital
 
@@ -566,97 +568,74 @@ export default class GeneticAlgo {
                         // Move the same fitnessTest result to the back. We will only propogate new solution
                         .then(() => {
                             return new Promise((resolve, reject) => {
-                                let index = 1;
-                                while (index < this.__bestCandidatesCount) {
-                                    if (this.fitnessTest(candidates[index]) === this.fitnessTest(candidates[index - 1])) {
-                                        let tempCandidate = candidates[index];
-                                        candidates.splice(index, 1);
-                                        candidates.push(tempCandidate);
+                            // Save the best into backup
+                            .then(() => {
+                                return new Promise((resolve, reject) => {
+                                    let newTempCandidate = new Candidate({
+                                        id: candidates[0].getId(),
+                                        tradeDuration: candidates[0].getTradeDuration(),
+                                        capital: candidates[0].getCapital(),
+                                        profit: candidates[0].getProfit(),
+                                        withdrawal: candidates[0].getWithdrawal(),
+                                        generation: candidates[0].getGeneration(),
+                                        genome: candidates[0].getCopyGenome(),
+                                    });
+
+                                    if (bestCandidate === undefined
+                                        || this.fitnessTest(newTempCandidate) >= this.fitnessTest(bestCandidate)
+                                    ) {
+                                        bestCandidate = newTempCandidate;
                                     }
-                                    else {
-                                        index += 1;
-                                    }
-                                }
-                                resolve(candidates);
-                            });
-                        })
-                        // Save the best into backup
-                        .then(() => {
-                            return new Promise((resolve, reject) => {
-                                let newTempCandidate = new Candidate({
-                                    id: 0,
-                                    tradeDuration: candidates[0].getTradeDuration(),
-                                    capital: candidates[0].getCapital(),
-                                    profit: candidates[0].getProfit(),
-                                    withdrawal: candidates[0].getWithdrawal(),
-                                    generation: candidates[0].getGeneration(),
-                                    genome: candidates[0].getGenome(),
+                                    resolve(bestCandidate);
                                 });
-
-                                if (bestCandidate === undefined
-                                    || this.fitnessTest(newTempCandidate) >= this.fitnessTest(bestCandidate)
-                                ) {
-                                    bestCandidate = newTempCandidate;
+                            })
+                            // Crossover gene
+                            .then(() => {
+                                console.log(`Crossover gene`);
+                                let crossoverPromises = [];
+                                let leftPos = 0;
+                                let savePosition = this.__bestCandidatesCount;
+                                while (leftPos < this.__bestCandidatesCount) {
+                                    let rightPos = leftPos + 1;
+                                    let copyLeftGenome = candidates[leftPos].getCopyGenome();
+                                    while (rightPos < this.__bestCandidatesCount) {
+                                        // Copy genome first then crossover
+                                        candidates[savePosition].setGenome(copyLeftGenome);
+                                        candidates[savePosition + 1].setGenome(candidates[rightPos].getCopyGenome());
+                                        // Crossover
+                                        crossoverPromises
+                                            .push(this
+                                                .crossoverGenome({
+                                                    candidateA: candidates[savePosition],
+                                                    candidateB: candidates[savePosition + 1],
+                                                })
+                                            );
+                                        rightPos += 1;
+                                        // savePosition += 2;
+                                        savePosition += 1;
+                                    }
+                                    leftPos += 1;
                                 }
-                                resolve(bestCandidate);
-                            });
-                        })
-                        // Have to re assign the id so that we save to the right file
-                        .then(() => {
-                            return Promise.all(candidates.map((candidate, index) => {
-                                candidate.setId(index);
-                                console.log(`candidate ${candidate.getId()}, score: ${this.fitnessTest(candidate)}`);
-                            }));
-                        })
-                        // Crossover gene
-                        .then(() => {
-                            console.log(`Crossover gene`);
-                            let crossoverPromises = [];
-                            let leftPos = 0;
-                            let savePosition = this.__bestCandidatesCount;
-                            while (leftPos < this.__bestCandidatesCount) {
-                                let rightPos = leftPos + 1;
-                                while (rightPos < this.__bestCandidatesCount) {
-                                    // Copy genome first then crossover
-                                    candidates[savePosition].setGenome(candidates[leftPos].getGenome());
-                                    candidates[savePosition + 1].setGenome(candidates[rightPos].getGenome());
-                                    // Crossover
-                                    crossoverPromises
-                                        .push(this
-                                            .crossoverGenome({
-                                                candidateA: candidates[savePosition],
-                                                candidateB: candidates[savePosition + 1],
-                                            })
-                                        );
-                                    rightPos += 1;
-                                    // savePosition += 2;
-                                    savePosition += 1;
-                                }
-                                leftPos += 1;
-                            }
 
-                            return Promise
-                                .all(crossoverPromises);
-                                // Remove the parents
-                                // .then(() => {
-                                //     return Array
-                                //         .from({length: this.__bestCandidatesCount}, (_, k) => k)
-                                //         .reduce((promise, index) => promise.then(() => {
-                                //             candidates.push(candidates.shift());
-                                //         }), Promise.resolve());
-                                // });
-                        })
-                        // Re populate new genes
-                        .then(() => {
-                            return Array
-                                .from({length: this.__totalCandidates - this.__bestCandidatesCount - this.__totalChildren}, (_, k) => this.__totalChildren + this.__bestCandidatesCount + k)
-                                .reduce((promise, index) => promise.then(() => {
-                                    candidates[index].setGenome(this.randomGenome({
+                                return Array
+                                    .from({length: crossoverPromises.length}, (_, k) => k)
+                                    .reduce((promise, index) => promise.then(() => {
+                                        return crossoverPromises[index];
+                                    }), Promise.resolve());
+                            })
+                            // Re populate new genes
+                            .then(() => {
+                                let copyGenomeBestCandidate = bestCandidate.getCopyGenome();
+                                return Array
+                                    .from({length: this.__totalCandidates - this.__bestCandidatesCount - this.__totalChildren}, (_, k) => this.__totalChildren + this.__bestCandidatesCount + k)
+                                    .reduce((promise, index) => promise.then(() => {
+                                        candidates[index].setGenome(this.randomGenome({
                                             layers,
                                             numberOfInputs,
                                             seed: copyGenomeBestCandidate,
-                }), Promise.resolve())
-            )
+                                        }));
+                                    }), Promise.resolve())
+                            })
             // Save the candidates
             .then(() => {
                 console.log(`end of generation`);

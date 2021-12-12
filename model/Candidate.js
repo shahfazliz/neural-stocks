@@ -54,6 +54,10 @@ export default class Candidate {
         return this.__genome;
     }
 
+    getCopyGenome() {
+        return JSON.parse(JSON.stringify(this.__genome));
+    }
+
     setGenome(genome) {
         this.__genome = genome;
         return this;
