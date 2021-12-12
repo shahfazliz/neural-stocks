@@ -91,8 +91,5 @@ async function getData(tickerSymbols) {
                     jsonfilepath: './data/universe/universe.json',
                     data: universe.map(world => Object.fromEntries(world)),
                 }));
-        })
-        .catch(error => {
-            console.log(`Error: ${error}`);
         });
 }

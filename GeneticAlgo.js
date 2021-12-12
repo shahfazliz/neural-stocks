@@ -682,8 +682,7 @@ export default class GeneticAlgo {
     }
 }
 
-const algo = new GeneticAlgo();
-algo.run();
+// const algo = new GeneticAlgo();
 // algo
 //     .createUniverse()
 //     .then(universe => console.log(universe))
