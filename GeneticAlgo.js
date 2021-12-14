@@ -437,137 +437,159 @@ export default class GeneticAlgo {
                         .from({ length: this.__totalCandidates }, (_, k) => k)
                         .map(candidateNumber => {
 
-                        numberOfInputs = (universe[0].size * this.__numberOfCandles) + 1; // 1 more is the capital
+                            numberOfInputs = (universe[0].size * this.__numberOfCandles) + 1; // 1 more is the capital
 
-                        return this
-                            .readJSONFileAsCandidate(`./data/candidates/${candidateNumber}.json`)
-                            .then(candidate => {
-                                candidate.reset();
+                            return this
+                                .readJSONFileAsCandidate(`./data/candidates/${candidateNumber}.json`)
+                                .then(candidate => {
+                                    candidate.reset();
 
-                                layers = [...this.__layers, this.__numberOfOutputs];
-                                // If candidate is empty, generate one
-                                if (candidate.isGenomeEmpty()) {
-                                    candidate
-                                        .setId(candidateNumber)
-                                        .setGenome(this.randomGenome({
+                                    layers = [...this.__layers, this.__numberOfOutputs];
+                                    // If candidate is empty, generate one
+                                    if (candidate.isGenomeEmpty()) {
+                                        candidate
+                                            .setId(candidateNumber)
+                                            .setGenome(this.randomGenome({
                                                 layers,
                                                 numberOfInputs,
                                                 seed: copyGenomeBestCandidate,
-
-                                candidates[candidateNumber] = candidate;
-                            });
-                    })
-                )
-            )
-            // Loop generations
-            .then(() => Array
-                .from({ length: this.__maxGenerationCount }, (_, k) => k) // 100 generations
-                .reduce((promise, generationNumber) => promise.then(() => {
-                    
-                    return Array
-                        .from({ length: candidates.length }, (_, k) => k)
-                        .reduce((promise, candidateNumber) => promise.then(() => {
-                            
-                            let candidate = candidates[candidateNumber];
-                            candidate
-                                .reset()
-                                .setGeneration(generationNumber);
-
-                            // Run the candidates
-                            return Array
-                                .from({ length: universe.length - this.__numberOfCandles }, (_, k) => k)
-                                .reduce((promise, dayNumber) => promise.then(() => {
-                                    console.log('------------------------------------------------');
-                                    console.log(`Generation: ${generationNumber}, Candidate: ${candidateNumber}, Day: ${dayNumber}`);
-                                    console.log('------------------------------------------------');
-                                    
-                                    // Only trade on Monday, Wednesday, and Friday
-                                    let tomorrow = universe[dayNumber].get('Day');
-                                    if (candidate.getCapital() > 0
-                                        && (tomorrow === 1
-                                            || tomorrow === 3
-                                            || tomorrow === 5)
-                                    ) {
-                                        // Get 50 candles as input set from universe
-                                        let inputSet = universe
-                                            .slice(dayNumber, dayNumber + this.__numberOfCandles)
-                                            .reduce((acc, map) => {
-                                                let valueIterator = map.values();
-                                                let value = valueIterator.next().value;
-                                                while (value !== undefined) {
-                                                    acc.push(value);
-                                                    value = valueIterator.next().value;
-                                                }
-                                                return acc;
-                                            }, []);
-
-                                        // Add capital as part of decision making
-                                        inputSet.unshift(candidate.getCapital());
-
-                                        // Execute candidate
-                                        let output = this.runCandidate({
-                                            id: candidate.getId(),
-                                            genome: candidate.getGenome(),
-                                            input: inputSet,
-                                            layers,
-                                        });
-
-                                        let sumOfOutputs = output.reduce((acc, val) => acc + val);
-                                        console.log(`Output: ${JSON.stringify(output.map(val => val / sumOfOutputs || 0), undefined, 4)}`);
-                                        
-                                        let originalCapital = candidate.getCapital();
-
-                                        let profit = this
-                                            .getListTickersOfInterest()
-                                            .reduce((profit, tickerSymbol, tickerSymbolIndex) => {
-                                                return profit + candidate.executeTrade({
-                                                    model: output,
-                                                    modelIndex: tickerSymbolIndex,
-                                                    perTradeComission: this.__costOfTrade,
-                                                    perTradeReward: this.__reward,
-                                                    priceCloseToday: universe[dayNumber + this.__numberOfCandles].get(`${tickerSymbol}_ClosePrice`),
-                                                    priceExpectedMove: universe[dayNumber + this.__numberOfCandles - 1].get(`${tickerSymbol}_StandardDeviation`),
-                                                    tickerSymbol,
-                                                });
-                                            }, 0);
-
-                                        // Record total profits so far
-                                        candidate.setProfit(candidate.getProfit() + profit);
-                                        console.log(`Total profit/loss: ${MathFn.currency(profit)} from ${originalCapital} capital`);
-
-                                        // Update capital
-                                        candidate.setCapital(originalCapital + profit);
-
-                                        // Every month trade withdraw
-                                        if (universe[dayNumber + this.__numberOfCandles].get('Month') !== universe[dayNumber + this.__numberOfCandles - 1].get('Month')) {
-                                            let withdrawal = MathFn.currency(candidate.getCapital() - 1000);
-
-                                            if (withdrawal > 0) {
-                                                console.log(`Withdrawal: ${withdrawal}`);
-                                                candidate.setCapital(candidate.getCapital() - withdrawal);
-                                                candidate.setWithdrawal(candidate.getWithdrawal() + withdrawal);
-                                            }
-                                            else {
-                                                console.log(`Withdrawal: 0`);
-                                            }
-                                        }
-
-                                        candidate.setTradeDuration(dayNumber);
-                                        console.log(`Score: ${this.fitnessTest(candidate)}`);
+                                            }));
                                     }
-                                }), Promise.resolve());
-                        }), Promise.resolve())
-                        // Fitness test, then sort by best first
-                        .then(() => {
-                            console.log(`Fitness test`);
-                            return Promise.resolve(candidates.sort((candidateA, candidateB) => {
-                                console.log(`Sorting...`);
-                                return this.fitnessTest(candidateB) - this.fitnessTest(candidateA)
-                            }));
+
+                                    candidates[candidateNumber] = candidate;
+                                });
                         })
-                        // Move the same fitnessTest result to the back. We will only propogate new solution
-                        .then(() => {
-                            return new Promise((resolve, reject) => {
+                    );
+            })
+            // Loop generations
+            .then(() => {
+                const numberOfTradingDays = universe.length - this.__numberOfCandles;
+
+                return Array
+                    .from({ length: this.__maxGenerationCount }, (_, k) => k) // 100 generations
+                    .reduce((promise, generationNumber) => promise.then(() => {
+
+                        const suitableBestCandidateCount = [2, 3, 4];
+                        this.__bestCandidatesCount = suitableBestCandidateCount[(suitableBestCandidateCount.indexOf(this.__bestCandidatesCount) + 1) % suitableBestCandidateCount.length];
+                    
+                        return Array
+                            .from({ length: candidates.length }, (_, k) => k)
+                            .reduce((promise, candidateNumber) => promise.then(() => {
+                            
+                                let candidate = candidates[candidateNumber];
+                                candidate
+                                    .reset()
+                                    .setGeneration(generationNumber);
+
+                                // Run the candidates
+                                return Array
+                                    .from({ length: numberOfTradingDays }, (_, k) => k)
+                                    .reduce((promise, dayNumber) => promise.then(() => {
+                                        // Only trade on Monday, Wednesday, and Friday
+                                        let tomorrow = universe[dayNumber].get('Day');
+                                        if (candidate.getCapital() > 0
+                                            && (tomorrow === 1
+                                                || tomorrow === 3
+                                                || tomorrow === 5)
+                                        ) {
+                                            console.log('------------------------------------------------');
+                                            console.log(`Generation: ${generationNumber}, Candidate: ${candidateNumber}, Day: ${dayNumber}/${numberOfTradingDays}`);
+                                            console.log('------------------------------------------------');
+                                            
+                                            // Get 50 candles as input set from universe
+                                            let inputSet = universe
+                                                .slice(dayNumber, dayNumber + this.__numberOfCandles)
+                                                .reduce((acc, map) => {
+                                                    let valueIterator = map.values();
+                                                    let value = valueIterator.next().value;
+                                                    while (value !== undefined) {
+                                                        acc.push(value);
+                                                        value = valueIterator.next().value;
+                                                    }
+                                                    return acc;
+                                                }, []);
+
+                                            // Add capital as part of decision making
+                                            inputSet.unshift(candidate.getCapital());
+
+                                            // Execute candidate
+                                            let output = this.runCandidate({
+                                                id: candidate.getId(),
+                                                genome: candidate.getGenome(),
+                                                input: inputSet,
+                                                layers,
+                                            });
+
+                                            let sumOfOutputs = output.reduce((acc, val) => acc + val);
+                                            console.log(`Output: ${JSON.stringify(output.map(val => val / sumOfOutputs || 0), undefined, 4)}`);
+
+                                            let originalCapital = candidate.getCapital();
+
+                                            let profit = this
+                                                .getListTickersOfInterest()
+                                                .reduce((profit, tickerSymbol, tickerSymbolIndex) => {
+                                                    return profit + candidate.executeTrade({
+                                                        model: output,
+                                                        modelIndex: tickerSymbolIndex,
+                                                        perTradeComission: this.__costOfTrade,
+                                                        perTradeReward: this.__reward,
+                                                        priceCloseToday: universe[dayNumber + this.__numberOfCandles].get(`${tickerSymbol}_ClosePrice`),
+                                                        priceExpectedMove: universe[dayNumber + this.__numberOfCandles - 1].get(`${tickerSymbol}_StandardDeviation`),
+                                                        tickerSymbol,
+                                                    });
+                                                }, 0);
+
+                                            // Record total profits so far
+                                            candidate.setProfit(candidate.getProfit() + profit);
+                                            console.log(`Total profit/loss: ${MathFn.currency(profit)} from ${originalCapital} capital`);
+
+                                            // Update capital
+                                            candidate.setCapital(originalCapital + profit);
+
+                                            // Every month trade withdraw
+                                            if (universe[dayNumber + this.__numberOfCandles].get('Month') !== universe[dayNumber + this.__numberOfCandles - 1].get('Month')) {
+                                                let withdrawal = MathFn.currency(candidate.getCapital() - 1000);
+
+                                                if (withdrawal > 0) {
+                                                    console.log(`Withdrawal: ${withdrawal}`);
+                                                    candidate.setCapital(candidate.getCapital() - withdrawal);
+                                                    candidate.setWithdrawal(candidate.getWithdrawal() + withdrawal);
+                                                }
+                                                else {
+                                                    console.log(`Withdrawal: 0`);
+                                                }
+                                            }
+
+                                            candidate.setTradeDuration(dayNumber);
+                                            console.log(`Score: ${this.fitnessTest(candidate)}`);
+                                        }
+                                    }), Promise.resolve());
+                            }), Promise.resolve())
+                            // Fitness test, then sort by best first
+                            .then(() => {
+                                console.log(`Fitness test`);
+                                return Promise.resolve(candidates.sort((candidateA, candidateB) => {
+                                    console.log(`Sorting...`);
+                                    return this.fitnessTest(candidateB) - this.fitnessTest(candidateA)
+                                }));
+                            })
+                            // Move the same fitnessTest result to the back. We will only propogate new solution
+                            .then(() => {
+                                return new Promise((resolve, reject) => {
+                                    let index = 0;
+                                    while (index < this.__bestCandidatesCount + this.__totalChildren - 1) {
+                                        if (this.fitnessTest(candidates[index]) === this.fitnessTest(candidates[index + 1])) {
+                                            let tempCandidate = candidates[index];
+                                            candidates.splice(index, 1);
+                                            candidates.push(tempCandidate);
+                                        }
+                                        else {
+                                            index += 1;
+                                        }
+                                    }
+                                    resolve(candidates);
+                                });
+                            })
                             // Save the best into backup
                             .then(() => {
                                 return new Promise((resolve, reject) => {
