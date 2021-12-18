@@ -86,10 +86,10 @@ export default class Candlestick {
         return this.__n;
     }
     getDay() {
-        return new MomentAdaptor(this.__timestamp, 'YYYY-MM-DD').day();
+        return new MomentAdaptor(this.__timestamp, 'YYYY-MM-DD').day() / 10; // Make the number smaller than 1
     }
     getMonth() {
-        return new MomentAdaptor(this.__timestamp, 'YYYY-MM-DD').month();
+        return new MomentAdaptor(this.__timestamp, 'YYYY-MM-DD').month() / 100; // Make the number smaller than 1
     }
 
     getStandardDeviation() {

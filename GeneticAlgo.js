@@ -552,8 +552,8 @@ export default class GeneticAlgo {
                                             candidate.setCapital(originalCapital + profit);
 
                                             // Every month trade withdraw
-                                            if (universe[dayNumber + this.__numberOfCandles].get('Month') !== universe[dayNumber + this.__numberOfCandles - 1].get('Month')) {
-                                                let withdrawal = MathFn.currency(candidate.getCapital() - 1000);
+                                            if (candidate.getTradeDuration() % 12 === 1) { // 12 trading days a month
+                                                let withdrawal = MathFn.currency(candidate.getCapital() - candidate.getInitialCapital());
 
                                                 if (withdrawal > 0) {
                                                     console.log(`Withdrawal: ${withdrawal}`);
@@ -565,7 +565,7 @@ export default class GeneticAlgo {
                                                 }
                                             }
 
-                                            candidate.setTradeDuration(dayNumber);
+                                            candidate.setTradeDuration(candidate.getTradeDuration() + 1);
                                             console.log(`Score: ${this.fitnessTest(candidate)}`);
                                         }
                                     }), Promise.resolve());
