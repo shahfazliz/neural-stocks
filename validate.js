@@ -14,7 +14,9 @@ algo
     .then(c => candidate = c)
     .then(() => {
         
-        candidate.reset();
+        candidate
+            .reset()
+            .setInitialCapital(algo.__initialCapital);
 
         layers = [...algo.__layers, algo.__numberOfOutputs];
         // Run the candidates
@@ -23,7 +25,7 @@ algo
             .reduce((promise, dayNumber) => promise.then(() => {
                 // Only trade on Monday, Wednesday, and Friday
                 let tomorrow = universe[dayNumber].get('Day');
-                if (candidate.getCapital() >= 1000
+                if (candidate.getCapital() >= candidate.getInitialCapital()
                     && (tomorrow === 1
                         || tomorrow === 3
                         || tomorrow === 5)
@@ -56,8 +58,9 @@ algo
                         layers,
                     });
 
-                    let sumOfOutputs = output.reduce((acc, val) => acc + val);
-                    console.log(`Output: ${JSON.stringify(output.map(val => val / sumOfOutputs || 0), undefined, 4)}`);
+                    // let sumOfOutputs = output.reduce((acc, val) => acc + val);
+                    // console.log(`Output: ${JSON.stringify(output.map(val => val / sumOfOutputs || 0), undefined, 4)}`);
+                    console.log(`Output: ${JSON.stringify(output, undefined, 4)}`);
 
                     let originalCapital = candidate.getCapital();
 
@@ -83,8 +86,8 @@ algo
                     candidate.setCapital(originalCapital + profit);
 
                     // Every month trade withdraw
-                    if (universe[dayNumber + algo.__numberOfCandles].get('Month') !== universe[dayNumber + algo.__numberOfCandles - 1].get('Month')) {
-                        let withdrawal = MathFn.currency(candidate.getCapital() - 1000);
+                    if (candidate.getTradeDuration() % 12 === 1) { // 12 trading days a month
+                        let withdrawal = MathFn.currency(candidate.getCapital() - candidate.getInitialCapital());
 
                         if (withdrawal > 0) {
                             console.log(`Withdrawal: ${withdrawal}`);
@@ -96,7 +99,7 @@ algo
                         }
                     }
 
-                    candidate.setTradeDuration(dayNumber);
+                    candidate.setTradeDuration(candidate.getTradeDuration() + 1);
                     console.log(`Score: ${algo.fitnessTest(candidate)}`);
                 }
             }), Promise.resolve());

@@ -108,6 +108,15 @@ export default class Candidate {
         return this;
     }
 
+    getInitialCapital() {
+        return this.__initialCapital;
+    }
+
+    setInitialCapital(capital) {
+        this.__initialCapital = capital;
+        return this;
+    } 
+
     toString() {
         return JSON.stringify({
             id: this.getId(),
