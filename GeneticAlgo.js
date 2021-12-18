@@ -442,13 +442,16 @@ export default class GeneticAlgo {
                             return this
                                 .readJSONFileAsCandidate(`./data/candidates/${candidateNumber}.json`)
                                 .then(candidate => {
-                                    candidate.reset();
+                                    candidate
+                                        .reset()
+                                        .setInitialCapital(this.__initialCapital);
 
                                     layers = [...this.__layers, this.__numberOfOutputs];
                                     // If candidate is empty, generate one
                                     if (candidate.isGenomeEmpty()) {
                                         candidate
                                             .setId(candidateNumber)
+                                            .setInitialCapital(this.__initialCapital)
                                             .setGenome(this.randomGenome({
                                                 layers,
                                                 numberOfInputs,
@@ -465,6 +468,7 @@ export default class GeneticAlgo {
             .then(() => {
                 const numberOfTradingDays = universe.length - this.__numberOfCandles;
 
+                // Loop generations
                 return Array
                     .from({ length: this.__maxGenerationCount }, (_, k) => k) // 100 generations
                     .reduce((promise, generationNumber) => promise.then(() => {
@@ -472,6 +476,7 @@ export default class GeneticAlgo {
                         const suitableBestCandidateCount = [2, 3, 4];
                         this.__bestCandidatesCount = suitableBestCandidateCount[(suitableBestCandidateCount.indexOf(this.__bestCandidatesCount) + 1) % suitableBestCandidateCount.length];
                     
+                        // Loop candidates
                         return Array
                             .from({ length: candidates.length }, (_, k) => k)
                             .reduce((promise, candidateNumber) => promise.then(() => {
@@ -481,13 +486,13 @@ export default class GeneticAlgo {
                                     .reset()
                                     .setGeneration(generationNumber);
 
-                                // Run the candidates
+                                // Loop trading days by running the candidate
                                 return Array
                                     .from({ length: numberOfTradingDays }, (_, k) => k)
                                     .reduce((promise, dayNumber) => promise.then(() => {
                                         // Only trade on Monday, Wednesday, and Friday
                                         let tomorrow = universe[dayNumber].get('Day');
-                                        if (candidate.getCapital() > 0
+                                        if (candidate.getCapital() >= candidate.getInitialCapital()
                                             && (tomorrow === 1
                                                 || tomorrow === 3
                                                 || tomorrow === 5)
