@@ -185,7 +185,7 @@ export default class GeneticAlgo {
     }
 
     randomWeight() {
-        return Math.random() * 0.02 - 0.01;
+        return MathFn.precision(MathFn.randomFloat(-1, 1));
     }
 
     /**
@@ -200,8 +200,8 @@ export default class GeneticAlgo {
                 // Direct access to the private attibute (genome) to save memory space
                 let minimumGenomeLength = candidateA.__genome[index].length;
 
-                let startSplice = Math.floor(Math.random() * minimumGenomeLength);
-                let numberOfGenesToCross = Math.ceil(Math.random() * (minimumGenomeLength - startSplice));
+                let startSplice = MathFn.randomInt(0, minimumGenomeLength - 1);
+                let numberOfGenesToCross = MathFn.randomInt(0, minimumGenomeLength - startSplice - 1);
 
                 let candidateBGenome = candidateB
                     .__genome[index]
@@ -224,8 +224,8 @@ export default class GeneticAlgo {
      */
     mutateGenome(candidate) {
         // Direct access to the private attibute (genome) to save memory space
-        let nodePos = Math.floor(Math.random() * candidate.__genome.length);
-        let startSpliceWeight = Math.floor(Math.random() * candidate.__genome[nodePos].length);
+        let nodePos = MathFn.randomInt(0, candidate.__genome.length - 1);
+        let startSpliceWeight = MathFn.randomInt(0, candidate.__genome[nodePos].length - 1);
         candidate
             .__genome[nodePos]
             .splice(startSpliceWeight, 1, this.randomWeight());
