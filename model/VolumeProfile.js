@@ -84,3 +84,6 @@ export default class VolumeProfile {
 //     .then(() => test
 //         .init('QQQ')
 //         .then(() => console.log(test.getVolumeProfile('408.71'))));
+
+// const test = new VolumeProfile();
+// test.reCreateVolumeProfile('QQQ');
