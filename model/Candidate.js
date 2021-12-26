@@ -9,6 +9,7 @@ export default class Candidate {
     __withdrawal = 0;
     __generation = 0;
     __initialCapital = 1000;
+    __coefficient = 1; // 0.4654;
 
     constructor({
         id = 0,
@@ -141,8 +142,7 @@ export default class Candidate {
     }
 
     executeTrade({
-        model,
-        modelIndex,
+        risk,
         perTradeComission,
         perTradeReward,
         priceCloseToday,
@@ -150,40 +150,45 @@ export default class Candidate {
         tickerSymbol,
     }) {
         let profit = 0;
-        const sumOfModelOutput = model.reduce((acc, val) => acc + val);
         
         // Long
-        let availableCapital = this.getCapital();
-        let risk = (model[modelIndex * 2] / sumOfModelOutput) || 0;
-        // let risk = model[modelIndex * 2];
-        let capitalToUse = availableCapital * risk;
+        let capitalToUse = risk[0];
         let costOfTradeLong = capitalToUse > 0 
             ? perTradeComission
             : 0;
         let rewardLong = capitalToUse * perTradeReward - costOfTradeLong;
         let long = -priceExpectedMove < priceCloseToday
-            ? MathFn.currency(rewardLong)
-            : MathFn.currency(rewardLong - capitalToUse);    
-        this.setCapital(availableCapital - capitalToUse);
-        console.log(`  profit long ${tickerSymbol}: ${long}`);
+            ? MathFn.currency(rewardLong / this.__coefficient)
+            : MathFn.currency((rewardLong - capitalToUse) * this.__coefficient);    
+        console.log(`  profit ${tickerSymbol}:`);
+        console.log(`    long  trade risking ${capitalToUse} = ${long}`)
         profit += long;
         
         // Short
-        availableCapital = this.getCapital();
-        risk = (model[modelIndex * 2 + 1] / sumOfModelOutput) || 0;
-        // risk = model[modelIndex * 2 + 1];
-        capitalToUse = availableCapital * risk;
+        capitalToUse = risk[1];
         let costOfTradeShort = capitalToUse > 0 
             ? perTradeComission
             : 0;
         let rewardShort = capitalToUse * perTradeReward - costOfTradeShort;
         let short = priceExpectedMove > priceCloseToday
-            ? MathFn.currency(rewardShort)
-            : MathFn.currency(rewardShort - capitalToUse);
-        this.setCapital(availableCapital - capitalToUse);
-        console.log(`  profit short ${tickerSymbol}: ${short}`);
+            ? MathFn.currency(rewardShort / this.__coefficient)
+            : MathFn.currency((rewardShort - capitalToUse) * this.__coefficient);
+        console.log(`    short trade risking ${capitalToUse} = ${short}`);
         profit += short;
 
         return profit;
+    }
+
+    executeWithdrawal() {
+        let withdrawal = MathFn.currency((this.getCapital() - this.getInitialCapital()) * this.__coefficient);
+
+        if (withdrawal > 0) {
+            console.log(`Withdrawal: ${withdrawal}`);
+            this.setCapital(this.getCapital() - withdrawal);
+            this.setWithdrawal(this.getWithdrawal() + withdrawal);
+        }
+        else {
+            console.log(`Withdrawal: 0`);
+        }
     }
 }

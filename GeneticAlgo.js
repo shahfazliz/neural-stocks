@@ -423,17 +423,29 @@ export default class GeneticAlgo {
                                                 layers,
                                             });
 
-                                            let sumOfOutputs = output.reduce((acc, val) => acc + val);
-                                            console.log(`Output: ${JSON.stringify(output.map(val => val / sumOfOutputs || 0), undefined, 4)}`);
+                                            console.log(`Output: ${JSON.stringify(output, undefined, 4)}`);
 
-                                            let originalCapital = candidate.getCapital();
+                                            // Calculate capital to risk based on the output
+                                            let currentCapitalToTrade = candidate.getCapital();
+                                            let sumOfRisk = 0;
+                                            let balanceLeftToRisk = currentCapitalToTrade;
+                                            
+                                            let capitalToRisk = output.map(percent => {
+                                                let proposedToRisk = MathFn.currency(currentCapitalToTrade * percent);
+                                                let risk = balanceLeftToRisk >= proposedToRisk
+                                                    ? proposedToRisk
+                                                    : MathFn.currency(balanceLeftToRisk);
+                                                sumOfRisk += risk;
+                                                balanceLeftToRisk = currentCapitalToTrade - sumOfRisk;
+                                                
+                                                return risk;
+                                            });
 
                                             let profit = this
                                                 .getListTickersOfInterest()
                                                 .reduce((profit, tickerSymbol, tickerSymbolIndex) => {
                                                     return profit + candidate.executeTrade({
-                                                        model: output,
-                                                        modelIndex: tickerSymbolIndex,
+                                                        risk: [capitalToRisk[tickerSymbolIndex * 2], capitalToRisk[tickerSymbolIndex * 2 + 1]],
                                                         perTradeComission: this.__costOfTrade,
                                                         perTradeReward: this.__reward,
                                                         priceCloseToday: universe[dayNumber + this.__numberOfCandles].get(`${tickerSymbol}_ClosePrice`),
@@ -444,23 +456,14 @@ export default class GeneticAlgo {
 
                                             // Record total profits so far
                                             candidate.setProfit(candidate.getProfit() + profit);
-                                            console.log(`Total profit/loss: ${MathFn.currency(profit)} from ${originalCapital} capital`);
+                                            console.log(`Total profit/loss: ${MathFn.currency(profit)} from ${currentCapitalToTrade} capital`);
 
                                             // Update capital
-                                            candidate.setCapital(originalCapital + profit);
+                                            candidate.setCapital(currentCapitalToTrade + profit);
 
                                             // Every month trade withdraw
                                             if (candidate.getTradeDuration() % 12 === 1) { // 12 trading days a month
-                                                let withdrawal = MathFn.currency(candidate.getCapital() - candidate.getInitialCapital());
-
-                                                if (withdrawal > 0) {
-                                                    console.log(`Withdrawal: ${withdrawal}`);
-                                                    candidate.setCapital(candidate.getCapital() - withdrawal);
-                                                    candidate.setWithdrawal(candidate.getWithdrawal() + withdrawal);
-                                                }
-                                                else {
-                                                    console.log(`Withdrawal: 0`);
-                                                }
+                                                candidate.executeWithdrawal();
                                             }
 
                                             console.log(`Score: ${this.fitnessTest(candidate)}`);
