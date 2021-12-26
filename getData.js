@@ -1,10 +1,10 @@
 import AlpacaAPI from './resource/AlpacaAPI.js';
 import App from './app.js';
 import ArrayFn from './util/ArrayFn.js';
-import FileService from './util/FileService.js';
-import GeneticAlgo from './GeneticAlgo.js';
-import MomentAdaptor from './util/MomentAdaptor.js';
 import CollectionService from './resource/CollectionService.js';
+import FileService from './util/FileService.js';
+import MomentAdaptor from './util/MomentAdaptor.js';
+import Universe from './model/Universe.js';
 
 const alpacaAPI = new AlpacaAPI();
 const app = new App();
@@ -84,8 +84,8 @@ async function getData(tickerSymbols) {
                 .then(() => alpacaAPI.recordInvalidTickerSymbol());
         })
         .then(() => {
-            const algo = new GeneticAlgo();
-            return algo
+            const universe = new Universe();
+            return universe
                 .createUniverse()
                 .then(universe => fileService.writeToJSONFile({
                     jsonfilepath: './data/universe/universe.json',
