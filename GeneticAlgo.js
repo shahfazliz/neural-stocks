@@ -101,18 +101,21 @@ export default class GeneticAlgo {
 
             // Sum all multiplication with weights
             let result = 0;
-            for (let j = 0; j < model[i].length; j++) {
-                // console.log(`model[${layerNumber} - 1 + ${j}]: ${model[layerNumber - 1 + j]}`)
+            for (let j = 0; j < model[i].length - 1; j++) { // -1 to exclude bias
                 result += model[i][j] * model[layerNumber - 1 + j]; // weight * input
             }
+
+            // Add bias
+            result += model[i][model[i].length - 1];
 
             // Determine if current node is in output layer
             const isOutputLayer = layerNumber === layers.length;
 
             // Apply activation function and save result
-            model[i] = isOutputLayer
-                ? this.sigmoid(result)
-                : result; // this.swish(result);
+            // model[i] = isOutputLayer
+            //     ? this.sigmoid(result)
+            //     : result; // this.swish(result);
+            model[i] = this.sigmoid(result);
 
             // Save the output node number
             if (isOutputLayer && outputNode === undefined) {
@@ -122,7 +125,8 @@ export default class GeneticAlgo {
 
         // Only return the output nodes, remove the rest to save memory space
         model.splice(0, outputNode);
-        return model;
+
+        return model.map(val => MathFn.precision(val));
     }
 
     swish(val) {
@@ -167,7 +171,7 @@ export default class GeneticAlgo {
             Array.from(
                 { length: numberOfNode },
                 () => Array.from(
-                    { length: numberOfWeightsPerNode },
+                    { length: numberOfWeightsPerNode + 1 }, // +1 for bias
                     () => this.randomWeight()
                 )
             ).forEach(val => weights.push(val));
@@ -175,8 +179,10 @@ export default class GeneticAlgo {
 
         if (seed && seed.length > 0) {
             console.log('with seed');
-            for (let index = 0; index < weights.length; index += 2) {
-                weights[index] = seed[index];
+            for (let i = 0; i < weights.length; i++) {
+                for (let j = MathFn.randomInt(0, 1); j < weights[i].length; j += 2) {
+                    weights[i][j] = seed[i][j];
+                }
             }
         }
 
