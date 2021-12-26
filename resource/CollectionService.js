@@ -41,4 +41,17 @@ export default class CollectionService {
                     });
             });
     }
+
+    /**
+     * Read from json file as Universe
+     */
+     readJSONFileAsUniverse(jsonfilepath) {
+        return fileService
+            .readJSONFile(jsonfilepath)
+            .then(json => {
+                console.log(`Reading from ${jsonfilepath} to Universe`);
+                // console.log(JSON.parse(json));
+                return json.map(world => new Map(Object.entries(world)));
+            });
+    }
 }

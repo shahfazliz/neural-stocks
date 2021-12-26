@@ -7,7 +7,8 @@ let candidate;
 const candidateNumber = 0;
 
 const algo = new GeneticAlgo();
-algo
+const collectionService = new CollectionService();
+collectionService
     .readJSONFileAsUniverse('./data/universe/universe.json')
     .then(u => universe = u)
     .then(() => algo.readJSONFileAsCandidate(`./data/backup/${candidateNumber}.json`))
