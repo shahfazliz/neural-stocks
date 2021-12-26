@@ -11,10 +11,11 @@ const collectionService = new CollectionService();
 collectionService
     .readJSONFileAsUniverse('./data/universe/universe.json')
     .then(u => universe = u)
-    .then(() => algo.readJSONFileAsCandidate(`./data/backup/${candidateNumber}.json`))
+    .then(() => algo.readJSONFileAsCandidate(`./data/candidates/${candidateNumber}.json`))
     .then(c => candidate = c)
     .then(() => {
-        
+        const numberOfTradingDays = universe.length - algo.__numberOfCandles;
+
         candidate
             .reset()
             .setInitialCapital(algo.__initialCapital);
@@ -22,17 +23,17 @@ collectionService
         layers = [...algo.__layers, algo.__numberOfOutputs];
         // Run the candidates
         return Array
-            .from({ length: universe.length - algo.__numberOfCandles }, (_, k) => k)
+            .from({ length: numberOfTradingDays }, (_, k) => k)
             .reduce((promise, dayNumber) => promise.then(() => {
                 // Only trade on Monday, Wednesday, and Friday
-                let tomorrow = universe[dayNumber].get('Day');
+                let tomorrow = universe[dayNumber + algo.__numberOfCandles].get('Day');
                 if (candidate.getCapital() >= candidate.getInitialCapital()
-                    && (tomorrow === 1
-                        || tomorrow === 3
-                        || tomorrow === 5)
+                    && (tomorrow === 0.1
+                        || tomorrow === 0.3
+                        || tomorrow === 0.5)
                 ) {
                     console.log('------------------------------------------------');
-                    console.log(`Candidate: ${candidateNumber}, Day: ${dayNumber}`);
+                    console.log(`Candidate: ${candidateNumber}, Day: ${dayNumber}/${numberOfTradingDays}`);
                     console.log('------------------------------------------------');
                     
                     // Get 50 candles as input set from universe
@@ -100,9 +101,9 @@ collectionService
                         }
                     }
 
-                    candidate.setTradeDuration(candidate.getTradeDuration() + 1);
                     console.log(`Score: ${algo.fitnessTest(candidate)}`);
                 }
+                candidate.setTradeDuration(candidate.getTradeDuration() + 1);
             }), Promise.resolve());
     })
     .then(() => {

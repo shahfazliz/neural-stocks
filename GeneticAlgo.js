@@ -383,11 +383,11 @@ export default class GeneticAlgo {
                                     .from({ length: numberOfTradingDays }, (_, k) => k)
                                     .reduce((promise, dayNumber) => promise.then(() => {
                                         // Only trade on Monday, Wednesday, and Friday
-                                        let tomorrow = universe[dayNumber].get('Day');
+                                        let tomorrow = universe[dayNumber + this.__numberOfCandles].get('Day');
                                         if (candidate.getCapital() >= candidate.getInitialCapital()
-                                            && (tomorrow === 1
-                                                || tomorrow === 3
-                                                || tomorrow === 5)
+                                            && (tomorrow === 0.1
+                                                || tomorrow === 0.3
+                                                || tomorrow === 0.5)
                                         ) {
                                             console.log('------------------------------------------------');
                                             console.log(`Generation: ${generationNumber}, Candidate: ${candidateNumber}, Day: ${dayNumber}/${numberOfTradingDays}`);
@@ -457,9 +457,9 @@ export default class GeneticAlgo {
                                                 }
                                             }
 
-                                            candidate.setTradeDuration(candidate.getTradeDuration() + 1);
                                             console.log(`Score: ${this.fitnessTest(candidate)}`);
                                         }
+                                        candidate.setTradeDuration(candidate.getTradeDuration() + 1);
                                     }), Promise.resolve());
                             }), Promise.resolve())
                             // Fitness test, then sort by best first
