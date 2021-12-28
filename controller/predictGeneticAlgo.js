@@ -1,22 +1,22 @@
-import AlpacaAPI from './resource/AlpacaAPI.js';
-import App from './app.js';
-import Candlestick from './model/Candlestick.js';
-import CollectionService from './resource/CollectionService.js';
-import GeneticAlgo from './GeneticAlgo.js';
-import VolumeProfile from './model/VolumeProfile.js';
-import MathFn from './util/MathFn.js';
+import AlpacaAPI from '../resource/AlpacaAPI.js';
+import App from '../app.js';
+import Candlestick from '../model/Candlestick.js';
+import CollectionService from '../resource/CollectionService.js';
+import GeneticAlgo from '../GeneticAlgo.js';
+import MathFn from '../util/MathFn.js';
+import VolumeProfile from '../model/VolumeProfile.js';
 
 const alpacaAPI = new AlpacaAPI();
 const app = new App();
 const collectionService = new CollectionService();
+const algo = new GeneticAlgo();
 
 let universe;
 let layers;
 let candidate;
 const candidateNumber = 0;
 
-const algo = new GeneticAlgo();
-algo
+collectionService
     .readJSONFileAsUniverse('./data/universe/universe.json')
     .then(u => universe = u)
     // get data to update universe
@@ -88,93 +88,93 @@ algo
                     map.set(`${tickerSymbol}_StandardDeviation`, candlestick.getStandardDeviation());
                 });
                 universe.push(map);
-            })
-            // .then(() => console.log(universe[universe.length - 1]))
+            });
+            // .then(() => console.log(universe[universe.length - 1]));
     })
-.then(() => algo.readJSONFileAsCandidate(`./data/backup/${candidateNumber}.json`))
-.then(c => candidate = c)
-// Predict today
-.then(() => {
-    candidate.reset();
+    .then(() => algo.readJSONFileAsCandidate(`./data/backup/${candidateNumber}.json`))
+    .then(c => candidate = c)
+    // Predict today
+    .then(() => {
+        candidate.reset();
 
-    layers = [...algo.__layers, algo.__numberOfOutputs];
-    // Get 50 candles as input set from universe
-    let inputSet = universe
-        .slice(universe.length - algo.__numberOfCandles - 1, universe.length - 1)
-        .reduce((acc, map) => {
-            let valueIterator = map.values();
-            let value = valueIterator.next().value;
-            while (value !== undefined) {
-                acc.push(value);
-                value = valueIterator.next().value;
-            }
-            return acc;
-        }, []);
+        layers = [...algo.__layers, algo.__numberOfOutputs];
+        // Get 50 candles as input set from universe
+        let inputSet = universe
+            .slice(universe.length - algo.__numberOfCandles - 1, universe.length - 1)
+            .reduce((acc, map) => {
+                let valueIterator = map.values();
+                let value = valueIterator.next().value;
+                while (value !== undefined) {
+                    acc.push(value);
+                    value = valueIterator.next().value;
+                }
+                return acc;
+            }, []);
 
-    // Add capital as part of decision making
-    inputSet.unshift(candidate.getCapital());
+        // Add capital as part of decision making
+        inputSet.unshift(candidate.getCapital());
 
-    // Execute candidate
-    let output = algo.runCandidate({
-        id: candidate.getId(),
-        genome: candidate.getGenome(),
-        input: inputSet,
-        layers,
+        // Execute candidate
+        let output = algo.runCandidate({
+            id: candidate.getId(),
+            genome: candidate.getGenome(),
+            input: inputSet,
+            layers,
+        });
+
+        console.log('Today:');
+        let sumOfOutputs = output.reduce((acc, val) => acc + val) - output[output.length - 1];
+        [
+            'Long SPY',
+            'Short SPY',
+            'Long QQQ',
+            'Short QQQ',
+            'Long IWM',
+            'Short IWM',
+        ].forEach((string, index) => {
+            console.log(`${string}: ${MathFn.currency(output[index] / sumOfOutputs)}`);
+        });
+    })
+    // Predict tomorrow
+    .then(() => {
+        candidate.reset();
+
+        layers = [...algo.__layers, algo.__numberOfOutputs];
+        // Get 50 candles as input set from universe
+        let inputSet = universe
+            .slice(universe.length - algo.__numberOfCandles)
+            .reduce((acc, map) => {
+                let valueIterator = map.values();
+                let value = valueIterator.next().value;
+                while (value !== undefined) {
+                    acc.push(value);
+                    value = valueIterator.next().value;
+                }
+                return acc;
+            }, []);
+
+        // Add capital as part of decision making
+        inputSet.unshift(candidate.getCapital());
+
+        // Execute candidate
+        let output = algo.runCandidate({
+            id: candidate.getId(),
+            genome: candidate.getGenome(),
+            input: inputSet,
+            layers,
+        });
+
+        console.log('Tomorrow:');
+        let sumOfOutputs = output.reduce((acc, val) => acc + val) - output[output.length - 1];
+        [
+            'Long SPY',
+            'Short SPY',
+            'Long QQQ',
+            'Short QQQ',
+            'Long IWM',
+            'Short IWM',
+        ].forEach((string, index) => {
+            console.log(`${string}: ${MathFn.currency(output[index] / sumOfOutputs)}`);
+        });
+        console.log(`Withdraw: ${MathFn.currency(output[output.length - 1])}`);
     });
-
-    console.log('Today:');
-    let sumOfOutputs = output.reduce((acc, val) => acc + val) - output[output.length - 1];
-    [
-        'Long SPY',
-        'Short SPY',
-        'Long QQQ',
-        'Short QQQ',
-        'Long IWM',
-        'Short IWM',
-    ].forEach((string, index) => {
-        console.log(`${string}: ${MathFn.currency(output[index] / sumOfOutputs)}`);
-    });
-})
-// Predict tomorrow
-.then(() => {
-    candidate.reset();
-
-    layers = [...algo.__layers, algo.__numberOfOutputs];
-    // Get 50 candles as input set from universe
-    let inputSet = universe
-        .slice(universe.length - algo.__numberOfCandles)
-        .reduce((acc, map) => {
-            let valueIterator = map.values();
-            let value = valueIterator.next().value;
-            while (value !== undefined) {
-                acc.push(value);
-                value = valueIterator.next().value;
-            }
-            return acc;
-        }, []);
-
-    // Add capital as part of decision making
-    inputSet.unshift(candidate.getCapital());
-
-    // Execute candidate
-    let output = algo.runCandidate({
-        id: candidate.getId(),
-        genome: candidate.getGenome(),
-        input: inputSet,
-        layers,
-    });
-
-    console.log('Tomorrow:');
-    let sumOfOutputs = output.reduce((acc, val) => acc + val) - output[output.length - 1];
-    [
-        'Long SPY',
-        'Short SPY',
-        'Long QQQ',
-        'Short QQQ',
-        'Long IWM',
-        'Short IWM',
-    ].forEach((string, index) => {
-        console.log(`${string}: ${MathFn.currency(output[index] / sumOfOutputs)}`);
-    });
-    console.log(`Withdraw: ${MathFn.currency(output[output.length - 1])}`);
-});

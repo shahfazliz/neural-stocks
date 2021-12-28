@@ -1,10 +1,11 @@
-import AlpacaAPI from './resource/AlpacaAPI.js';
-import App from './app.js';
-import ArrayFn from './util/ArrayFn.js';
-import CollectionService from './resource/CollectionService.js';
-import FileService from './util/FileService.js';
-import MomentAdaptor from './util/MomentAdaptor.js';
-import Universe from './model/Universe.js';
+import AlpacaAPI from '../resource/AlpacaAPI.js';
+import App from '../app.js';
+import ArrayFn from '../util/ArrayFn.js';
+import CollectionService from '../resource/CollectionService.js';
+import FileService from '../util/FileService.js';
+import MomentAdaptor from '../util/MomentAdaptor.js';
+import Universe from '../model/Universe.js';
+import VolumeProfile from '../model/VolumeProfile.js';
 
 const alpacaAPI = new AlpacaAPI();
 const app = new App();
@@ -82,6 +83,16 @@ async function getData(tickerSymbols) {
                 ))
                 // Finally update the ignored ticker symbol with invalid symbols
                 .then(() => alpacaAPI.recordInvalidTickerSymbol());
+        })
+        .then(() => {
+            return Promise
+                .all(app
+                    .__listOfTickers
+                    .map(tickerSymbol => {
+                        const volumeProfile = new VolumeProfile();
+                        return volumeProfile.reCreateVolumeProfile(tickerSymbol);
+                    })
+                );
         })
         .then(() => {
             const universe = new Universe();

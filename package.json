@@ -4,11 +4,14 @@
   "description": "Attempt to created a neural network to help decide to long or short SPX, NDX and RUT.",
   "main": "app.js",
   "scripts": {
-    "predict": "node predict.js",
-    "trainalgo": "node continueTrain.js",
-    "updatedata": "node getData.js",
-    "updatevolumeprofile": "node updateVolumeProfile.js",
-    "validate": "node validate.js"
+    "predictgeneticalgo": "node ./controller/predictGeneticAlgo.js",
+    "predictneuralnetwork": "node ./controller/predictNeuralNetwork.js",
+    "traingeneticalgo": "node ./controller/trainGeneticAlgo.js",
+    "trainneuralnetwork": "node ./controller/trainNeuralNetwork.js",
+    "updatedata": "node ./controller/updateData.js",
+    "updatevolumeprofile": "node ./controller/updateVolumeProfile.js",
+    "validategeneticalgo": "node ./controller/validateGeneticAlgo.js",
+    "validateneuralnetwork": "node ./controller/validateNeuralNetwork.js"
   },
   "author": "Shahfazliz Shahron",
   "license": "ISC",

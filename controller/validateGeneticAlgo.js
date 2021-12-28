@@ -1,6 +1,6 @@
-import CollectionService from './resource/CollectionService.js';
-import GeneticAlgo from './GeneticAlgo.js';
-import MathFn from './util/MathFn.js';
+import CollectionService from '../resource/CollectionService.js';
+import GeneticAlgo from '../GeneticAlgo.js';
+import MathFn from '../util/MathFn.js';
 
 let universe;
 let layers;

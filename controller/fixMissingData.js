@@ -1,9 +1,9 @@
-import App from './app.js';
-import ArrayFn from './util/ArrayFn.js';
-import CollectionService from './resource/CollectionService.js';
-import FileService from './util/FileService.js';
-import MarketWatchAPI from './resource/MarketWatchAPI.js';
-import MomentAdaptor from './util/MomentAdaptor.js';
+import App from '../app.js';
+import ArrayFn from '../util/ArrayFn.js';
+import CollectionService from '../resource/CollectionService.js';
+import FileService from '../util/FileService.js';
+import MarketWatchAPI from '../resource/MarketWatchAPI.js';
+import MomentAdaptor from '../util/MomentAdaptor.js';
 
 const app = new App();
 const collectionService = new CollectionService();

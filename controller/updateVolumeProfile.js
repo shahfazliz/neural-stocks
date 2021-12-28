@@ -1,5 +1,5 @@
-import GeneticAlgo from './GeneticAlgo.js';
-import VolumeProfile from './model/VolumeProfile.js';
+import GeneticAlgo from '../GeneticAlgo.js';
+import VolumeProfile from '../model/VolumeProfile.js';
 
 
 const algo = new GeneticAlgo();
