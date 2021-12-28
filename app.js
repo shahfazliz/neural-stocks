@@ -1,17 +1,8 @@
 import fs from 'fs/promises';
 
 export default class App {
-    __trainingOptions = {
-        activation: 'sigmoid',
-        binaryThresh: 0.1,
-        errorThresh: 0.15,
-        hiddenLayers: [100, 100, 100, 100],
-        iterations: 1000,
-        learningRate: 0.1,
-        log: true,
-        logPeriod: 1,
-    };
-
+    __initialCapital = 1000;
+    __numberOfCandlesAYear = 252;
     __numberOfElement = 50;
 
     __trainedFilePath = './trained.json';

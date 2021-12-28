@@ -1,9 +1,8 @@
-import CollectionService from './resource/CollectionService.js';
-import fs from 'fs/promises';
 import * as tf from '@tensorflow/tfjs';
-import tfn from '@tensorflow/tfjs-node';
-import MathFn from './util/MathFn.js';
 import Candidate from './model/Candidate.js';
+import CollectionService from './resource/CollectionService.js';
+import MathFn from './util/MathFn.js';
+import tfn from '@tensorflow/tfjs-node';
 
 const collectionService = new CollectionService();
 
@@ -41,80 +40,6 @@ export default class NeuroAlgo {
 
     getListTickersOfInterest() {
         return this.__listOfTickersOfInterest;
-    }
-
-    getListOfTickers() {
-        return this.__listOfTickers;
-    }
-
-    isTickerOfInterest(tickerSymbol) {
-        return this
-            .__listOfTickersOfInterest
-            .includes(tickerSymbol);
-    }
-
-    /**
-     * Create training data with output
-     */
-    createTrainingData({
-        tickerSymbol = 'N/A',
-        candlestickCollection,
-        numberOfElement = this.__numberOfElement,
-    }) {
-        console.log(`Create training data set for ticker ${tickerSymbol}`);
-        return new Promise((resolve, reject) => {
-
-            
-
-            return resolve(result);
-        });
-    }
-
-    saveTraining(model) {
-        console.log(`Save training model to ${this.__trainedFilePath}`);
-        return fs
-            .writeFile(
-                this.__trainedFilePath,
-                JSON.stringify(model.toJSON(), undefined, 4)
-            )
-            .then(() => model);
-    }
-
-    loadTrainedModel() {
-        console.log(`Load training model from ${this.__trainedFilePath}`);
-        return fs
-            .readFile(this.__trainedFilePath)
-            .then(data => {
-                const model = new brain.NeuralNetwork();
-                model.fromJSON(JSON.parse(data));
-                return model;
-            });
-    }
-
-    continueTraining(trainingData) {
-        console.log(`Continue training`);
-        return this
-            .loadTrainedModel()
-            .then(model => {
-                model.train(
-                    trainingData,
-                    Object.assign(this.__trainingOptions, {keepNetworkIntact: true}),
-                );
-
-                return model;
-            });
-    }
-
-    createLastInput({
-        tickerSymbol = 'N/A',
-        candlestickCollection,
-        numberOfElement = this.__numberOfElement,
-    }) {
-        console.log(`Create last training data set for ticker ${tickerSymbol}`);
-        return new Promise((resolve, reject) => {
-
-            return resolve(result);
-        });
     }
 
     train() {
@@ -241,7 +166,7 @@ export default class NeuroAlgo {
                     })
                     .then(model => {
                         return model
-                            .fit(trainingData, outputData, {epochs: 10000})
+                            .fit(trainingData, outputData, {epochs: 20000})
                             .then(() => {
                                 model.save('file://./data/model');
                             });
@@ -361,7 +286,3 @@ export default class NeuroAlgo {
             });
     }
 }
-
-const neuro = new NeuroAlgo();
-// neuro.train();
-neuro.test();

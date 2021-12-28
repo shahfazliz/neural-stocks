@@ -1,3 +1,8 @@
+import App from '../app.js';
+import CollectionService from '../resource/CollectionService.js';
+
+const app = new App();
+const collectionService = new CollectionService();
 export default class Universe {
     __universe = [];
 
@@ -7,21 +12,21 @@ export default class Universe {
     
     createTickerWorld({
         candlestickCollection,
-        numberOfCandles = this.__numberOfCandles,
+        numberOfCandles = app.__numberOfCandles,
         tickerSymbol = 'N/A',
     }) {
         return new Promise((resolve, reject) => {
             console.log(`Create world for ${tickerSymbol}`);
             // Test the minimum amount of required candles
             const totalCandlestick = candlestickCollection.length();
-            if (totalCandlestick < numberOfCandles + this.__numberOfCandlesAYear) {
+            if (totalCandlestick < numberOfCandles + app.__numberOfCandlesAYear) {
                 return reject(`number of candle is ${totalCandlestick}, it is less than required candle of ${numberOfCandles}`);
             }
 
             return resolve(candlestickCollection
                 .map((candlestick, index) => {
-                    if (index > this.__numberOfCandlesAYear) {
-                        // const replaceDateWithCount = (index - this.__numberOfCandlesAYear) % numberOfCandles;
+                    if (index > app.__numberOfCandlesAYear) {
+                        // const replaceDateWithCount = (index - app.__numberOfCandlesAYear) % numberOfCandles;
                         const map = new Map();
 
                         // For debugging, see the dates
@@ -48,7 +53,7 @@ export default class Universe {
 
     createUniverse() {
         return Promise
-            .all(this
+            .all(app
                 .__listOfTickers
                 .map(tickerSymbol => collectionService
                     .readJSONFileAsCandlestickCollection(`./data/tickers/${tickerSymbol}.json`)
