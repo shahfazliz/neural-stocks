@@ -116,11 +116,11 @@ export default class AlpacaAPI {
                     params: {
                         start: new MomentAdaptor(clock.next_close, 'YYYY-MM-DD')
                             .utcOffset(-5)
-                            .subtractBusinessDay(2)
-                            .format(),
-                        end: new MomentAdaptor(clock.next_close, 'YYYY-MM-DD')
-                            .utcOffset(-5)
                             .subtractBusinessDay(1)
+                            .format(),
+                        end: new MomentAdaptor(clock.timestamp, 'YYYY-MM-DD')
+                            .utcOffset(-5)
+                            .subtract(15, 'minutes')
                             .format(),
                         timeframe: '1Day',
                     },

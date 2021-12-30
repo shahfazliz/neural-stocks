@@ -22,7 +22,7 @@ export default class VolumeProfile {
                     Object
                         .keys(obj)
                         .forEach(price => {
-                            this.__volumeProfile.set(price, obj[price])
+                            this.__volumeProfile.set(`${price}`, obj[`${price}`])
                         })
                 }
             });
@@ -42,9 +42,9 @@ export default class VolumeProfile {
                         const averageVolume = rawCandlestick.Volume / temp.length;
                         new Set(temp).forEach(price => {
                             this.__volumeProfile.set(
-                                price, 
-                                this.__volumeProfile.has(price)
-                                    ? MathFn.precision(this.__volumeProfile.get(price) + averageVolume)
+                                `${price}`, 
+                                this.__volumeProfile.has(`${price}`)
+                                    ? MathFn.precision(this.__volumeProfile.get(`${price}`) + averageVolume)
                                     : MathFn.precision(averageVolume)
                             );
                         });
@@ -61,7 +61,7 @@ export default class VolumeProfile {
         return this.__volumeProfile.get(`${price}`);
     }
 
-    update(candlestick) {
+    update(candlestick, debug) {
         const temp = [];
         for (let i = candlestick.getLow(); i <= candlestick.getHigh(); i = MathFn.precision(i + 0.01)) {
             temp.push(i);
@@ -69,11 +69,14 @@ export default class VolumeProfile {
         const averageVolume = candlestick.getVolume() / temp.length;
         new Set(temp).forEach(price => {
             this.__volumeProfile.set(
-                price, 
-                this.__volumeProfile.has(price)
-                    ? MathFn.precision(this.__volumeProfile.get(price) + averageVolume)
+                `${price}`, 
+                this.__volumeProfile.has(`${price}`)
+                    ? MathFn.precision(this.__volumeProfile.get(`${price}`) + averageVolume)
                     : MathFn.precision(averageVolume)
             );
+            if (debug) {
+                console.log(this.__volumeProfile.get(`${price}`));
+            }
         });
     }
 }
