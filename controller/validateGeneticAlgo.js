@@ -24,22 +24,22 @@ collectionService
         layers = [...algo.__layers, algo.__numberOfOutputs];
         // Run the candidates
         return Array
-            .from({ length: numberOfTradingDays }, (_, k) => k)
+            .from({ length: numberOfTradingDays }, (_, k) => algo.__numberOfCandles + k)
             .reduce((promise, dayNumber) => promise.then(() => {
                 // Only trade on Monday, Wednesday, and Friday
-                let tomorrow = universe[dayNumber + algo.__numberOfCandles].get('Day');
+                let today = universe[dayNumber].get('Day');
                 if (candidate.getCapital() >= candidate.getInitialCapital()
-                    && (tomorrow === 0.1
-                        || tomorrow === 0.3
-                        || tomorrow === 0.5)
+                    && (today === 0.1
+                        || today === 0.3
+                        || today === 0.5)
                 ) {
                     console.log('------------------------------------------------');
-                    console.log(`Candidate: ${candidateNumber}, Day: ${dayNumber}/${numberOfTradingDays}`);
+                    console.log(`Candidate: ${candidateNumber}, Day: ${dayNumber}/${universe.length - 1}`);
                     console.log('------------------------------------------------');
                     
                     // Get 50 candles as input set from universe
                     let inputSet = universe
-                        .slice(dayNumber, dayNumber + algo.__numberOfCandles)
+                        .slice(dayNumber - algo.__numberOfCandles, dayNumber) // 50 candles before today
                         .reduce((acc, map) => {
                             let valueIterator = map.values();
                             let value = valueIterator.next().value;
@@ -86,8 +86,8 @@ collectionService
                                 risk: [capitalToRisk[tickerSymbolIndex * 2], capitalToRisk[tickerSymbolIndex * 2 + 1]],
                                 perTradeComission: algo.__costOfTrade,
                                 perTradeReward: algo.__reward,
-                                priceCloseToday: universe[dayNumber + algo.__numberOfCandles].get(`${tickerSymbol}_ClosePrice`),
-                                priceExpectedMove: universe[dayNumber + algo.__numberOfCandles - 1].get(`${tickerSymbol}_StandardDeviation`),
+                                priceCloseToday: universe[dayNumber].get(`${tickerSymbol}_ClosePrice`),
+                                priceExpectedMove: universe[dayNumber - 1].get(`${tickerSymbol}_StandardDeviation`),
                                 tickerSymbol,
                             });
                         }, 0);

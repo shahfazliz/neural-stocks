@@ -48,10 +48,10 @@ export default class NeuroAlgo {
             .then(universe => {
                 return new Promise((resolve, reject) => {
                     const inputOutputSet = Array
-                        .from({length: universe.length - this.__numberOfCandles}, (_, k) => k)
+                        .from({length: universe.length - this.__numberOfCandles}, (_, k) => this.__numberOfCandles + k)
                         .reduce((accumulator, dayNumber) => {
                             const input = universe
-                                .slice(dayNumber, dayNumber + this.__numberOfCandles)
+                                .slice(dayNumber - this.__numberOfCandles, dayNumber)
                                 .reduce((acc, map) => {
                                     let valueIterator = map.values();
                                     let value = valueIterator.next().value;
@@ -66,8 +66,8 @@ export default class NeuroAlgo {
                             const output = this
                                 .__listOfTickersOfInterest
                                 .reduce((acc, tickerSymbol) => {
-                                    const priceCloseToday = universe[dayNumber + this.__numberOfCandles].get(`${tickerSymbol}_ClosePrice`);
-                                    const priceExpectedMove = universe[dayNumber + this.__numberOfCandles - 1].get(`${tickerSymbol}_StandardDeviation`);
+                                    const priceCloseToday = universe[dayNumber].get(`${tickerSymbol}_ClosePrice`);
+                                    const priceExpectedMove = universe[dayNumber - 1].get(`${tickerSymbol}_StandardDeviation`);
                             
                                     let long = -priceExpectedMove < priceCloseToday ? 1 : 0;
                                     let short = priceExpectedMove > priceCloseToday ? 1 : 0
@@ -198,22 +198,22 @@ export default class NeuroAlgo {
                         const numberOfTradingDays = universe.length - this.__numberOfCandles;
 
                         return Array
-                            .from({ length: numberOfTradingDays }, (_, k) => k)
+                            .from({ length: numberOfTradingDays }, (_, k) => this.__numberOfCandles + k)
                             .reduce((promise, dayNumber) => promise.then(() => {
                                 // Only trade on Monday, Wednesday, and Friday
-                                let tomorrow = universe[dayNumber + this.__numberOfCandles].get('Day');
-                                if (candidate.getCapital() >= candidate.getInitialCapital()
-                                    && (tomorrow === 0.1
-                                        || tomorrow === 0.3
-                                        || tomorrow === 0.5)
+                                let today = universe[dayNumber].get('Day');
+                                if (candidate.getCapital() > 0 // >= candidate.getInitialCapital()
+                                    && (today === 0.1
+                                        || today === 0.3
+                                        || today === 0.5)
                                 ) {
                                     console.log('------------------------------------------------');
-                                    console.log(`Day: ${dayNumber}/${numberOfTradingDays}`);
+                                    console.log(`Day: ${dayNumber}/${universe.length - 1}`);
                                     console.log('------------------------------------------------');
                                     
                                     // Get 50 candles as input set from universe
                                     let inputSet = universe
-                                        .slice(dayNumber, dayNumber + this.__numberOfCandles)
+                                        .slice(dayNumber - this.__numberOfCandles, dayNumber) // 50 candles bofore today
                                         .reduce((acc, map) => {
                                             let valueIterator = map.values();
                                             let value = valueIterator.next().value;
@@ -256,8 +256,8 @@ export default class NeuroAlgo {
                                                 risk: [capitalToRisk[tickerSymbolIndex * 2], capitalToRisk[tickerSymbolIndex * 2 + 1]],
                                                 perTradeComission: this.__costOfTrade,
                                                 perTradeReward: this.__reward,
-                                                priceCloseToday: universe[dayNumber + this.__numberOfCandles].get(`${tickerSymbol}_ClosePrice`),
-                                                priceExpectedMove: universe[dayNumber + this.__numberOfCandles - 1].get(`${tickerSymbol}_StandardDeviation`),
+                                                priceCloseToday: universe[dayNumber].get(`${tickerSymbol}_ClosePrice`),
+                                                priceExpectedMove: universe[dayNumber - 1].get(`${tickerSymbol}_StandardDeviation`),
                                                 tickerSymbol,
                                             });
                                         }, 0);

@@ -272,7 +272,7 @@ export default class GeneticAlgo {
         //     withdrawal: candidate.getWithdrawal(),
         //     tradeDuration: candidate.getTradeDuration(),
         // }, undefined, 4)}`);
-        return candidate.getProfit() + candidate.getWithdrawal() + candidate.getTradeDuration();
+        return Number(`${candidate.getTradeDuration()}${candidate.getCapital() + candidate.getProfit() + candidate.getWithdrawal()}`);
     }
 
     /**
@@ -378,22 +378,22 @@ export default class GeneticAlgo {
 
                                 // Loop trading days by running the candidate
                                 return Array
-                                    .from({ length: numberOfTradingDays }, (_, k) => k)
+                                    .from({ length: numberOfTradingDays }, (_, k) => this.__numberOfCandles + k)
                                     .reduce((promise, dayNumber) => promise.then(() => {
                                         // Only trade on Monday, Wednesday, and Friday
-                                        let tomorrow = universe[dayNumber + this.__numberOfCandles].get('Day');
+                                        let today = universe[dayNumber].get('Day');
                                         if (candidate.getCapital() >= candidate.getInitialCapital()
-                                            && (tomorrow === 0.1
-                                                || tomorrow === 0.3
-                                                || tomorrow === 0.5)
+                                            && (today === 0.1
+                                                || today === 0.3
+                                                || today === 0.5)
                                         ) {
                                             console.log('------------------------------------------------');
-                                            console.log(`Generation: ${generationNumber}, Candidate: ${candidateNumber}, Day: ${dayNumber}/${numberOfTradingDays}`);
+                                            console.log(`Generation: ${generationNumber}, Candidate: ${candidateNumber}, Day: ${dayNumber}/${universe.length - 1}`);
                                             console.log('------------------------------------------------');
                                             
                                             // Get 50 candles as input set from universe
                                             let inputSet = universe
-                                                .slice(dayNumber, dayNumber + this.__numberOfCandles)
+                                                .slice(dayNumber - this.__numberOfCandles, dayNumber) // 50 candles before today
                                                 .reduce((acc, map) => {
                                                     let valueIterator = map.values();
                                                     let value = valueIterator.next().value;
@@ -440,8 +440,8 @@ export default class GeneticAlgo {
                                                         risk: [capitalToRisk[tickerSymbolIndex * 2], capitalToRisk[tickerSymbolIndex * 2 + 1]],
                                                         perTradeComission: this.__costOfTrade,
                                                         perTradeReward: this.__reward,
-                                                        priceCloseToday: universe[dayNumber + this.__numberOfCandles].get(`${tickerSymbol}_ClosePrice`),
-                                                        priceExpectedMove: universe[dayNumber + this.__numberOfCandles - 1].get(`${tickerSymbol}_StandardDeviation`),
+                                                        priceCloseToday: universe[dayNumber].get(`${tickerSymbol}_ClosePrice`),
+                                                        priceExpectedMove: universe[dayNumber - 1].get(`${tickerSymbol}_StandardDeviation`),
                                                         tickerSymbol,
                                                     });
                                                 }, 0);
