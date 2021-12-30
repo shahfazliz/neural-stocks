@@ -8,15 +8,17 @@ const collectionService = new CollectionService();
 const fileService = new FileService();
 
 export default class GeneticAlgo {
-    __totalCandidates = 12;
+    __totalCandidates = 11;
     __bestCandidatesCount = 3; // 2->1, 3->3, 4->6, 5->10 Combinations without repetition order not important
     __totalChildren = (this.factorial(this.__bestCandidatesCount) / (this.factorial(2) * this.factorial(this.__bestCandidatesCount - 2)));
-    __maxGenerationCount = 100;
-    __costOfTrade = 1.74;
+    __maxGenerationCount = 500;
+
+    __initialCapital = 1000;
+    __costOfTrade = 0; // 1.74;
     __reward = 0.06; // 6%
 
     __numberOfOutputs = 6;
-    __layers = [200];
+    __layers = [50, 50, 50, 50];
 
     __numberOfCandles = 50;
     __numberOfCandlesAYear = 252;

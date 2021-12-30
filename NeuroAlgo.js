@@ -8,12 +8,15 @@ const collectionService = new CollectionService();
 
 export default class NeuroAlgo {
     __initialCapital = 1000;
-    __costOfTrade = 0; // 1.74;
+    __costOfTrade = 1.74;
     __reward = 0.06; // 6%
-
     __numberOfCandles = 50;
 
-    __trainedFilePath = './trained.json';
+    __epochs = 2000;
+    __hiddenNodes = 15;
+    __learnRate = 0.01;
+
+    __trainedFilePath = './data/tensorflowModel';
 
     __listOfTickers = [
         'BAL',
@@ -114,7 +117,7 @@ export default class NeuroAlgo {
                 const outputData = tf.tensor2d(inputOutputSet.output);
 
                 return tf
-                    .loadLayersModel(tfn.io.fileSystem('./data/model/model.json'))
+                    .loadLayersModel(tfn.io.fileSystem(`${this.__trainedFilePath}/model.json`))
                     .then(model => {
                         console.log('Model available');
                         model.compile({
@@ -130,28 +133,28 @@ export default class NeuroAlgo {
                             inputShape: [inputOutputSet.input[0].length],
                             activation: 'relu6',
                             useBias: true,
-                            units: 50, // Input nodes
+                            units: this.__hiddenNodes, // Input nodes
                         }));
                         model.add(tf.layers.dense({
-                            inputShape: 50,
+                            inputShape: this.__hiddenNodes,
                             activation: 'relu6',
                             useBias: true,
-                            units: 50, // Hidden nodes
+                            units: this.__hiddenNodes, // Hidden nodes
                         }));
                         model.add(tf.layers.dense({
-                            inputShape: 50,
+                            inputShape: this.__hiddenNodes,
                             activation: 'relu6',
                             useBias: true,
-                            units: 50, // Hidden nodes
+                            units: this.__hiddenNodes, // Hidden nodes
                         }));
                         model.add(tf.layers.dense({
-                            inputShape: 50,
+                            inputShape: this.__hiddenNodes,
                             activation: 'relu6',
                             useBias: true,
-                            units: 50, // Hidden nodes
+                            units: this.__hiddenNodes, // Hidden nodes
                         }));
                         model.add(tf.layers.dense({
-                            inputShape: 50,
+                            inputShape: this.__hiddenNodes,
                             activation: 'relu6',
                             useBias: true,
                             units: 6, // Output nodes
@@ -159,16 +162,16 @@ export default class NeuroAlgo {
         
                         model.compile({
                             loss: tf.losses.meanSquaredError,
-                            optimizer: tf.train.sgd(0.01),
+                            optimizer: tf.train.sgd(this.__learnRate),
                         });
 
                         return model;
                     })
                     .then(model => {
                         return model
-                            .fit(trainingData, outputData, {epochs: 20000})
+                            .fit(trainingData, outputData, {epochs: this.__epochs})
                             .then(() => {
-                                model.save('file://./data/model');
+                                model.save(`file://${this.__trainedFilePath}`);
                             });
                     });
             });
@@ -176,11 +179,11 @@ export default class NeuroAlgo {
 
     test() {
         return tf
-            .loadLayersModel(tfn.io.fileSystem('./data/model/model.json'))
+            .loadLayersModel(tfn.io.fileSystem(`${this.__trainedFilePath}/model.json`))
             .then(model => {
                 model.compile({
                     loss: tf.losses.meanSquaredError,
-                    optimizer: tf.train.sgd(0.01),
+                    optimizer: tf.train.sgd(this.__learnRate),
                 });
                 return model;
             })
