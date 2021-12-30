@@ -112,10 +112,10 @@ export default class GeneticAlgo {
             const isOutputLayer = layerNumber === layers.length;
 
             // Apply activation function and save result
-            // model[i] = isOutputLayer
-            //     ? this.sigmoid(result)
-            //     : result; // this.swish(result);
-            model[i] = this.sigmoid(result);
+            model[i] = isOutputLayer
+                ? MathFn.sigmoid(result)
+                : MathFn.limitBetween(result, 0, 3) // MathFn.swish(result);
+            // model[i] = MathFn.sigmoid(result);
 
             // Save the output node number
             if (isOutputLayer && outputNode === undefined) {
@@ -127,14 +127,6 @@ export default class GeneticAlgo {
         model.splice(0, outputNode);
 
         return model.map(val => MathFn.precision(val));
-    }
-
-    swish(val) {
-        return val * this.sigmoid(val);
-    }
-
-    sigmoid(val) {
-        return 1 / (1 + Math.exp(-val));
     }
 
     /**
