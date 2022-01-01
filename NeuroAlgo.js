@@ -12,9 +12,15 @@ export default class NeuroAlgo {
     __reward = 0.06; // 6%
     __numberOfCandles = 50;
 
-    __epochs = 2000;
+    __epochs = 50000;
     __hiddenNodes = 15;
-    __learnRate = 0.01;
+    __hiddenLayers = 3;
+    __learnRate = 0.001;
+    __compile = {
+        loss: tf.losses.meanSquaredError,
+        optimizer: tf.train.sgd(this.__learnRate),
+        metrics: ['accuracy'],
+    };
 
     __trainedFilePath = './data/tensorflowModel';
 
@@ -88,7 +94,7 @@ export default class NeuroAlgo {
                             accumulator.output.push(output);
 
                             return accumulator;
-                        }, {input: [], output: []});
+                        }, {input: [], output: [], validateIn: [], validateOut: []});
                     
                     // Randomize sequence using Fisher-Yates (aka Knuth) Shuffle
                     let currentIndex = inputOutputSet.input.length;
@@ -109,6 +115,17 @@ export default class NeuroAlgo {
                         inputOutputSet.output[currentIndex] = inputOutputSet.output[randomIndex];
                         inputOutputSet.output[randomIndex] = tempOutput;
                     }
+
+                    // Train with smaller model to prevent overfitting
+                    const deleteCount = Math.floor(inputOutputSet.input.length / 10);
+                    const start = MathFn.randomInt(0, inputOutputSet.input.length - deleteCount);
+                    
+                    inputOutputSet.validateIn = inputOutputSet.input.slice(start, start + deleteCount);
+                    inputOutputSet.validateOut = inputOutputSet.output.slice(start, start + deleteCount);
+
+                    inputOutputSet.input.splice(start, deleteCount);
+                    inputOutputSet.output.splice(start, deleteCount);
+
                     resolve(inputOutputSet);
                 });
             })
@@ -120,39 +137,32 @@ export default class NeuroAlgo {
                     .loadLayersModel(tfn.io.fileSystem(`${this.__trainedFilePath}/model.json`))
                     .then(model => {
                         console.log('Model available');
-                        model.compile({
-                            loss: tf.losses.meanSquaredError,
-                            optimizer: tf.train.adam(0.06),
-                        });
+                        model.compile(this.__compile);
                         return model;
                     })
                     .catch(() => {
                         console.log('Model NOT available');
                         const model = tf.sequential();
+                        // Input Layer
                         model.add(tf.layers.dense({
                             inputShape: [inputOutputSet.input[0].length],
                             activation: 'relu6',
                             useBias: true,
                             units: this.__hiddenNodes, // Input nodes
                         }));
-                        model.add(tf.layers.dense({
-                            inputShape: this.__hiddenNodes,
-                            activation: 'relu6',
-                            useBias: true,
-                            units: this.__hiddenNodes, // Hidden nodes
-                        }));
-                        model.add(tf.layers.dense({
-                            inputShape: this.__hiddenNodes,
-                            activation: 'relu6',
-                            useBias: true,
-                            units: this.__hiddenNodes, // Hidden nodes
-                        }));
-                        model.add(tf.layers.dense({
-                            inputShape: this.__hiddenNodes,
-                            activation: 'relu6',
-                            useBias: true,
-                            units: this.__hiddenNodes, // Hidden nodes
-                        }));
+                        
+                        // Hidden layers
+                        for (let i = 0; i < this.__hiddenLayers; i++) {
+                            model.add(tf.layers.dense({
+                                inputShape: this.__hiddenNodes,
+                                activation: 'relu6',
+                                useBias: true,
+                                units: this.__hiddenNodes, // Hidden nodes
+                            }));
+                            // model.add(tf.layers.dropout({ rate: 0.0001 }));
+                        }
+
+                        // Output layer
                         model.add(tf.layers.dense({
                             inputShape: this.__hiddenNodes,
                             activation: 'relu6',
@@ -160,16 +170,27 @@ export default class NeuroAlgo {
                             units: 6, // Output nodes
                         }));
         
-                        model.compile({
-                            loss: tf.losses.meanSquaredError,
-                            optimizer: tf.train.sgd(this.__learnRate),
-                        });
+                        model.compile(this.__compile);
 
                         return model;
                     })
                     .then(model => {
                         return model
-                            .fit(trainingData, outputData, {epochs: this.__epochs})
+                            .fit(
+                                trainingData, 
+                                outputData,
+                                {
+                                    epochs: this.__epochs,
+                                    validationData: [
+                                        tf.tensor2d(inputOutputSet.validateIn),
+                                        tf.tensor2d(inputOutputSet.validateOut),
+                                    ],
+                                    callbacks: tf.callbacks.earlyStopping({
+                                        monitor: 'loss',
+                                        mode: 'auto',
+                                    }),
+                                },
+                            )
                             .then(() => {
                                 model.save(`file://${this.__trainedFilePath}`);
                             });
@@ -181,10 +202,7 @@ export default class NeuroAlgo {
         return tf
             .loadLayersModel(tfn.io.fileSystem(`${this.__trainedFilePath}/model.json`))
             .then(model => {
-                model.compile({
-                    loss: tf.losses.meanSquaredError,
-                    optimizer: tf.train.sgd(this.__learnRate),
-                });
+                model.compile(this.__compile);
                 return model;
             })
             .then(model => {
