@@ -274,7 +274,7 @@ export default class GeneticAlgo {
         //     withdrawal: candidate.getWithdrawal(),
         //     tradeDuration: candidate.getTradeDuration(),
         // }, undefined, 4)}`);
-        return Number(`${candidate.getTradeDuration()}${candidate.getCapital() + candidate.getProfit() + candidate.getWithdrawal()}`);
+        return Number(`${candidate.getTradeDuration()}${(candidate.getCapital() + candidate.getProfit() + candidate.getWithdrawal())}`);
     }
 
     /**
