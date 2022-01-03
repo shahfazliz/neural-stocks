@@ -228,6 +228,7 @@ export default class NeuroAlgo {
                                         || today === 0.3
                                         || today === 0.5)
                                 ) {
+                                    candidate.setTradeDuration(candidate.getTradeDuration() + 1);
                                     console.log('------------------------------------------------');
                                     console.log(`Day: ${dayNumber}/${universe.length - 1}`);
                                     console.log('------------------------------------------------');
@@ -295,7 +296,6 @@ export default class NeuroAlgo {
                                         candidate.executeWithdrawal();
                                     }
                                 }
-                                candidate.setTradeDuration(candidate.getTradeDuration() + 1);
                             }), Promise.resolve());
                     })
                     .then(() => {

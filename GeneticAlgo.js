@@ -389,6 +389,7 @@ export default class GeneticAlgo {
                                                 || today === 0.3
                                                 || today === 0.5)
                                         ) {
+                                            candidate.setTradeDuration(candidate.getTradeDuration() + 1);
                                             console.log('------------------------------------------------');
                                             console.log(`Generation: ${generationNumber}, Candidate: ${candidateNumber}, Day: ${dayNumber}/${universe.length - 1}`);
                                             console.log('------------------------------------------------');
@@ -462,7 +463,6 @@ export default class GeneticAlgo {
 
                                             console.log(`Score: ${this.fitnessTest(candidate)}`);
                                         }
-                                        candidate.setTradeDuration(candidate.getTradeDuration() + 1);
                                     }), Promise.resolve());
                             }), Promise.resolve())
                             // Fitness test, then sort by best first

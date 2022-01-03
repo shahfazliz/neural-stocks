@@ -33,6 +33,7 @@ collectionService
                         || today === 0.3
                         || today === 0.5)
                 ) {
+                    candidate.setTradeDuration(candidate.getTradeDuration() + 1);
                     console.log('------------------------------------------------');
                     console.log(`Candidate: ${candidateNumber}, Day: ${dayNumber}/${universe.length - 1}`);
                     console.log('------------------------------------------------');
@@ -106,7 +107,6 @@ collectionService
 
                     console.log(`Score: ${algo.fitnessTest(candidate)}`);
                 }
-                candidate.setTradeDuration(candidate.getTradeDuration() + 1);
             }), Promise.resolve());
     })
     .then(() => {
