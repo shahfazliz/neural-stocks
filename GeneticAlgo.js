@@ -14,11 +14,11 @@ export default class GeneticAlgo {
     __maxGenerationCount = 500;
 
     __initialCapital = 1000;
-    __costOfTrade = 0; // 1.74;
+    __costOfTrade = 1.74;
     __reward = 0.06; // 6%
 
     __numberOfOutputs = 6;
-    __layers = [50, 50, 50, 50];
+    __layers = [15, 15, 15, 15];
 
     __numberOfCandles = 50;
     __numberOfCandlesAYear = 252;
@@ -116,7 +116,7 @@ export default class GeneticAlgo {
             // Apply activation function and save result
             model[i] = isOutputLayer
                 ? MathFn.sigmoid(result)
-                : MathFn.limitBetween(result, 0, 3) // MathFn.swish(result);
+                : MathFn.limitBetween(result, 0, 6) // MathFn.swish(result);
             // model[i] = MathFn.sigmoid(result);
 
             // Save the output node number
@@ -185,7 +185,7 @@ export default class GeneticAlgo {
     }
 
     randomWeight() {
-        return MathFn.precision(MathFn.randomFloat(-1, 1));
+        return MathFn.randomFloat(-1, 1);
     }
 
     /**
@@ -274,7 +274,7 @@ export default class GeneticAlgo {
         //     withdrawal: candidate.getWithdrawal(),
         //     tradeDuration: candidate.getTradeDuration(),
         // }, undefined, 4)}`);
-        return Number(`${candidate.getTradeDuration()}${(candidate.getCapital() + candidate.getProfit() + candidate.getWithdrawal())}`);
+        return (candidate.getCapital() + candidate.getProfit() + candidate.getWithdrawal());
     }
 
     /**
@@ -384,7 +384,7 @@ export default class GeneticAlgo {
                                     .reduce((promise, dayNumber) => promise.then(() => {
                                         // Only trade on Monday, Wednesday, and Friday
                                         let today = universe[dayNumber].get('Day');
-                                        if (candidate.getCapital() >= candidate.getInitialCapital()
+                                        if (candidate.getCapital() > 0 // >= candidate.getInitialCapital()
                                             && (today === 0.1
                                                 || today === 0.3
                                                 || today === 0.5)

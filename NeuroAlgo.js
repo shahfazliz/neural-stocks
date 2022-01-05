@@ -1,10 +1,12 @@
 import * as tf from '@tensorflow/tfjs';
 import Candidate from './model/Candidate.js';
 import CollectionService from './resource/CollectionService.js';
+import FileService from './util/FileService.js';
 import MathFn from './util/MathFn.js';
 import tfn from '@tensorflow/tfjs-node';
 
 const collectionService = new CollectionService();
+const fileService = new FileService();
 
 export default class NeuroAlgo {
     __initialCapital = 1000;
@@ -90,6 +92,8 @@ export default class NeuroAlgo {
                                 }, [])
                                 .map(eachOutput => MathFn.currency(eachOutput / totalOutput || 0));
 
+                            // console.log(`Output: ${JSON.stringify(output, undefined, 4)}`);
+
                             accumulator.input.push(input);
                             accumulator.output.push(output);
 
@@ -125,6 +129,8 @@ export default class NeuroAlgo {
 
                     inputOutputSet.input.splice(start, deleteCount);
                     inputOutputSet.output.splice(start, deleteCount);
+
+                    // console.log(`InputOutputSet output: ${JSON.stringify(inputOutputSet.output, undefined, 4)}`);
 
                     resolve(inputOutputSet);
                 });
@@ -270,6 +276,8 @@ export default class NeuroAlgo {
                                         
                                         return risk;
                                     });
+
+                                    // console.log(`Capital To Risk: ${JSON.stringify(capitalToRisk, undefined, 4)}`);
                 
                                     let profit = this
                                         .getListTickersOfInterest()
@@ -304,6 +312,47 @@ export default class NeuroAlgo {
                         console.log('------------------------------------------------');
                         console.log(candidate.scoreToString())
                     });
+            });
+    }
+
+    extractGenome() {
+        return tf
+            .loadLayersModel(tfn.io.fileSystem(`${this.__trainedFilePath}/model.json`))
+            .then(model => {
+                console.log('Model available');
+                model.compile(this.__compile);
+                return model;
+            })
+            .then(model => {
+                const totalLayers = model.layers.length;
+                return Promise.all(Array
+                    .from({length: totalLayers}, (_, k) => k)
+                    .map(layerNumber => {
+                        return Promise
+                            .all([
+                                model.layers[layerNumber].getWeights()[0].data(), // Weights
+                                model.layers[layerNumber].getWeights()[1].data(), // Bias
+                            ])
+                            .then(data => {
+                                let [weights, bias] = data;
+                                const result = [];
+                                bias.forEach((b, index) => {
+                                    result.push([...weights.slice(index, index + weights.length / bias.length), b]);
+                                })
+                                return result;
+                            });
+                    }));
+            })
+            .then(data => {
+                const candidate = new Candidate({
+                    id: 10,
+                    genome: data.flat(1),
+                });
+
+                return fileService.writeToJSONFile({
+                    jsonfilepath: `./data/candidates/${candidate.getId()}.json`,
+                    data: candidate.toString(),
+                });
             });
     }
 }

@@ -4,6 +4,7 @@
   "description": "Attempt to created a neural network to help decide to long or short SPX, NDX and RUT.",
   "main": "app.js",
   "scripts": {
+    "extractgenome": "node ./controller/extractGenome.js",
     "predictgeneticalgo": "node ./controller/predictGeneticAlgo.js",
     "predictneuralnetwork": "node ./controller/predictNeuralNetwork.js",
     "traingeneticalgo": "node ./controller/trainGeneticAlgo.js",

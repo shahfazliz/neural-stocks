@@ -28,7 +28,7 @@ collectionService
             .reduce((promise, dayNumber) => promise.then(() => {
                 // Only trade on Monday, Wednesday, and Friday
                 let today = universe[dayNumber].get('Day');
-                if (candidate.getCapital() >= candidate.getInitialCapital()
+                if (candidate.getCapital() > 0 // >= candidate.getInitialCapital()
                     && (today === 0.1
                         || today === 0.3
                         || today === 0.5)
