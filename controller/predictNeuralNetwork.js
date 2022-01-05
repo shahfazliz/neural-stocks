@@ -4,15 +4,15 @@ import App from '../app.js';
 import Candidate from '../model/Candidate.js';
 import Candlestick from '../model/Candlestick.js';
 import CollectionService from '../resource/CollectionService.js';
-import GeneticAlgo from '../GeneticAlgo.js';
 import MathFn from '../util/MathFn.js';
+import NeuroAlgo from '../NeuroAlgo.js';
 import tfn from '@tensorflow/tfjs-node';
 import VolumeProfile from '../model/VolumeProfile.js';
 
 const alpacaAPI = new AlpacaAPI();
 const app = new App();
 const collectionService = new CollectionService();
-const algo = new GeneticAlgo();
+const neuro = new NeuroAlgo();
 
 let universe;
 
@@ -70,6 +70,14 @@ collectionService
                             };
                             return obj;
                         })
+                        .catch(() => {
+                            console.log(`Latest ${tickerSymbol} quote was not available`);
+                            const obj = {
+                                tickerSymbol,
+                                candlestickCollection
+                            };
+                            return obj;
+                        })
                     )
                 )
             )
@@ -100,7 +108,7 @@ collectionService
     })
     .then(() => {
         return tf
-        .loadLayersModel(tfn.io.fileSystem('./data/tensorflowModel/model.json'))
+        .loadLayersModel(tfn.io.fileSystem(`${neuro.__trainedFilePath}/model.json`))
         .then(model => {
             model.compile({
                 loss: tf.losses.meanSquaredError,
@@ -120,7 +128,7 @@ collectionService
 
         // Get 50 candles as input set from universe
         let inputSet = universe
-            .slice(universe.length - algo.__numberOfCandles - 1, universe.length - 1)
+            .slice(universe.length - neuro.__numberOfCandles - 1, universe.length - 1)
             .reduce((acc, map) => {
                 let valueIterator = map.values();
                 let value = valueIterator.next().value;
@@ -166,7 +174,7 @@ collectionService
     })
     .then(() => {
         return tf
-        .loadLayersModel(tfn.io.fileSystem('./data/model/model.json'))
+        .loadLayersModel(tfn.io.fileSystem(`${neuro.__trainedFilePath}/model.json`))
         .then(model => {
             model.compile({
                 loss: tf.losses.meanSquaredError,
@@ -186,7 +194,7 @@ collectionService
 
         // Get 50 candles as input set from universe
         let inputSet = universe
-            .slice(universe.length - algo.__numberOfCandles)
+            .slice(universe.length - neuro.__numberOfCandles)
             .reduce((acc, map) => {
                 let valueIterator = map.values();
                 let value = valueIterator.next().value;
