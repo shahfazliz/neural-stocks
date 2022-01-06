@@ -35,6 +35,7 @@ export default class Candidate {
         this.__tradeDuration = 0;
         this.__withdrawal = 0;
         this.__generation = 0;
+        this.__tradeDuration = 0;
         return this;
     }
 
