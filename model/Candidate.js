@@ -9,7 +9,7 @@ export default class Candidate {
     __withdrawal = 0;
     __generation = 0;
     __initialCapital = 1000;
-    __coefficient = 1; // 0.4654;
+    __coefficient = 1; // 0.5113;
 
     constructor({
         id = 0,

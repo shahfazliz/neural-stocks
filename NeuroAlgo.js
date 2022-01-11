@@ -171,7 +171,7 @@ export default class NeuroAlgo {
                         // Output layer
                         model.add(tf.layers.dense({
                             inputShape: this.__hiddenNodes,
-                            activation: 'relu6',
+                            activation: 'sigmoid',
                             useBias: true,
                             units: 6, // Output nodes
                         }));
