@@ -42,7 +42,7 @@ export default class AlpacaAPI {
         }
         this.__numberOfRequestCounter += 1;
 
-        console.log(`Retrieving data for ${tickerSymbol}`);
+        console.log(`Retrieving data for ${tickerSymbol} from ${startDate} to ${endDate}`);
         return axios
             .get(`https://data.alpaca.markets/v2/stocks/${tickerSymbol}/bars`, {
                 headers: {
