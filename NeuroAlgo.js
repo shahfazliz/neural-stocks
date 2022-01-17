@@ -1,43 +1,27 @@
-import * as tf from '@tensorflow/tfjs';
 import App from './app.js';
 import Candidate from './model/Candidate.js';
 import CollectionService from './resource/CollectionService.js';
 import FileService from './util/FileService.js';
 import MathFn from './util/MathFn.js';
-import tfn from '@tensorflow/tfjs-node';
+import TensorFlowAdaptor from './util/TensorFlowAdaptor.js';
 
 const app = new App();
 const collectionService = new CollectionService();
 const fileService = new FileService();
+const tensorFlow = new TensorFlowAdaptor();
 
 export default class NeuroAlgo {
-    __initialCapital = 1000;
-    __costOfTrade = 1.74;
-    __reward = 0.06; // 6%
-    __numberOfCandles = 50;
-
-    __epochs = 50000;
-    __hiddenNodes = 15;
-    __hiddenLayers = 3;
-    __learnRate = 0.001;
-    __compileParams = {
-        loss: tf.losses.meanSquaredError,
-        optimizer: tf.train.sgd(this.__learnRate),
-        metrics: ['accuracy'],
-    };
-
-    __trainedFilePath = './data/tensorflowModel';
-
     train() {
         return collectionService
             .readJSONFileAsUniverse('./data/universe/universe.json')
+            // Setup inputs and expected outputs
             .then(universe => {
                 return new Promise((resolve, reject) => {
                     const inputOutputSet = Array
-                        .from({length: universe.length - this.__numberOfCandles}, (_, k) => this.__numberOfCandles + k)
+                        .from({length: universe.length - app.__numberOfCandles}, (_, k) => app.__numberOfCandles + k)
                         .reduce((accumulator, dayNumber) => {
                             const input = universe
-                                .slice(dayNumber - this.__numberOfCandles, dayNumber)
+                                .slice(dayNumber - app.__numberOfCandles, dayNumber)
                                 .reduce((acc, map) => {
                                     let valueIterator = map.values();
                                     let value = valueIterator.next().value;
@@ -110,104 +94,54 @@ export default class NeuroAlgo {
                     resolve(inputOutputSet);
                 });
             })
+            // Start training
             .then(inputOutputSet => {
-                const trainingData = tf.tensor2d(inputOutputSet.input);
-                const outputData = tf.tensor2d(inputOutputSet.output);
-
-                return tf
-                    .loadLayersModel(tfn.io.fileSystem(`${this.__trainedFilePath}/model.json`))
-                    .then(model => {
-                        console.log('Model available');
-                        model.compile(this.__compileParams);
-                        return model;
-                    })
+                return tensorFlow
+                    .getTrainedModel()
                     .catch(() => {
                         console.log('Model NOT available');
-                        const model = tf.sequential();
-                        // Input Layer
-                        model.add(tf.layers.dense({
-                            inputShape: [inputOutputSet.input[0].length],
-                            activation: 'relu6',
-                            useBias: true,
-                            units: this.__hiddenNodes, // Input nodes
-                        }));
-                        
-                        // Hidden layers
-                        for (let i = 0; i < this.__hiddenLayers; i++) {
-                            model.add(tf.layers.dense({
-                                inputShape: this.__hiddenNodes,
-                                activation: 'relu6',
-                                useBias: true,
-                                units: this.__hiddenNodes, // Hidden nodes
-                            }));
-                            // model.add(tf.layers.dropout({ rate: 0.0001 }));
-                        }
-
-                        // Output layer
-                        model.add(tf.layers.dense({
-                            inputShape: this.__hiddenNodes,
-                            activation: 'sigmoid',
-                            useBias: true,
-                            units: 6, // Output nodes
-                        }));
-        
-                        model.compile(this.__compileParams);
-
-                        return model;
+                        return tensorFlow.createNewModel({
+                            numberOfInputNodes: inputOutputSet.input[0].length,
+                            numberOfOutputNodes: app.__numberOfOutputs,
+                        });
                     })
                     .then(model => {
-                        return model
-                            .fit(
-                                trainingData, 
-                                outputData,
-                                {
-                                    epochs: this.__epochs,
-                                    validationData: [
-                                        tf.tensor2d(inputOutputSet.validateIn),
-                                        tf.tensor2d(inputOutputSet.validateOut),
-                                    ],
-                                    callbacks: tf.callbacks.earlyStopping({
-                                        monitor: 'loss',
-                                        mode: 'auto',
-                                    }),
-                                },
-                            )
-                            .then(() => {
-                                model.save(`file://${this.__trainedFilePath}`);
-                            });
+                        return tensorFlow.trainModel({
+                            model,
+                            trainingInputData: inputOutputSet.input,
+                            trainingOutputData: inputOutputSet.output,
+                            validateInputData: inputOutputSet.validateIn,
+                            validateOutputData: inputOutputSet.validateOut,
+                        });
                     });
             });
     }
 
     test() {
-        return tf
-            .loadLayersModel(tfn.io.fileSystem(`${this.__trainedFilePath}/model.json`))
-            .then(model => {
-                model.compile(this.__compileParams);
-                return model;
-            })
+        return tensorFlow
+            .getTrainedModel()
             .then(model => {
                 const candidate = new Candidate({
                     id: 0,
                 });
                 candidate
                     .reset()
-                    .setInitialCapital(this.__initialCapital);
+                    .setInitialCapital(app.__initialCapital);
 
                 collectionService
                     .readJSONFileAsUniverse('./data/universe/universe.json')
                     .then(universe => {
-                        const numberOfTradingDays = universe.length - this.__numberOfCandles;
+                        const numberOfTradingDays = universe.length - app.__numberOfCandles;
 
                         return Array
-                            .from({ length: numberOfTradingDays }, (_, k) => this.__numberOfCandles + k)
+                            .from({ length: numberOfTradingDays }, (_, k) => app.__numberOfCandles + k)
                             .reduce((promise, dayNumber) => promise.then(() => {
                                 // Only trade on Monday, Wednesday, and Friday
                                 let today = universe[dayNumber].get('Day');
                                 if (candidate.getCapital() > 0 // >= candidate.getInitialCapital()
-                                    && (today === 0.1
-                                        || today === 0.3
-                                        || today === 0.5)
+                                    // && (today === 0.1
+                                    //     || today === 0.3
+                                    //     || today === 0.5)
                                 ) {
                                     candidate.setTradeDuration(candidate.getTradeDuration() + 1);
                                     console.log('------------------------------------------------');
@@ -216,7 +150,7 @@ export default class NeuroAlgo {
                                     
                                     // Get 50 candles as input set from universe
                                     let inputSet = universe
-                                        .slice(dayNumber - this.__numberOfCandles, dayNumber) // 50 candles bofore today
+                                        .slice(dayNumber - app.__numberOfCandles, dayNumber) // 50 candles bofore today
                                         .reduce((acc, map) => {
                                             let valueIterator = map.values();
                                             let value = valueIterator.next().value;
@@ -230,9 +164,10 @@ export default class NeuroAlgo {
                                     // console.log(inputSet);
                 
                                     // Execute candidate
-                                    let output = model
-                                        .predict(tf.tensor2d([inputSet]))
-                                        .arraySync()[0];
+                                    let output = tensorFlow.predict({
+                                        model,
+                                        input: inputSet,
+                                    });
                 
                                     // console.log(`Output: ${JSON.stringify(output, undefined, 4)}`);
                 
@@ -259,8 +194,8 @@ export default class NeuroAlgo {
                                         .reduce((profit, tickerSymbol, tickerSymbolIndex) => {
                                             return profit + candidate.executeTrade({
                                                 risk: [capitalToRisk[tickerSymbolIndex * 2], capitalToRisk[tickerSymbolIndex * 2 + 1]],
-                                                perTradeComission: this.__costOfTrade,
-                                                perTradeReward: this.__reward,
+                                                perTradeComission: app.__costOfTrade,
+                                                perTradeReward: app.__reward,
                                                 priceCloseToday: universe[dayNumber].get(`${tickerSymbol}_ClosePrice`),
                                                 priceExpectedMove: universe[dayNumber - 1].get(`${tickerSymbol}_StandardDeviation`),
                                                 tickerSymbol,
@@ -293,33 +228,8 @@ export default class NeuroAlgo {
     }
 
     extractGenome() {
-        return tf
-            .loadLayersModel(tfn.io.fileSystem(`${this.__trainedFilePath}/model.json`))
-            .then(model => {
-                console.log('Model available');
-                model.compile(this.__compileParams);
-                return model;
-            })
-            .then(model => {
-                const totalLayers = model.layers.length;
-                return Promise.all(Array
-                    .from({length: totalLayers}, (_, k) => k)
-                    .map(layerNumber => {
-                        return Promise
-                            .all([
-                                model.layers[layerNumber].getWeights()[0].data(), // Weights
-                                model.layers[layerNumber].getWeights()[1].data(), // Bias
-                            ])
-                            .then(data => {
-                                let [weights, bias] = data;
-                                const result = [];
-                                bias.forEach((b, index) => {
-                                    result.push([...weights.slice(index, index + weights.length / bias.length), b]);
-                                })
-                                return result;
-                            });
-                    }));
-            })
+        return tensorFlow
+            .extractGenome()
             .then(data => {
                 const candidate = new Candidate({
                     id: 10,

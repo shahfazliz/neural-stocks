@@ -1,11 +1,10 @@
-import GeneticAlgo from '../GeneticAlgo.js';
+import App from '../app.js';
 import VolumeProfile from '../model/VolumeProfile.js';
 
-
-const algo = new GeneticAlgo();
+const app = new App();
 
 Promise
-    .all(algo
+    .all(app
         .__listOfTickers
         .map(tickerSymbol => {
             const volumeProfile = new VolumeProfile();

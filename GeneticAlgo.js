@@ -13,17 +13,9 @@ export default class GeneticAlgo {
     __totalCandidates = 11;
     __bestCandidatesCount = 3; // 2->1, 3->3, 4->6, 5->10 Combinations without repetition order not important
     __totalChildren = (MathFn.factorial(this.__bestCandidatesCount) / (MathFn.factorial(2) * MathFn.factorial(this.__bestCandidatesCount - 2)));
-    __maxGenerationCount = 1500;
+    __maxGenerationCount = 10;
 
-    __initialCapital = 1000;
-    __costOfTrade = 1.74;
-    __reward = 0.06; // 6%
-
-    __numberOfOutputs = 6;
     __layers = [15, 15, 15, 15];
-
-    __numberOfCandles = 50;
-    __numberOfCandlesAYear = 252;
 
     /**
      * Node structure
@@ -299,21 +291,21 @@ export default class GeneticAlgo {
                         .from({ length: this.__totalCandidates }, (_, k) => k)
                         .map(candidateNumber => {
 
-                            numberOfInputs = (universe[0].size * this.__numberOfCandles) + 1; // 1 more is the capital
+                            numberOfInputs = (universe[0].size * app.__numberOfCandles) + 1; // 1 more is the capital
 
                             return this
                                 .readJSONFileAsCandidate(`./data/candidates/${candidateNumber}.json`)
                                 .then(candidate => {
                                     candidate
                                         .reset()
-                                        .setInitialCapital(this.__initialCapital);
+                                        .setInitialCapital(app.__initialCapital);
 
-                                    layers = [...this.__layers, this.__numberOfOutputs];
+                                    layers = [...this.__layers, app.__numberOfOutputs];
                                     // If candidate is empty, generate one
                                     if (candidate.isGenomeEmpty()) {
                                         candidate
                                             .setId(candidateNumber)
-                                            .setInitialCapital(this.__initialCapital)
+                                            .setInitialCapital(app.__initialCapital)
                                             .setGenome(this.randomGenome({
                                                 layers,
                                                 numberOfInputs,
@@ -328,7 +320,7 @@ export default class GeneticAlgo {
             })
             // Loop generations
             .then(() => {
-                const numberOfTradingDays = universe.length - this.__numberOfCandles;
+                const numberOfTradingDays = universe.length - app.__numberOfCandles;
 
                 // Loop generations
                 return Array
@@ -350,7 +342,7 @@ export default class GeneticAlgo {
 
                                 // Loop trading days by running the candidate
                                 return Array
-                                    .from({ length: numberOfTradingDays }, (_, k) => this.__numberOfCandles + k)
+                                    .from({ length: numberOfTradingDays }, (_, k) => app.__numberOfCandles + k)
                                     .reduce((promise, dayNumber) => promise.then(() => {
                                         // Only trade on Monday, Wednesday, and Friday
                                         let today = universe[dayNumber].get('Day');
@@ -366,7 +358,7 @@ export default class GeneticAlgo {
                                             
                                             // Get 50 candles as input set from universe
                                             let inputSet = universe
-                                                .slice(dayNumber - this.__numberOfCandles, dayNumber) // 50 candles before today
+                                                .slice(dayNumber - app.__numberOfCandles, dayNumber) // 50 candles before today
                                                 .reduce((acc, map) => {
                                                     let valueIterator = map.values();
                                                     let value = valueIterator.next().value;
@@ -411,8 +403,8 @@ export default class GeneticAlgo {
                                                 .reduce((profit, tickerSymbol, tickerSymbolIndex) => {
                                                     return profit + candidate.executeTrade({
                                                         risk: [capitalToRisk[tickerSymbolIndex * 2], capitalToRisk[tickerSymbolIndex * 2 + 1]],
-                                                        perTradeComission: this.__costOfTrade,
-                                                        perTradeReward: this.__reward,
+                                                        perTradeComission: app.__costOfTrade,
+                                                        perTradeReward: app.__reward,
                                                         priceCloseToday: universe[dayNumber].get(`${tickerSymbol}_ClosePrice`),
                                                         priceExpectedMove: universe[dayNumber - 1].get(`${tickerSymbol}_StandardDeviation`),
                                                         tickerSymbol,

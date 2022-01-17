@@ -1,18 +1,16 @@
-import * as tf from '@tensorflow/tfjs';
 import AlpacaAPI from '../resource/AlpacaAPI.js';
 import App from '../app.js';
 import Candidate from '../model/Candidate.js';
 import Candlestick from '../model/Candlestick.js';
 import CollectionService from '../resource/CollectionService.js';
 import MathFn from '../util/MathFn.js';
-import NeuroAlgo from '../NeuroAlgo.js';
-import tfn from '@tensorflow/tfjs-node';
+import TensorFlowAdaptor from '../util/TensorFlowAdaptor.js';
 import VolumeProfile from '../model/VolumeProfile.js';
 
 const alpacaAPI = new AlpacaAPI();
 const app = new App();
 const collectionService = new CollectionService();
-const neuro = new NeuroAlgo();
+const tensorFlow = new TensorFlowAdaptor();
 
 let universe;
 
@@ -107,15 +105,7 @@ collectionService
             // .then(() => console.log(universe[universe.length - 1]));
     })
     .then(() => {
-        return tf
-        .loadLayersModel(tfn.io.fileSystem(`${neuro.__trainedFilePath}/model.json`))
-        .then(model => {
-            model.compile({
-                loss: tf.losses.meanSquaredError,
-                optimizer: tf.train.sgd(0.01),
-            });
-            return model;
-        });
+        return tensorFlow.getTrainedModel()
     })
     // Predict today
     .then(model => {
@@ -128,7 +118,7 @@ collectionService
 
         // Get 50 candles as input set from universe
         let inputSet = universe
-            .slice(universe.length - neuro.__numberOfCandles - 1, universe.length - 1)
+            .slice(universe.length - app.__numberOfCandles - 1, universe.length - 1)
             .reduce((acc, map) => {
                 let valueIterator = map.values();
                 let value = valueIterator.next().value;
@@ -140,9 +130,10 @@ collectionService
             }, []);
 
         // Execute candidate
-        let output = model
-            .predict(tf.tensor2d([inputSet]))
-            .arraySync()[0];
+        let output = tensorFlow.predict({
+            model,
+            input: inputSet,
+        });
 
         // Calculate capital to risk based on the output
         let currentCapitalToTrade = candidate.getCapital();
@@ -173,15 +164,7 @@ collectionService
         });
     })
     .then(() => {
-        return tf
-        .loadLayersModel(tfn.io.fileSystem(`${neuro.__trainedFilePath}/model.json`))
-        .then(model => {
-            model.compile({
-                loss: tf.losses.meanSquaredError,
-                optimizer: tf.train.sgd(0.01),
-            });
-            return model;
-        });
+        return tensorFlow.getTrainedModel();
     })
     // Predict tomorrow
     .then(model => {
@@ -194,7 +177,7 @@ collectionService
 
         // Get 50 candles as input set from universe
         let inputSet = universe
-            .slice(universe.length - neuro.__numberOfCandles)
+            .slice(universe.length - app.__numberOfCandles)
             .reduce((acc, map) => {
                 let valueIterator = map.values();
                 let value = valueIterator.next().value;
@@ -206,9 +189,10 @@ collectionService
             }, []);
 
         // Execute candidate
-        let output = model
-            .predict(tf.tensor2d([inputSet]))
-            .arraySync()[0];
+        let output = tensorFlow.predict({
+            model,
+            input: inputSet,
+        });
 
         // Calculate capital to risk based on the output
         let currentCapitalToTrade = candidate.getCapital();

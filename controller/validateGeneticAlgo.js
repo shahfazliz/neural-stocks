@@ -1,3 +1,4 @@
+import App from '../app.js';
 import CollectionService from '../resource/CollectionService.js';
 import GeneticAlgo from '../GeneticAlgo.js';
 import MathFn from '../util/MathFn.js';
@@ -7,6 +8,7 @@ let layers;
 let candidate;
 const candidateNumber = 0;
 
+const app = new App();
 const algo = new GeneticAlgo();
 const collectionService = new CollectionService();
 collectionService
@@ -15,16 +17,16 @@ collectionService
     .then(() => algo.readJSONFileAsCandidate(`./data/candidates/${candidateNumber}.json`))
     .then(c => candidate = c)
     .then(() => {
-        const numberOfTradingDays = universe.length - algo.__numberOfCandles;
+        const numberOfTradingDays = universe.length - app.__numberOfCandles;
 
         candidate
             .reset()
-            .setInitialCapital(algo.__initialCapital);
+            .setInitialCapital(app.__initialCapital);
 
-        layers = [...algo.__layers, algo.__numberOfOutputs];
+        layers = [...algo.__layers, app.__numberOfOutputs];
         // Run the candidates
         return Array
-            .from({ length: numberOfTradingDays }, (_, k) => algo.__numberOfCandles + k)
+            .from({ length: numberOfTradingDays }, (_, k) => app.__numberOfCandles + k)
             .reduce((promise, dayNumber) => promise.then(() => {
                 // Only trade on Monday, Wednesday, and Friday
                 let today = universe[dayNumber].get('Day');
@@ -40,7 +42,7 @@ collectionService
                     
                     // Get 50 candles as input set from universe
                     let inputSet = universe
-                        .slice(dayNumber - algo.__numberOfCandles, dayNumber) // 50 candles before today
+                        .slice(dayNumber - app.__numberOfCandles, dayNumber) // 50 candles before today
                         .reduce((acc, map) => {
                             let valueIterator = map.values();
                             let value = valueIterator.next().value;
@@ -80,13 +82,13 @@ collectionService
                         return risk;
                     });
 
-                    let profit = algo
+                    let profit = app
                         .getListTickersOfInterest()
                         .reduce((profit, tickerSymbol, tickerSymbolIndex) => {
                             return profit + candidate.executeTrade({
                                 risk: [capitalToRisk[tickerSymbolIndex * 2], capitalToRisk[tickerSymbolIndex * 2 + 1]],
-                                perTradeComission: algo.__costOfTrade,
-                                perTradeReward: algo.__reward,
+                                perTradeComission: app.__costOfTrade,
+                                perTradeReward: app.__reward,
                                 priceCloseToday: universe[dayNumber].get(`${tickerSymbol}_ClosePrice`),
                                 priceExpectedMove: universe[dayNumber - 1].get(`${tickerSymbol}_StandardDeviation`),
                                 tickerSymbol,
