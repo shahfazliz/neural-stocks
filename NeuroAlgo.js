@@ -1,10 +1,12 @@
 import * as tf from '@tensorflow/tfjs';
+import App from './app.js';
 import Candidate from './model/Candidate.js';
 import CollectionService from './resource/CollectionService.js';
 import FileService from './util/FileService.js';
 import MathFn from './util/MathFn.js';
 import tfn from '@tensorflow/tfjs-node';
 
+const app = new App();
 const collectionService = new CollectionService();
 const fileService = new FileService();
 
@@ -18,40 +20,13 @@ export default class NeuroAlgo {
     __hiddenNodes = 15;
     __hiddenLayers = 3;
     __learnRate = 0.001;
-    __compile = {
+    __compileParams = {
         loss: tf.losses.meanSquaredError,
         optimizer: tf.train.sgd(this.__learnRate),
         metrics: ['accuracy'],
     };
 
     __trainedFilePath = './data/tensorflowModel';
-
-    __listOfTickers = [
-        'BAL',
-        'CYB',
-        'DBA', 'DIA',
-        'EEM',
-        'FXA', 'FXB', 'FXC', 'FXE', 'FXF', 'FXI', 'FXY',
-        'GDX', 'GDXJ', 'GLD', 'GOVT',
-        'IEF', 'IEI',
-        'IWM',
-        'IYT',
-        'NIB',
-        'QQQ',
-        'RJA', 'RJI',
-        'SHY',
-        'SPY',
-        'TIP', 'TLH', 'TLT',
-        'UNG', 'USO', 'UUP',
-        'VXX',
-        'XHB', 'XLB', 'XLE', 'XLF', 'XLI', 'XLK', 'XLP', 'XLRE', 'XLU', 'XLV', 'XRT', 'XTL', 'XTN',
-    ];
-
-    __listOfTickersOfInterest = ['SPY', 'QQQ', 'IWM']; // order is important
-
-    getListTickersOfInterest() {
-        return this.__listOfTickersOfInterest;
-    }
 
     train() {
         return collectionService
@@ -74,8 +49,8 @@ export default class NeuroAlgo {
                                 }, []);
 
                             let totalOutput = 0;
-                            const output = this
-                                .__listOfTickersOfInterest
+                            const output = app
+                                .getListOfTickers()
                                 .reduce((acc, tickerSymbol) => {
                                     const priceCloseToday = universe[dayNumber].get(`${tickerSymbol}_ClosePrice`);
                                     const priceExpectedMove = universe[dayNumber - 1].get(`${tickerSymbol}_StandardDeviation`);
@@ -143,7 +118,7 @@ export default class NeuroAlgo {
                     .loadLayersModel(tfn.io.fileSystem(`${this.__trainedFilePath}/model.json`))
                     .then(model => {
                         console.log('Model available');
-                        model.compile(this.__compile);
+                        model.compile(this.__compileParams);
                         return model;
                     })
                     .catch(() => {
@@ -176,7 +151,7 @@ export default class NeuroAlgo {
                             units: 6, // Output nodes
                         }));
         
-                        model.compile(this.__compile);
+                        model.compile(this.__compileParams);
 
                         return model;
                     })
@@ -208,7 +183,7 @@ export default class NeuroAlgo {
         return tf
             .loadLayersModel(tfn.io.fileSystem(`${this.__trainedFilePath}/model.json`))
             .then(model => {
-                model.compile(this.__compile);
+                model.compile(this.__compileParams);
                 return model;
             })
             .then(model => {
@@ -279,7 +254,7 @@ export default class NeuroAlgo {
 
                                     // console.log(`Capital To Risk: ${JSON.stringify(capitalToRisk, undefined, 4)}`);
                 
-                                    let profit = this
+                                    let profit = app
                                         .getListTickersOfInterest()
                                         .reduce((profit, tickerSymbol, tickerSymbolIndex) => {
                                             return profit + candidate.executeTrade({
@@ -311,6 +286,8 @@ export default class NeuroAlgo {
                         console.log('Candidate Summary');
                         console.log('------------------------------------------------');
                         console.log(candidate.scoreToString())
+
+                        return candidate;
                     });
             });
     }
@@ -320,7 +297,7 @@ export default class NeuroAlgo {
             .loadLayersModel(tfn.io.fileSystem(`${this.__trainedFilePath}/model.json`))
             .then(model => {
                 console.log('Model available');
-                model.compile(this.__compile);
+                model.compile(this.__compileParams);
                 return model;
             })
             .then(model => {

@@ -1,17 +1,19 @@
+import App from './app.js';
 import Candidate from './model/Candidate.js';
 import CollectionService from './resource/CollectionService.js';
 import FileService from './util/FileService.js';
 import fs from 'fs/promises';
 import MathFn from './util/MathFn.js';
 
+const app = new App();
 const collectionService = new CollectionService();
 const fileService = new FileService();
 
 export default class GeneticAlgo {
     __totalCandidates = 11;
     __bestCandidatesCount = 3; // 2->1, 3->3, 4->6, 5->10 Combinations without repetition order not important
-    __totalChildren = (this.factorial(this.__bestCandidatesCount) / (this.factorial(2) * this.factorial(this.__bestCandidatesCount - 2)));
-    __maxGenerationCount = 500;
+    __totalChildren = (MathFn.factorial(this.__bestCandidatesCount) / (MathFn.factorial(2) * MathFn.factorial(this.__bestCandidatesCount - 2)));
+    __maxGenerationCount = 1500;
 
     __initialCapital = 1000;
     __costOfTrade = 1.74;
@@ -22,32 +24,6 @@ export default class GeneticAlgo {
 
     __numberOfCandles = 50;
     __numberOfCandlesAYear = 252;
-    __listOfTickers = [
-        'BAL',
-        'CYB',
-        'DBA', 'DIA',
-        'EEM',
-        'FXA', 'FXB', 'FXC', 'FXE', 'FXF', 'FXI', 'FXY',
-        'GDX', 'GDXJ', 'GLD', 'GOVT',
-        'IEF', 'IEI',
-        'IWM',
-        'IYT',
-        'NIB',
-        'QQQ',
-        'RJA', 'RJI',
-        'SHY',
-        'SPY',
-        'TIP', 'TLH', 'TLT',
-        'UNG', 'USO', 'UUP',
-        'VXX',
-        'XHB', 'XLB', 'XLE', 'XLF', 'XLI', 'XLK', 'XLP', 'XLRE', 'XLU', 'XLV', 'XRT', 'XTL', 'XTN',
-    ];
-
-    __listTickersOfInterest = ['SPY', 'QQQ', 'IWM']; // order is important
-
-    getListTickersOfInterest() {
-        return this.__listTickersOfInterest;
-    }
 
     /**
      * Node structure
@@ -298,12 +274,6 @@ export default class GeneticAlgo {
             );
     }
 
-    factorial(number) {
-        return (number === 1 || number === 0) 
-            ? 1
-            : number * this.factorial(number - 1);
-    }
-
     run() {
         let universe;
         let candidates = [];
@@ -436,7 +406,7 @@ export default class GeneticAlgo {
                                                 return risk;
                                             });
 
-                                            let profit = this
+                                            let profit = app
                                                 .getListTickersOfInterest()
                                                 .reduce((profit, tickerSymbol, tickerSymbolIndex) => {
                                                     return profit + candidate.executeTrade({

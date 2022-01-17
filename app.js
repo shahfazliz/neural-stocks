@@ -28,14 +28,14 @@ export default class App {
         'XHB', 'XLB', 'XLE', 'XLF', 'XLI', 'XLK', 'XLP', 'XLRE', 'XLU', 'XLV', 'XRT', 'XTL', 'XTN',
     ];
 
-    __listOfTickersOfInterest = [
-        'IWM',
-        'QQQ',
-        'SPY',
-    ];
+    __listOfTickersOfInterest = ['SPY', 'QQQ', 'IWM']; // order is important
 
     getListOfTickers() {
         return this.__listOfTickers;
+    }
+
+    getListTickersOfInterest() {
+        return this.__listOfTickersOfInterest;
     }
 
     isTickerOfInterest(tickerSymbol) {
