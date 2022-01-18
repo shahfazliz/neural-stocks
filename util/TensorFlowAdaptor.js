@@ -99,7 +99,7 @@ export default class TensorFlowAdaptor {
             .arraySync()[0];
     }
 
-    extractGenomeTest() {
+    extractGenome() {
         return this
             .getTrainedModel()
             .then(model => {
