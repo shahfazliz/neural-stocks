@@ -91,7 +91,7 @@ collectionService
             });
             // .then(() => console.log(universe[universe.length - 1]));
     })
-    .then(() => algo.readJSONFileAsCandidate(`./data/backup/${candidateNumber}.json`))
+    .then(() => collectionService.readJSONFileAsCandidate(`./data/backup/${candidateNumber}.json`))
     .then(c => candidate = c)
     // Predict today
     .then(() => {

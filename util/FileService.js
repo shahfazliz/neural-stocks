@@ -13,7 +13,6 @@ export default class FileService {
      * Read from json file as object
      */
      readJSONFile(jsonfilepath) {
-        console.log(`Reading from ${jsonfilepath}`);
         return fs
             .readFile(jsonfilepath)
             .then(rawJson => JSON.parse(rawJson))

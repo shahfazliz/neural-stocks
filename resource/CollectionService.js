@@ -1,3 +1,4 @@
+import Candidate from '../model/Candidate.js';
 import CandlestickCollection from '../model/CandlestickCollection.js';
 import FileService from '../util/FileService.js';
 import VolumeProfile from '../model/VolumeProfile.js';
@@ -53,5 +54,26 @@ export default class CollectionService {
                 // console.log(JSON.parse(json));
                 return json.map(world => new Map(Object.entries(world)));
             });
+    }
+
+    /**
+     * Read json file as candidate
+     * @returns {Promise}
+     */
+     readJSONFileAsCandidate(jsonfilepath) {
+        return fileService
+            .readJSONFile(jsonfilepath)
+            .then(json => {
+                console.log(`Reading from ${jsonfilepath}`);
+                // console.log(JSON.parse(rawJson));
+                return new Candidate(json);
+            })
+            // If file does not exist, create one
+            .catch(() => fileService
+                .writeToJSONFile({
+                    jsonfilepath,
+                })
+                .then(() => new Candidate({}))
+            );
     }
 }

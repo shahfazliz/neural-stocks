@@ -14,7 +14,7 @@ const collectionService = new CollectionService();
 collectionService
     .readJSONFileAsUniverse('./data/universe/universe.json')
     .then(u => universe = u)
-    .then(() => algo.readJSONFileAsCandidate(`./data/candidates/${candidateNumber}.json`))
+    .then(() => collectionService.readJSONFileAsCandidate(`./data/candidates/${candidateNumber}.json`))
     .then(c => candidate = c)
     .then(() => {
         const numberOfTradingDays = universe.length - app.__numberOfCandles;

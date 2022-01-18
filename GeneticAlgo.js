@@ -2,7 +2,6 @@ import App from './app.js';
 import Candidate from './model/Candidate.js';
 import CollectionService from './resource/CollectionService.js';
 import FileService from './util/FileService.js';
-import fs from 'fs/promises';
 import MathFn from './util/MathFn.js';
 
 const app = new App();
@@ -245,26 +244,6 @@ export default class GeneticAlgo {
         return (candidate.getCapital() + candidate.getProfit() + candidate.getWithdrawal());
     }
 
-    /**
-     * Read json file as candidate
-     * @returns {Promise}
-     */
-    readJSONFileAsCandidate(jsonfilepath) {
-        return fs
-            .readFile(jsonfilepath)
-            .then(rawJson => {
-                console.log(`Reading from ${jsonfilepath}`);
-                // console.log(JSON.parse(rawJson));
-                return new Candidate(JSON.parse(rawJson));
-            })
-            // If file does not exist, create one
-            .catch(() => fileService
-                .writeToJSONFile({
-                    jsonfilepath,
-                })
-                .then(() => new Candidate({}))
-            );
-    }
 
     run() {
         let universe;
@@ -279,7 +258,7 @@ export default class GeneticAlgo {
             .then(u => universe = u)
             // Load best candidate
             .then(() => {
-                return this
+                return collectionService
                     .readJSONFileAsCandidate(`./data/backup/0.json`)
                     .then(candidate => bestCandidate = candidate);
             })
@@ -293,7 +272,7 @@ export default class GeneticAlgo {
 
                             numberOfInputs = (universe[0].size * app.__numberOfCandles) + 1; // 1 more is the capital
 
-                            return this
+                            return collectionService
                                 .readJSONFileAsCandidate(`./data/candidates/${candidateNumber}.json`)
                                 .then(candidate => {
                                     candidate
