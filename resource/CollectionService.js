@@ -73,7 +73,14 @@ export default class CollectionService {
                 .writeToJSONFile({
                     jsonfilepath,
                 })
-                .then(() => new Candidate({}))
+                .then(() => {
+                    console.log(jsonfilepath.replace('/metadata.json', ''));
+                    const candidate = new Candidate({
+                        modelLocation: jsonfilepath.replace('/metadata.json', ''),
+                    });
+                    console.log(candidate);
+                    return candidate;
+                })
             );
     }
 }

@@ -1,4 +1,4 @@
-import MathFn from "../util/MathFn.js";
+import MathFn from '../util/MathFn.js';
 
 export default class Candidate {
     __id = 0;
@@ -9,24 +9,25 @@ export default class Candidate {
     __withdrawal = 0;
     __generation = 0;
     __initialCapital = 1000;
-    __coefficient = 1; // 0.5113;
+    __modelLocation = '.';
+    __model = null;
 
     constructor({
         id = 0,
-        genome = [],
         capital = this.__initialCapital,
         profit = 0,
         tradeDuration = 0,
         withdrawal = 0,
         generation = 0,
+        modelLocation = '.',
     }) {
         this.__id = id;
-        this.__genome = genome;
         this.__capital = capital;
         this.__profit = profit;
         this.__tradeDuration = tradeDuration;
         this.__withdrawal = withdrawal;
         this.__generation = generation;
+        this.__modelLocation = modelLocation;
     }
 
     reset() {
@@ -117,7 +118,25 @@ export default class Candidate {
     setInitialCapital(capital) {
         this.__initialCapital = capital;
         return this;
-    } 
+    }
+
+    getModelLocation() {
+        return this.__modelLocation;
+    }
+
+    setModelLocation(filepath) {
+        this.__modelLocation = filepath;
+        return this;
+    }
+
+    getModel() {
+        return this.__model;
+    }
+
+    setModel(model) {
+        this.__model = model;
+        return this;
+    }
 
     toString() {
         return JSON.stringify({
@@ -127,7 +146,7 @@ export default class Candidate {
             profit: this.getProfit(),
             withdrawal: this.getWithdrawal(),
             generation: this.getGeneration(),
-            genome: this.getGenome(),
+            modelLocation: this.getModelLocation(),
         }, undefined, 4);
     }
 
@@ -159,8 +178,8 @@ export default class Candidate {
             : 0;
         let rewardLong = capitalToUse * perTradeReward - costOfTradeLong;
         let long = -priceExpectedMove < priceCloseToday
-            ? MathFn.currency(rewardLong / this.__coefficient)
-            : MathFn.currency((rewardLong - capitalToUse) * this.__coefficient);    
+            ? MathFn.currency(rewardLong)
+            : MathFn.currency(rewardLong - capitalToUse);    
         console.log(`  profit ${tickerSymbol}:`);
         console.log(`    long  trade risking ${capitalToUse} = ${long}`)
         profit += long;
@@ -172,8 +191,8 @@ export default class Candidate {
             : 0;
         let rewardShort = capitalToUse * perTradeReward - costOfTradeShort;
         let short = priceExpectedMove > priceCloseToday
-            ? MathFn.currency(rewardShort / this.__coefficient)
-            : MathFn.currency((rewardShort - capitalToUse) * this.__coefficient);
+            ? MathFn.currency(rewardShort)
+            : MathFn.currency(rewardShort - capitalToUse);
         console.log(`    short trade risking ${capitalToUse} = ${short}`);
         profit += short;
 
@@ -181,7 +200,7 @@ export default class Candidate {
     }
 
     executeWithdrawal() {
-        let withdrawal = MathFn.currency((this.getCapital() - this.getInitialCapital()) * this.__coefficient);
+        let withdrawal = MathFn.currency(this.getCapital() - this.getInitialCapital());
 
         if (withdrawal > 0) {
             console.log(`Withdrawal: ${withdrawal}`);

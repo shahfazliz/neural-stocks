@@ -15,6 +15,11 @@ export default class TensorFlowAdaptor {
 
     __trainedFilePath = './data/tensorflowModel';
 
+    setTrainedFilePath(filepath) {
+        this.__trainedFilePath = filepath;
+        return this;
+    }
+
     getTrainedModel() {
         return tf
             .loadLayersModel(tfn.io.fileSystem(`${this.__trainedFilePath}/model.json`))
@@ -69,15 +74,20 @@ export default class TensorFlowAdaptor {
         validateInputData,
         validateOutputData,
     }) {
+        const trainingInputData2D = tf.tensor2d(trainingInputData);
+        const trainingOutputData2D = tf.tensor2d(trainingOutputData);
+        const validateInputData2D = tf.tensor2d(validateInputData);
+        const validateOutputData2D = tf.tensor2d(validateOutputData);
+        
         return model
             .fit(
-                tf.tensor2d(trainingInputData), 
-                tf.tensor2d(trainingOutputData),
+                trainingInputData2D, 
+                trainingOutputData2D,
                 {
                     epochs: this.__epochs,
                     validationData: [
-                        tf.tensor2d(validateInputData),
-                        tf.tensor2d(validateOutputData),
+                        validateInputData2D,
+                        validateOutputData2D,
                     ],
                     callbacks: tf.callbacks.earlyStopping({
                         monitor: 'loss',
@@ -86,6 +96,10 @@ export default class TensorFlowAdaptor {
                 },
             )
             .then(() => {
+                trainingInputData2D.dispose();
+                trainingOutputData2D.dispose();
+                validateInputData2D.dispose();
+                validateOutputData2D.dispose();
                 model.save(`file://${this.__trainedFilePath}`);
             });
     }
@@ -94,9 +108,17 @@ export default class TensorFlowAdaptor {
         model,
         input,
     }) {
-        return model
-            .predict(tf.tensor2d([input]))
-            .arraySync()[0];
+        return tf.tidy(() => {
+            const input2D = tf.tensor2d([input]); 
+
+            const result = model
+                .predict(input2D)
+                .arraySync()[0];
+            
+            input2D.dispose();
+
+            return result;
+        });
     }
 
     extractGenome() {
@@ -122,5 +144,28 @@ export default class TensorFlowAdaptor {
                             });
                     }));
             });
+    }
+
+    clone(model) {
+        return tf.tidy(() => {
+            const newModel = this
+            .createNewModel({
+                numberOfInputNodes: model.inputs[0].shape[1],
+                numberOfOutputNodes: model.outputs[0].shape[1],
+            });
+
+            newModel.setWeights(model
+                .getWeights()
+                .slice()
+            );
+
+            newModel.compile(this.__compileParams);
+            return newModel;
+        });
+    }
+
+    memory() {
+        console.log(tf.memory());
+        return this;
     }
 }

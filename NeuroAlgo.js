@@ -34,7 +34,7 @@ export default class NeuroAlgo {
 
                             let totalOutput = 0;
                             const output = app
-                                .getListOfTickers()
+                                .getListTickersOfInterest()
                                 .reduce((acc, tickerSymbol) => {
                                     const priceCloseToday = universe[dayNumber].get(`${tickerSymbol}_ClosePrice`);
                                     const priceExpectedMove = universe[dayNumber - 1].get(`${tickerSymbol}_StandardDeviation`);
@@ -117,7 +117,7 @@ export default class NeuroAlgo {
             });
     }
 
-    test() {
+    validate() {
         return tensorFlow
             .getTrainedModel()
             .then(model => {
@@ -162,7 +162,7 @@ export default class NeuroAlgo {
                                         }, []);
 
                                     // console.log(inputSet);
-                
+
                                     // Execute candidate
                                     let output = tensorFlow.predict({
                                         model,
@@ -188,7 +188,7 @@ export default class NeuroAlgo {
                                     });
 
                                     // console.log(`Capital To Risk: ${JSON.stringify(capitalToRisk, undefined, 4)}`);
-                
+
                                     let profit = app
                                         .getListTickersOfInterest()
                                         .reduce((profit, tickerSymbol, tickerSymbolIndex) => {
@@ -220,7 +220,8 @@ export default class NeuroAlgo {
                         console.log('------------------------------------------------');
                         console.log('Candidate Summary');
                         console.log('------------------------------------------------');
-                        console.log(candidate.scoreToString())
+                        console.log(candidate.scoreToString());
+                        tensorFlow.memory();
 
                         return candidate;
                     });

@@ -1,159 +1,21 @@
+import * as tf from '@tensorflow/tfjs';
 import App from './app.js';
 import Candidate from './model/Candidate.js';
 import CollectionService from './resource/CollectionService.js';
 import FileService from './util/FileService.js';
 import MathFn from './util/MathFn.js';
+import TensorFlowAdaptor from './util/TensorFlowAdaptor.js';
+import tfn from '@tensorflow/tfjs-node';
 
 const app = new App();
 const collectionService = new CollectionService();
 const fileService = new FileService();
+const tensorFlow = new TensorFlowAdaptor();
 
 export default class GeneticAlgo {
-    __totalCandidates = 11;
-    __bestCandidatesCount = 3; // 2->1, 3->3, 4->6, 5->10 Combinations without repetition order not important
-    __totalChildren = (MathFn.factorial(this.__bestCandidatesCount) / (MathFn.factorial(2) * MathFn.factorial(this.__bestCandidatesCount - 2)));
-    __maxGenerationCount = 10;
-
-    __layers = [15, 15, 15, 15];
-
-    /**
-     * Node structure
-     * --------------
-     *
-     *   x0 - 2 - 4
-     *      X   X   > 6
-     *   x1 - 3 - 5
-     *
-     * const nodes = [
-     *      x0, x1, // inputs
-     *      [w02, w12, c2], // hidden node 2
-     *      [w03, w13, c3], // hidden node 3
-     *      [w24, w34, c4], // hidden node 4
-     *      [w25, w35, c5], // hidden node 5
-     *      [w46, w56, c6], // output node 6
-     * ];
-     *
-     *
-     * Some other rules?
-     * -----------------
-     * 1. number of nodes per layer === number of inputs
-     * 2. number of hidden layers = Math.floor((length of nodes - number of inputs) / number of inputs)
-     * 3. number of output nodes = (length of nodes - number of inputs) - (number of hidden layers * number of inputs)
-     * 4. hidden nodes use swish activation function (x) => x*sigmoid(x)
-     * 5. output nodes use sigmoid activation function (x) => 1/(1+Math.exp(-x))
-     *
-     * Sample input
-     * ------------
-     * const input = [13,14];
-     * const nodes = [
-     *  [1,1,1], // node 1
-     *  [2,2,2], // node 2
-     *  [3,3,3], // node 3
-     *  [4,4,4], // node 4
-     *  [5,5,5], // output node
-     * ];
-     */
-    runCandidate({
-        id,
-        input,
-        genome,
-        layers,
-    }) {
-        console.log(`Run candidate ${id} with input length of ${input.length}`);
-
-        const model = [...input, ...genome];
-
-        let outputNode = undefined;
-        for (let i = input.length; i < model.length; i++) {
-            // Calculate hidden layer number
-            const layerNumber = this.isInLayer(layers, i - input.length);
-
-            // Sum all multiplication with weights
-            let result = 0;
-            for (let j = 0; j < model[i].length - 1; j++) { // -1 to exclude bias
-                result += model[i][j] * model[layerNumber - 1 + j]; // weight * input
-            }
-
-            // Add bias
-            result += model[i][model[i].length - 1];
-
-            // Determine if current node is in output layer
-            const isOutputLayer = layerNumber === layers.length;
-
-            // Apply activation function and save result
-            model[i] = isOutputLayer
-                ? MathFn.sigmoid(result)
-                : MathFn.limitBetween(result, 0, 6) // MathFn.swish(result);
-            // model[i] = MathFn.sigmoid(result);
-
-            // Save the output node number
-            if (isOutputLayer && outputNode === undefined) {
-                outputNode = i;
-            }
-        }
-
-        // Only return the output nodes, remove the rest to save memory space
-        model.splice(0, outputNode);
-
-        return model.map(val => MathFn.precision(val));
-    }
-
-    /**
-     * Find the target resides in which layer. Not zero index
-     */
-    isInLayer(layers, target) {
-        for (let i = 0; i < layers.length; i++) {
-            let sum = layers
-                .slice(0, i + 1)
-                .reduce((acc, val) => acc + val);
-
-            if (target < sum) {
-                return i + 1; // Not zero index
-            }
-        }
-    }
-
-    /**
-     * Initial genome
-     */
-    randomGenome({
-        layers = [3, 3, 3],
-        numberOfInputs = 1,
-        seed,
-    }) {
-        console.log(`Generating random genome with ${layers[0]} input nodes, ${layers[layers.length - 1]} output nodes, and ${layers.length - 2} hidden layers`);
-
-        let weights = [];
-        layers.forEach((numberOfNode, index) => {
-            let numberOfWeightsPerNode = index === 0
-                ? numberOfInputs
-                : layers[index - 1];
-
-            Array.from(
-                { length: numberOfNode },
-                () => Array.from(
-                    { length: numberOfWeightsPerNode + 1 }, // +1 for bias
-                    () => this.randomWeight()
-                )
-            ).forEach(val => weights.push(val));
-        });
-
-        if (seed && seed.length > 0) {
-            console.log('with seed');
-            for (let i = 0; i < weights.length; i++) {
-                for (let j = MathFn.randomInt(0, 1); j < weights[i].length; j += 2) {
-                    weights[i][j] = seed[i][j];
-                }
-            }
-        }
-
-        // console.log(weights);
-        return weights;
-    }
-
-    randomWeight() {
-        return MathFn.randomFloat(-1, 1);
-    }
+    __mutationRate = 0.2;
+    __totalCandidates = 10;
+    __maxGenerationCount = 100;
 
     /**
      * Crossover genome
@@ -162,27 +24,25 @@ export default class GeneticAlgo {
         candidateA,
         candidateB,
     }) {
-        return new Promise((resolve, reject) => {
-            for (let index = 0; index < candidateA.__genome.length; index++) {
-                // Direct access to the private attibute (genome) to save memory space
-                let minimumGenomeLength = candidateA.__genome[index].length;
+        return Promise
+            .all([
+                candidateA.getModel().getWeights(),
+                candidateB.getModel().getWeights(),
+            ])
+            .then(weightsAndBias => {
+                let [candidateAWeights, candidateBWeights] = weightsAndBias;
 
-                let startSplice = MathFn.randomInt(0, minimumGenomeLength - 1);
-                let numberOfGenesToCross = MathFn.randomInt(0, minimumGenomeLength - startSplice - 1);
+                const totalWeights = candidateAWeights.length;
+                const startWeight = MathFn.randomInt(0, totalWeights - 1);
+                const numberOfWeights = MathFn.randomInt(0, totalWeights - startWeight);
 
-                let candidateBGenome = candidateB
-                    .__genome[index]
-                    .slice(startSplice, startSplice + numberOfGenesToCross);
+                const candidateASegment = candidateAWeights.slice(startWeight, startWeight + numberOfWeights);
+                const candidateBSegment = candidateBWeights.slice(startWeight, startWeight + numberOfWeights);
 
-                candidateA
-                    .__genome[index]
-                    .splice(startSplice, numberOfGenesToCross, ...candidateBGenome);
-            }
-
-            resolve();
-        });
+                candidateAWeights.splice(startWeight, numberOfWeights, ...candidateBSegment);
+                candidateBWeights.splice(startWeight, numberOfWeights, ...candidateASegment);
+            });
     }
-
 
     /**
      * Genome mutation
@@ -190,40 +50,31 @@ export default class GeneticAlgo {
      * @returns undefined
      */
     mutateGenome(candidate) {
-        // Direct access to the private attibute (genome) to save memory space
-        let nodePos = MathFn.randomInt(0, candidate.__genome.length - 1);
-        let startSpliceWeight = MathFn.randomInt(0, candidate.__genome[nodePos].length - 1);
-        candidate
-            .__genome[nodePos]
-            .splice(startSpliceWeight, 1, this.randomWeight());
-        return candidate;
-    }
+        return Promise
+            .all(candidate
+                .getModel()
+                .getWeights()
+                .map(tensor => {
+                    return tensor
+                        .data()
+                        .then(values => {
+                            for (let i = 0; i < values.length; i++) {
+                                if (MathFn.randomFloat(0, 1) < this.__mutationRate) {
+                                    values[i] += MathFn.randomInt(-1, 1) * values[1] * 0.1;
+                                }
+                            }
 
-    /**
-     *
-     * Inputs
-     * ------
-     * 1. 50 candles (open, close, high, low, volume profile, 1 standard deviation until yesterday)
-     * 2. 40 tickers
-     * 3. x cash in hand
-     * 4. cost of trade
-     * 5. withdrawal
-     *
-     *
-     * Output nodes
-     * ------------
-     * 1. spx long with how much risk
-     * 2. spx short with how much risk
-     * 3. ndx long with how much risk
-     * 4. ndx short with how much risk
-     * 5. rut long with how much risk
-     * 6. rut short with how much risk
-     *
-     *
-     * Option pricing rules?
-     * ---------------------
-     * 1. Selling put or calls at 1 td deviation, max profit is 6~7% of risk
-     */
+                            return tf.tensor(values, tensor.shape);
+                        });
+                }))
+            .then(newWeights => {
+                candidate
+                    .getModel()
+                    .setWeights(newWeights);
+                
+                return candidate;
+            });
+    }
 
     /**
      * Fitness test/score
@@ -244,58 +95,83 @@ export default class GeneticAlgo {
         return (candidate.getCapital() + candidate.getProfit() + candidate.getWithdrawal());
     }
 
-
-    run() {
+    train() {
         let universe;
         let candidates = [];
         let layers;
         let numberOfInputs;
-        let bestCandidate;
 
-        collectionService
+        let bestCandidates;
+
+        return collectionService
             // Load universe
             .readJSONFileAsUniverse('./data/universe/universe.json')
-            .then(u => universe = u)
-            // Load best candidate
-            .then(() => {
-                return collectionService
-                    .readJSONFileAsCandidate(`./data/backup/0.json`)
-                    .then(candidate => bestCandidate = candidate);
+            .then(u => {
+                universe = u;
+                numberOfInputs = universe[0].size * app.__numberOfCandles;
             })
-            // Load candidates
+            // Load best candidates
             .then(() => {
-                let copyGenomeBestCandidate = bestCandidate.getCopyGenome();
+                return Promise.all([0, 1].map(candidateNumber => {
+                    return collectionService
+                        .readJSONFileAsCandidate(`./data/backup/${candidateNumber}/metadata.json`)
+                        .then(candidate => {
+                            return tensorFlow
+                                .setTrainedFilePath(candidate.getModelLocation())
+                                .getTrainedModel()
+                                .catch(() => {
+                                    candidate.setModelLocation(`./data/backup/${candidateNumber}`);
+                                    return tensorFlow
+                                        .setTrainedFilePath(candidate.getModelLocation())
+                                        .createNewModel({
+                                            numberOfInputNodes: numberOfInputs,
+                                            numberOfOutputNodes: app.__numberOfOutputs,
+                                        });
+                                })
+                                .then(model => candidate.setModel(model));
+                        });
+                }));
+            })
+            .then(candidates => {
+                bestCandidates = candidates;
+            })
+            // Load other candidates
+            .then(() => {
                 return Promise
                     .all(Array
                         .from({ length: this.__totalCandidates }, (_, k) => k)
                         .map(candidateNumber => {
 
-                            numberOfInputs = (universe[0].size * app.__numberOfCandles) + 1; // 1 more is the capital
-
                             return collectionService
-                                .readJSONFileAsCandidate(`./data/candidates/${candidateNumber}.json`)
+                                .readJSONFileAsCandidate(`./data/candidates/${candidateNumber}/metadata.json`)
                                 .then(candidate => {
-                                    candidate
-                                        .reset()
-                                        .setInitialCapital(app.__initialCapital);
+                                    return tensorFlow
+                                        .setTrainedFilePath(candidate.getModelLocation())
+                                        .getTrainedModel()
+                                        .catch(() => {
+                                            candidate.setModelLocation(`./data/candidates/${candidateNumber}`);
+                                            return tensorFlow
+                                                .setTrainedFilePath(candidate.getModelLocation())
+                                                .createNewModel({
+                                                    numberOfInputNodes: numberOfInputs,
+                                                    numberOfOutputNodes: app.__numberOfOutputs,
+                                                });
+                                        })
+                                        .then(model => {
+                                            candidate
+                                                .reset()
+                                                .setId(candidateNumber)
+                                                .setInitialCapital(app.__initialCapital)
+                                                .setModel(model);
 
-                                    layers = [...this.__layers, app.__numberOfOutputs];
-                                    // If candidate is empty, generate one
-                                    if (candidate.isGenomeEmpty()) {
-                                        candidate
-                                            .setId(candidateNumber)
-                                            .setInitialCapital(app.__initialCapital)
-                                            .setGenome(this.randomGenome({
-                                                layers,
-                                                numberOfInputs,
-                                                seed: copyGenomeBestCandidate,
-                                            }));
-                                    }
-
-                                    candidates[candidateNumber] = candidate;
+                                            return candidate;
+                                        });
                                 });
                         })
                     );
+            })
+            .then(c => {
+                candidates = c;
             })
             // Loop generations
             .then(() => {
@@ -303,12 +179,9 @@ export default class GeneticAlgo {
 
                 // Loop generations
                 return Array
-                    .from({ length: this.__maxGenerationCount }, (_, k) => k) // 100 generations
+                    .from({ length: this.__maxGenerationCount }, (_, k) => k)
                     .reduce((promise, generationNumber) => promise.then(() => {
 
-                        const suitableBestCandidateCount = [2, 3, 4];
-                        this.__bestCandidatesCount = suitableBestCandidateCount[(suitableBestCandidateCount.indexOf(this.__bestCandidatesCount) + 1) % suitableBestCandidateCount.length];
-                    
                         // Loop candidates
                         return Array
                             .from({ length: candidates.length }, (_, k) => k)
@@ -326,9 +199,9 @@ export default class GeneticAlgo {
                                         // Only trade on Monday, Wednesday, and Friday
                                         let today = universe[dayNumber].get('Day');
                                         if (candidate.getCapital() > 0 // >= candidate.getInitialCapital()
-                                            && (today === 0.1
-                                                || today === 0.3
-                                                || today === 0.5)
+                                            // && (today === 0.1
+                                            //     || today === 0.3
+                                            //     || today === 0.5)
                                         ) {
                                             candidate.setTradeDuration(candidate.getTradeDuration() + 1);
                                             console.log('------------------------------------------------');
@@ -348,18 +221,13 @@ export default class GeneticAlgo {
                                                     return acc;
                                                 }, []);
 
-                                            // Add capital as part of decision making
-                                            inputSet.unshift(candidate.getCapital());
-
                                             // Execute candidate
-                                            let output = this.runCandidate({
-                                                id: candidate.getId(),
-                                                genome: candidate.getGenome(),
+                                            let output = tensorFlow.predict({
+                                                model: candidate.getModel(),
                                                 input: inputSet,
-                                                layers,
                                             });
 
-                                            console.log(`Output: ${JSON.stringify(output, undefined, 4)}`);
+                                            // console.log(`Output: ${JSON.stringify(output, undefined, 4)}`);
 
                                             // Calculate capital to risk based on the output
                                             let currentCapitalToTrade = candidate.getCapital();
@@ -411,46 +279,82 @@ export default class GeneticAlgo {
                                 console.log(`Fitness test`);
                                 return Promise.resolve(candidates.sort((candidateA, candidateB) => {
                                     console.log(`Sorting...`);
-                                    return this.fitnessTest(candidateB) - this.fitnessTest(candidateA)
+                                    return this.fitnessTest(candidateB) - this.fitnessTest(candidateA);
                                 }));
                             })
-                            // Move the same fitnessTest result to the back. We will only propogate new solution
+                            // Save the best two candidates
                             .then(() => {
-                                return new Promise((resolve, reject) => {
-                                    let index = 0;
-                                    while (index < this.__bestCandidatesCount + this.__totalChildren - 1) {
-                                        if (this.fitnessTest(candidates[index]) === this.fitnessTest(candidates[index + 1])) {
-                                            let tempCandidate = candidates[index];
-                                            candidates.splice(index, 1);
-                                            candidates.push(tempCandidate);
-                                        }
-                                        else {
-                                            index += 1;
-                                        }
-                                    }
-                                    resolve(candidates);
+                                let sortedBestCandidates = [
+                                    bestCandidates[0],
+                                    bestCandidates[1],
+                                    candidates[0],
+                                    candidates[1]
+                                ].sort((candidateA, candidateB) => {
+                                    return this.fitnessTest(candidateB) - this.fitnessTest(candidateA);
                                 });
-                            })
-                            // Save the best into backup
-                            .then(() => {
-                                return new Promise((resolve, reject) => {
-                                    let newTempCandidate = new Candidate({
-                                        id: candidates[0].getId(),
-                                        tradeDuration: candidates[0].getTradeDuration(),
-                                        capital: candidates[0].getCapital(),
-                                        profit: candidates[0].getProfit(),
-                                        withdrawal: candidates[0].getWithdrawal(),
-                                        generation: candidates[0].getGeneration(),
-                                        genome: candidates[0].getCopyGenome(),
-                                    });
 
-                                    if (bestCandidate === undefined
-                                        || this.fitnessTest(newTempCandidate) >= this.fitnessTest(bestCandidate)
-                                    ) {
-                                        bestCandidate = newTempCandidate;
+                                // Move the same fitnessTest result to the back. We will only propogate new solution
+                                let index = 0;
+                                let numberOfLoops = 1;
+                                while (numberOfLoops < sortedBestCandidates.length) {
+                                    if (this.fitnessTest(sortedBestCandidates[index]) === this.fitnessTest(sortedBestCandidates[index + 1])) {
+                                        let tempCandidate = sortedBestCandidates[index];
+                                        sortedBestCandidates.splice(index, 1);
+                                        sortedBestCandidates.push(tempCandidate);
+                                    } else {
+                                        index += 1;
                                     }
-                                    resolve(bestCandidate);
-                                });
+                                    numberOfLoops += 1;
+                                }
+
+                                // Copy best two candidates
+                                return Promise.all([0, 1].map(candidateNumber => {
+                                    let newTempCandidate = new Candidate({
+                                        id: sortedBestCandidates[candidateNumber].getId(),
+                                        tradeDuration: sortedBestCandidates[candidateNumber].getTradeDuration(),
+                                        capital: sortedBestCandidates[candidateNumber].getCapital(),
+                                        profit: sortedBestCandidates[candidateNumber].getProfit(),
+                                        withdrawal: sortedBestCandidates[candidateNumber].getWithdrawal(),
+                                        generation: sortedBestCandidates[candidateNumber].getGeneration(),
+                                        modelLocation: `./data/backup/${candidateNumber}`,
+                                    });
+                                    newTempCandidate.setModel(tensorFlow.clone(sortedBestCandidates[candidateNumber].getModel()))
+                                    return newTempCandidate
+                                }));
+                            })
+                            .then(b => {
+                                bestCandidates = b;
+                            })
+                            // Crossover gene
+                            .then(() => {
+                                console.log(`Crossover gene`);
+                                let crossoverPromises = [];
+                                let savePosition = 0;
+                                while (savePosition < this.__totalCandidates) {
+                                    // Copy genome first then crossover
+                                    candidates[savePosition].setModel(tensorFlow.clone(bestCandidates[0].getModel()));
+                                    candidates[savePosition + 1].setModel(tensorFlow.clone(bestCandidates[1].getModel()));
+                                    // Crossover
+                                    crossoverPromises
+                                        .push(this
+                                            .crossoverGenome({
+                                                candidateA: candidates[savePosition],
+                                                candidateB: candidates[savePosition + 1],
+                                            })
+                                        );
+                                    savePosition += 2;
+                                }
+
+                                return Promise.all(crossoverPromises);
+                            })
+                            // Mutate gene
+                            .then(() => {
+                                return Promise.all(Array
+                                    .from({length: this.__totalCandidates}, (_, k) => k)
+                                    .map(candidateNumber => {
+                                        return this.mutateGenome(candidates[candidateNumber]);
+                                    })
+                                );
                             })
                             // Have to re assign the id so that we save to the right file
                             .then(() => {
@@ -459,77 +363,153 @@ export default class GeneticAlgo {
                                     console.log(`candidate ${candidate.getId()}, score: ${this.fitnessTest(candidate)}`);
                                 }));
                             })
-                            // Crossover gene
                             .then(() => {
-                                console.log(`Crossover gene`);
-                                let crossoverPromises = [];
-                                let leftPos = 0;
-                                let savePosition = this.__bestCandidatesCount;
-                                while (leftPos < this.__bestCandidatesCount) {
-                                    let rightPos = leftPos + 1;
-                                    let copyLeftGenome = candidates[leftPos].getCopyGenome();
-                                    while (rightPos < this.__bestCandidatesCount) {
-                                        // Copy genome first then crossover
-                                        candidates[savePosition].setGenome(copyLeftGenome);
-                                        candidates[savePosition + 1].setGenome(candidates[rightPos].getCopyGenome());
-                                        // Crossover
-                                        crossoverPromises
-                                            .push(this
-                                                .crossoverGenome({
-                                                    candidateA: candidates[savePosition],
-                                                    candidateB: candidates[savePosition + 1],
-                                                })
-                                            );
-                                        rightPos += 1;
-                                        // savePosition += 2;
-                                        savePosition += 1;
-                                    }
-                                    leftPos += 1;
-                                }
-
-                                return Array
-                                    .from({length: crossoverPromises.length}, (_, k) => k)
-                                    .reduce((promise, index) => promise.then(() => {
-                                        return crossoverPromises[index];
-                                    }), Promise.resolve());
-                            })
-                            // Re populate new genes
-                            .then(() => {
-                                let copyGenomeBestCandidate = bestCandidate.getCopyGenome();
-                                return Array
-                                    .from({length: this.__totalCandidates - this.__bestCandidatesCount - this.__totalChildren}, (_, k) => this.__totalChildren + this.__bestCandidatesCount + k)
-                                    .reduce((promise, index) => promise.then(() => {
-                                        candidates[index].setGenome(this.randomGenome({
-                                            layers,
-                                            numberOfInputs,
-                                            seed: copyGenomeBestCandidate,
-                                        }));
-                                    }), Promise.resolve())
-                            })
-                            // Mutate gene
-                            .then(() => {
-                                return Array
-                                    .from({length: this.__totalChildren}, (_, k) => this.__bestCandidatesCount + k)
-                                    .reduce((promise, luckyCandidateNumber) => promise.then(() => {
-                                        console.log(`mutate cadidate ${luckyCandidateNumber} gene`);
-                                        this.mutateGenome(candidates[luckyCandidateNumber]);
-                                    }), Promise.resolve());
+                                tensorFlow.memory();
                             });
                     }), Promise.resolve());
             })
             // Save the candidates
             .then(() => {
                 console.log(`end of generation`);
-                fileService.writeToJSONFile({
-                    jsonfilepath: './data/backup/0.json',
-                    data: bestCandidate.toString(),
+
+                bestCandidates
+                    .map((candidate, index) => {
+                        candidate
+                            .setModelLocation(`./data/backup/${index}`)
+                            .getModel()
+                            .save(`file://${candidate.getModelLocation()}`);
+                        
+                            return fileService.writeToJSONFile({
+                            jsonfilepath: `./data/backup/${index}/metadata.json`,
+                            data: candidate.toString(),
+                        })
                 });
-                return candidates
-                    .forEach(candidate => fileService.writeToJSONFile({
-                        jsonfilepath: `./data/candidates/${candidate.getId()}.json`,
-                        data: candidate.toString(),
-                    }));
+
+                candidates
+                    .map((candidate, index) => {
+                        candidate
+                            .setModelLocation(`./data/candidates/${index}`)
+                            .getModel()
+                            .save(`file://${candidate.getModelLocation()}`);
+                            
+                        return fileService.writeToJSONFile({
+                            jsonfilepath: `./data/candidates/${index}/metadata.json`,
+                            data: candidate.toString(),
+                        });
+                    });
             });
 
+    }
+
+    validate() {
+        return tensorFlow
+            .setTrainedFilePath(`./data/backup/0`)
+            .getTrainedModel()
+            .then(model => {
+                const candidate = new Candidate({
+                    id: 0,
+                });
+                candidate
+                    .reset()
+                    .setInitialCapital(app.__initialCapital);
+
+                collectionService
+                    .readJSONFileAsUniverse('./data/universe/universe.json')
+                    .then(universe => {
+                        const numberOfTradingDays = universe.length - app.__numberOfCandles;
+
+                        return Array
+                            .from({ length: numberOfTradingDays }, (_, k) => app.__numberOfCandles + k)
+                            .reduce((promise, dayNumber) => promise.then(() => {
+                                // Only trade on Monday, Wednesday, and Friday
+                                let today = universe[dayNumber].get('Day');
+                                if (candidate.getCapital() > 0 // >= candidate.getInitialCapital()
+                                    // && (today === 0.1
+                                    //     || today === 0.3
+                                    //     || today === 0.5)
+                                ) {
+                                    candidate.setTradeDuration(candidate.getTradeDuration() + 1);
+                                    console.log('------------------------------------------------');
+                                    console.log(`Day: ${dayNumber}/${universe.length - 1}`);
+                                    console.log('------------------------------------------------');
+                                    
+                                    // Get 50 candles as input set from universe
+                                    let inputSet = universe
+                                        .slice(dayNumber - app.__numberOfCandles, dayNumber) // 50 candles before today
+                                        .reduce((acc, map) => {
+                                            let valueIterator = map.values();
+                                            let value = valueIterator.next().value;
+                                            while (value !== undefined) {
+                                                acc.push(value);
+                                                value = valueIterator.next().value;
+                                            }
+                                            return acc;
+                                        }, []);
+
+                                    // console.log(inputSet);
+                
+                                    // Execute candidate
+                                    let output = tensorFlow.predict({
+                                        model,
+                                        input: inputSet,
+                                    });
+
+                                    // console.log(`Output: ${JSON.stringify(output, undefined, 4)}`);
+
+                                    // Calculate capital to risk based on the output
+                                    let currentCapitalToTrade = candidate.getCapital();
+                                    let sumOfRisk = 0;
+                                    let balanceLeftToRisk = currentCapitalToTrade;
+                                    
+                                    let capitalToRisk = output.map(percent => {
+                                        let proposedToRisk = MathFn.currency(currentCapitalToTrade * percent);
+                                        let risk = balanceLeftToRisk >= proposedToRisk
+                                            ? proposedToRisk
+                                            : MathFn.currency(balanceLeftToRisk);
+                                        sumOfRisk += risk;
+                                        balanceLeftToRisk = currentCapitalToTrade - sumOfRisk;
+                                        
+                                        return risk;
+                                    });
+
+                                    // console.log(`Capital To Risk: ${JSON.stringify(capitalToRisk, undefined, 4)}`);
+
+                                    let profit = app
+                                        .getListTickersOfInterest()
+                                        .reduce((profit, tickerSymbol, tickerSymbolIndex) => {
+                                            return profit + candidate.executeTrade({
+                                                risk: [capitalToRisk[tickerSymbolIndex * 2], capitalToRisk[tickerSymbolIndex * 2 + 1]],
+                                                perTradeComission: app.__costOfTrade,
+                                                perTradeReward: app.__reward,
+                                                priceCloseToday: universe[dayNumber].get(`${tickerSymbol}_ClosePrice`),
+                                                priceExpectedMove: universe[dayNumber - 1].get(`${tickerSymbol}_StandardDeviation`),
+                                                tickerSymbol,
+                                            });
+                                        }, 0);
+
+                                    // Record total profits so far
+                                    candidate.setProfit(candidate.getProfit() + profit);
+                                    console.log(`Total profit/loss: ${MathFn.currency(profit)} from ${currentCapitalToTrade} capital`);
+
+                                    // Update capital
+                                    candidate.setCapital(currentCapitalToTrade + profit);
+
+                                    // Every month trade withdraw
+                                    if (candidate.getTradeDuration() % 12 === 1) { // 12 trading days a month
+                                        candidate.executeWithdrawal();
+                                    }
+                                }
+                            }), Promise.resolve());
+                    })
+                    .then(() => {
+                        console.log('------------------------------------------------');
+                        console.log('Candidate Summary');
+                        console.log('------------------------------------------------');
+                        console.log(candidate.scoreToString());
+                        tensorFlow.memory();
+
+                        return candidate;
+                    });
+            });
     }
 }
