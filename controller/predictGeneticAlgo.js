@@ -1,20 +1,18 @@
 import AlpacaAPI from '../resource/AlpacaAPI.js';
 import App from '../app.js';
+import Candidate from '../model/Candidate.js';
 import Candlestick from '../model/Candlestick.js';
 import CollectionService from '../resource/CollectionService.js';
-import GeneticAlgo from '../GeneticAlgo.js';
 import MathFn from '../util/MathFn.js';
+import TensorFlowAdaptor from '../util/TensorFlowAdaptor.js';
 import VolumeProfile from '../model/VolumeProfile.js';
 
 const alpacaAPI = new AlpacaAPI();
 const app = new App();
 const collectionService = new CollectionService();
-const algo = new GeneticAlgo();
+const tensorFlow = new TensorFlowAdaptor();
 
 let universe;
-let layers;
-let candidate;
-const candidateNumber = 0;
 
 collectionService
     .readJSONFileAsUniverse('./data/universe/universe.json')
@@ -52,11 +50,26 @@ collectionService
                                     tickerVolumeProfile.update(candlestick);
 
                                     candlestick.setVolumeProfile(tickerVolumeProfile.getVolumeProfile(candlestick.getClose()));
+
+                                    const yesterdayVolumeProfile = candlestickCollection
+                                        .getLastElement()
+                                        .getVolumeProfile();
+
+                                    candlestick.setVolumeProfileDiff(Math.log(candlestick.getVolumeProfile() / yesterdayVolumeProfile));
+
                                     candlestickCollection.push(candlestick);
                                     return candlestickCollection;
                                 });
                         })
                         .then(candlestickCollection => {
+                            const obj = {
+                                tickerSymbol,
+                                candlestickCollection
+                            };
+                            return obj;
+                        })
+                        .catch(() => {
+                            console.log(`Latest ${tickerSymbol} quote was not available`);
                             const obj = {
                                 tickerSymbol,
                                 candlestickCollection
@@ -91,16 +104,23 @@ collectionService
             });
             // .then(() => console.log(universe[universe.length - 1]));
     })
-    .then(() => collectionService.readJSONFileAsCandidate(`./data/backup/${candidateNumber}.json`))
-    .then(c => candidate = c)
-    // Predict today
     .then(() => {
-        candidate.reset();
+        return tensorFlow
+        .setTrainedFilePath(`./data/backup/0`)
+        .getTrainedModel();
+    })
+    // Predict today
+    .then(model => {
+        const candidate = new Candidate({
+            id: 0,
+        });
+        candidate
+            .reset()
+            .setInitialCapital(app.__initialCapital);
 
-        layers = [...algo.__layers, algo.__numberOfOutputs];
         // Get 50 candles as input set from universe
         let inputSet = universe
-            .slice(universe.length - algo.__numberOfCandles - 1, universe.length - 1)
+            .slice(universe.length - app.__numberOfCandles - 1, universe.length - 1)
             .reduce((acc, map) => {
                 let valueIterator = map.values();
                 let value = valueIterator.next().value;
@@ -111,19 +131,29 @@ collectionService
                 return acc;
             }, []);
 
-        // Add capital as part of decision making
-        inputSet.unshift(candidate.getCapital());
-
         // Execute candidate
-        let output = algo.runCandidate({
-            id: candidate.getId(),
-            genome: candidate.getGenome(),
+        let output = tensorFlow.predict({
+            model,
             input: inputSet,
-            layers,
+        });
+
+        // Calculate capital to risk based on the output
+        let currentCapitalToTrade = candidate.getCapital();
+        let sumOfRisk = 0;
+        let balanceLeftToRisk = currentCapitalToTrade;
+        
+        let capitalToRisk = output.map(percent => {
+            let proposedToRisk = MathFn.currency(currentCapitalToTrade * percent);
+            let risk = balanceLeftToRisk >= proposedToRisk
+                ? proposedToRisk
+                : MathFn.currency(balanceLeftToRisk);
+            sumOfRisk += risk;
+            balanceLeftToRisk = currentCapitalToTrade - sumOfRisk;
+            
+            return risk;
         });
 
         console.log('Today:');
-        let sumOfOutputs = output.reduce((acc, val) => acc + val) - output[output.length - 1];
         [
             'Long SPY',
             'Short SPY',
@@ -132,17 +162,26 @@ collectionService
             'Long IWM',
             'Short IWM',
         ].forEach((string, index) => {
-            console.log(`${string}: ${MathFn.currency(output[index] / sumOfOutputs)}`);
+            console.log(`  ${string}: ${capitalToRisk[index]}`);
         });
     })
-    // Predict tomorrow
     .then(() => {
-        candidate.reset();
+        return tensorFlow
+            .setTrainedFilePath(`./data/backup/0`)
+            .getTrainedModel();
+    })
+    // Predict tomorrow
+    .then(model => {
+        const candidate = new Candidate({
+            id: 0,
+        });
+        candidate
+            .reset()
+            .setInitialCapital(app.__initialCapital);
 
-        layers = [...algo.__layers, algo.__numberOfOutputs];
         // Get 50 candles as input set from universe
         let inputSet = universe
-            .slice(universe.length - algo.__numberOfCandles)
+            .slice(universe.length - app.__numberOfCandles)
             .reduce((acc, map) => {
                 let valueIterator = map.values();
                 let value = valueIterator.next().value;
@@ -153,19 +192,29 @@ collectionService
                 return acc;
             }, []);
 
-        // Add capital as part of decision making
-        inputSet.unshift(candidate.getCapital());
-
         // Execute candidate
-        let output = algo.runCandidate({
-            id: candidate.getId(),
-            genome: candidate.getGenome(),
+        let output = tensorFlow.predict({
+            model,
             input: inputSet,
-            layers,
+        });
+
+        // Calculate capital to risk based on the output
+        let currentCapitalToTrade = candidate.getCapital();
+        let sumOfRisk = 0;
+        let balanceLeftToRisk = currentCapitalToTrade;
+        
+        let capitalToRisk = output.map(percent => {
+            let proposedToRisk = MathFn.currency(currentCapitalToTrade * percent);
+            let risk = balanceLeftToRisk >= proposedToRisk
+                ? proposedToRisk
+                : MathFn.currency(balanceLeftToRisk);
+            sumOfRisk += risk;
+            balanceLeftToRisk = currentCapitalToTrade - sumOfRisk;
+            
+            return risk;
         });
 
         console.log('Tomorrow:');
-        let sumOfOutputs = output.reduce((acc, val) => acc + val) - output[output.length - 1];
         [
             'Long SPY',
             'Short SPY',
@@ -174,7 +223,6 @@ collectionService
             'Long IWM',
             'Short IWM',
         ].forEach((string, index) => {
-            console.log(`${string}: ${MathFn.currency(output[index] / sumOfOutputs)}`);
+            console.log(`  ${string}: ${capitalToRisk[index]}`);
         });
-        console.log(`Withdraw: ${MathFn.currency(output[output.length - 1])}`);
     });
