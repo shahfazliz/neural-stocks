@@ -15,7 +15,7 @@ const tensorFlow = new TensorFlowAdaptor();
 export default class GeneticAlgo {
     __mutationRate = 0.2;
     __totalCandidates = 10;
-    __maxGenerationCount = 100;
+    __maxGenerationCount = 200;
 
     /**
      * Crossover genome
