@@ -1,6 +1,6 @@
 export default class App {
     __initialCapital = 1000;
-    __costOfTrade = 1.74;
+    __costOfTrade = 0.5; // 0.25 to open and another 0.25 to close
     __reward = 0.06; // 6%
 
     __numberOfCandlesAYear = 252;

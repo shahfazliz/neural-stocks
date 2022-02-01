@@ -428,9 +428,10 @@ export default class GeneticAlgo {
                                     //     || today === 0.3
                                     //     || today === 0.5)
                                 ) {
+                                    let day = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'][today * 10 - 1];
                                     candidate.setTradeDuration(candidate.getTradeDuration() + 1);
                                     console.log('------------------------------------------------');
-                                    console.log(`Day: ${dayNumber}/${universe.length - 1}`);
+                                    console.log(`Day: ${dayNumber}/${universe.length - 1} ${day}`);
                                     console.log('------------------------------------------------');
                                     
                                     // Get 50 candles as input set from universe
