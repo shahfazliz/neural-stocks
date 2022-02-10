@@ -114,6 +114,7 @@ collectionService
         });
         candidate
             .reset()
+            .setCapital(app.__initialCapital)
             .setInitialCapital(app.__initialCapital);
 
         // Get 50 candles as input set from universe
@@ -173,6 +174,7 @@ collectionService
         });
         candidate
             .reset()
+            .setCapital(app.__initialCapital)
             .setInitialCapital(app.__initialCapital);
 
         // Get 50 candles as input set from universe

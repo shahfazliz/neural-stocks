@@ -11,6 +11,7 @@ const alpacaAPI = new AlpacaAPI();
 const app = new App();
 const collectionService = new CollectionService();
 const tensorFlow = new TensorFlowAdaptor();
+const capital = 1000;
 
 let universe;
 
@@ -116,7 +117,8 @@ collectionService
         });
         candidate
             .reset()
-            .setInitialCapital(app.__initialCapital);
+            .setCapital(capital)
+            .setInitialCapital(capital);
 
         // Get 50 candles as input set from universe
         let inputSet = universe
@@ -177,7 +179,8 @@ collectionService
         });
         candidate
             .reset()
-            .setInitialCapital(app.__initialCapital);
+            .setCapital(capital)
+            .setInitialCapital(capital);
 
         // Get 50 candles as input set from universe
         let inputSet = universe
