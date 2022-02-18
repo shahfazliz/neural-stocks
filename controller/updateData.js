@@ -39,7 +39,7 @@ async function getData(tickerSymbols) {
             let lastFilteredTickerSymbols = [];
             for (let tickerSymbol of removedIgnoredTickerSymbols) {
                 const candlestickCollection = multipleTickerCandlestickCollection[tickerSymbol];
-                const startDateAfterLastDateInCollection = ArrayFn.isEmpty(candlestickCollection)
+                const startDateAfterLastDateInCollection = candlestickCollection.isEmpty()
                     ? new MomentAdaptor('2016-08-10', 'YYYY-MM-DD')
                     : new MomentAdaptor(
                         candlestickCollection
