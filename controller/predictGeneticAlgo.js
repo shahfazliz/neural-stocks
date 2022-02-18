@@ -1,5 +1,6 @@
 import AlpacaAPI from '../resource/AlpacaAPI.js';
 import App from '../app.js';
+import ArrayFn from '../util/ArrayFn.js';
 import Candidate from '../model/Candidate.js';
 import Candlestick from '../model/Candlestick.js';
 import CollectionService from '../resource/CollectionService.js';
@@ -14,10 +15,72 @@ const tensorFlow = new TensorFlowAdaptor();
 const capital = 1000;
 
 let universe;
+let model;
 
 collectionService
     .readJSONFileAsUniverse('./data/universe/universe.json')
     .then(u => universe = u)
+    .then(() => {
+        return tensorFlow
+        .setTrainedFilePath(`./data/backup/0`)
+        .getTrainedModel();
+    })
+    .then(m => model = m)
+    // Predict today
+    .then(() => {
+        const candidate = new Candidate({
+            id: 0,
+        });
+        candidate
+            .reset()
+            .setCapital(capital)
+            .setInitialCapital(capital);
+
+        // Get 50 candles as input set from universe
+        let inputSet = universe
+            .slice(universe.length - app.__numberOfCandles)
+            .reduce((acc, map) => {
+                let valueIterator = map.values();
+                let value = valueIterator.next().value;
+                while (value !== undefined) {
+                    acc.push(value);
+                    value = valueIterator.next().value;
+                }
+                return acc;
+            }, []);
+
+        // Execute candidate
+        let output = tensorFlow.predict({
+            model,
+            input: inputSet,
+        });
+
+        // Calculate capital to risk based on the output
+        let currentCapitalToTrade = candidate.getCapital();
+        let sumOfRisk = 0;
+        let balanceLeftToRisk = currentCapitalToTrade;
+        
+        let capitalToRisk = output.map(percent => {
+            let proposedToRisk = MathFn.currency(currentCapitalToTrade * percent);
+            let risk = balanceLeftToRisk >= proposedToRisk
+                ? proposedToRisk
+                : MathFn.currency(balanceLeftToRisk);
+            sumOfRisk += risk;
+            balanceLeftToRisk = currentCapitalToTrade - sumOfRisk;
+            
+            return risk;
+        });
+
+        console.log('Today:');
+        const lastInputSet = ArrayFn.getLastElement(universe);
+        app
+            .getListTickersOfInterest()
+            .forEach((tickerSymbol, index) => {
+                console.log(`  ${tickerSymbol} with expected move of: ${MathFn.currency(lastInputSet.get(tickerSymbol + '_StandardDeviation') * 100)}%`);
+                console.log(`    Long: ${capitalToRisk[index * 2]}`); // 0, 2, 4
+                console.log(`    Short: ${capitalToRisk[index * 2 + 1]}`); // 1, 3, 5
+            });
+    })
     // get data to update universe
     .then(() => {
         return Promise
@@ -105,75 +168,8 @@ collectionService
             });
             // .then(() => console.log(universe[universe.length - 1]));
     })
-    .then(() => {
-        return tensorFlow
-        .setTrainedFilePath(`./data/backup/0`)
-        .getTrainedModel();
-    })
-    // Predict today
-    .then(model => {
-        const candidate = new Candidate({
-            id: 0,
-        });
-        candidate
-            .reset()
-            .setCapital(capital)
-            .setInitialCapital(capital);
-
-        // Get 50 candles as input set from universe
-        let inputSet = universe
-            .slice(universe.length - app.__numberOfCandles - 1, universe.length - 1)
-            .reduce((acc, map) => {
-                let valueIterator = map.values();
-                let value = valueIterator.next().value;
-                while (value !== undefined) {
-                    acc.push(value);
-                    value = valueIterator.next().value;
-                }
-                return acc;
-            }, []);
-
-        // Execute candidate
-        let output = tensorFlow.predict({
-            model,
-            input: inputSet,
-        });
-
-        // Calculate capital to risk based on the output
-        let currentCapitalToTrade = candidate.getCapital();
-        let sumOfRisk = 0;
-        let balanceLeftToRisk = currentCapitalToTrade;
-        
-        let capitalToRisk = output.map(percent => {
-            let proposedToRisk = MathFn.currency(currentCapitalToTrade * percent);
-            let risk = balanceLeftToRisk >= proposedToRisk
-                ? proposedToRisk
-                : MathFn.currency(balanceLeftToRisk);
-            sumOfRisk += risk;
-            balanceLeftToRisk = currentCapitalToTrade - sumOfRisk;
-            
-            return risk;
-        });
-
-        console.log('Today:');
-        [
-            'Long SPY',
-            'Short SPY',
-            'Long QQQ',
-            'Short QQQ',
-            'Long IWM',
-            'Short IWM',
-        ].forEach((string, index) => {
-            console.log(`  ${string}: ${capitalToRisk[index]}`);
-        });
-    })
-    .then(() => {
-        return tensorFlow
-            .setTrainedFilePath(`./data/backup/0`)
-            .getTrainedModel();
-    })
     // Predict tomorrow
-    .then(model => {
+    .then(() => {
         const candidate = new Candidate({
             id: 0,
         });
@@ -218,14 +214,12 @@ collectionService
         });
 
         console.log('Tomorrow:');
-        [
-            'Long SPY',
-            'Short SPY',
-            'Long QQQ',
-            'Short QQQ',
-            'Long IWM',
-            'Short IWM',
-        ].forEach((string, index) => {
-            console.log(`  ${string}: ${capitalToRisk[index]}`);
-        });
+        const lastInputSet = ArrayFn.getLastElement(universe);
+        app
+            .getListTickersOfInterest()
+            .forEach((tickerSymbol, index) => {
+                console.log(`  ${tickerSymbol} with expected move of: ${MathFn.currency(lastInputSet.get(tickerSymbol + '_StandardDeviation') * 100)}%`);
+                console.log(`    Long: ${capitalToRisk[index * 2]}`); // 0, 2, 4
+                console.log(`    Short: ${capitalToRisk[index * 2 + 1]}`); // 1, 3, 5
+            });
     });
