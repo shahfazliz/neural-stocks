@@ -1,5 +1,6 @@
 import AlpacaAPI from '../resource/AlpacaAPI.js';
 import App from '../app.js';
+import ArrayFn from '../util/ArrayFn.js';
 import Candidate from '../model/Candidate.js';
 import Candlestick from '../model/Candlestick.js';
 import CollectionService from '../resource/CollectionService.js';
