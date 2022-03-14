@@ -7,18 +7,19 @@
     limitBetween: (value, min, max) => limitMin(limitMax(value, min), max),
     limitMin,
     limitMax,
-    precision: value => parseFloat(value.toFixed(5)),
+    precision,
     randomFloat: (min, max) => Math.random() * (max - min) + min,
     randomInt: (min, max) => Math.floor(Math.random() * (max - min + 1) + min),
     swish: value => value * sigmoid(value),
     sigmoid,
+    standardDeviation,
     // variations(repeat)
     // permutations(repeat)
     // combinations(repeat)
 }
 
 function factorial(value) {
-    return (value >= 1) 
+    return (value <= 1) 
     ? 1
     : value * factorial(value - 1);
 }
@@ -35,3 +36,11 @@ function sigmoid(value) {
     return 1 / (1 + Math.exp(-value));
 }
 
+function precision(value) {
+    return parseFloat(value.toFixed(5));
+}
+
+function standardDeviation(numbers) {
+    const mean = numbers.reduce((acc, value) => acc + value) / numbers.length;
+    return precision(Math.sqrt(numbers.reduce((acc, value) => acc += (value - mean) ** 2, 0) / numbers.length));
+}

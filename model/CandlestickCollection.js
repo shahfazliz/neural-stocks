@@ -68,8 +68,8 @@ export default class CandlestickCollection {
                     .slice(this.__collection.length - this.__numberOfCandlesAYear);
 
                 candlestick
-                    .setStandardDeviation(this
-                        .calculateStandardDeviation(oneYearCollection
+                    .setStandardDeviation(MathFn
+                        .standardDeviation(oneYearCollection
                             .map(candlestickOfYear => {
                                 // console.log(candlestickOfYear.getCloseDiff());
                                 return candlestickOfYear.getCloseDiff();
@@ -84,11 +84,6 @@ export default class CandlestickCollection {
             .push(candlestick);
 
         return this;
-    }
-
-    calculateStandardDeviation(numbers) {
-        const mean = numbers.reduce((acc, value) => acc + value) / numbers.length;
-        return MathFn.precision(Math.sqrt(numbers.reduce((acc, value) => acc += (value - mean) ** 2, 0) / numbers.length));
     }
 
     length() {
