@@ -75,7 +75,10 @@ export default class Universe {
                 // Check if all worlds have same amount of entries
                 for (let i = 0; i < multipleWorlds.length; i++) {
                     if (multipleWorlds[i].length !== totalMapsPerWorld) {
-                        return Promise.reject(`Worlds does not have the same amount of entries ${totalMapsPerWorld} vs. ${multipleWorlds[i].length}`);
+                        const firstSymbol = this.extractSymbolFromString([...multipleWorlds[0][0].keys()][2]);
+                        const secondSymbol = this.extractSymbolFromString([...multipleWorlds[i][0].keys()][2]);
+
+                        return Promise.reject(`Worlds does not have the same amount of entries ${firstSymbol}(${totalMapsPerWorld}) vs. ${secondSymbol}(${multipleWorlds[i].length})`);
                     }
                 }
 
@@ -101,5 +104,9 @@ export default class Universe {
                 return result;
             })
             .catch(error => console.log(`Error: ${error}`));
+    }
+
+    extractSymbolFromString(str) {
+        return str.match(/^.{6}/)[0];
     }
 }
