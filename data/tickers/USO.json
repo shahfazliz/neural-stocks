@@ -14448,5 +14448,145 @@
         "Timestamp": "2022-05-06T04:00:00Z",
         "Volume": 5677561,
         "vw": 81.776922
+    },
+    {
+        "ClosePrice": 76.57,
+        "HighPrice": 80.03,
+        "LowPrice": 76.38,
+        "n": 51905,
+        "OpenPrice": 79.81,
+        "Timestamp": "2022-05-09T04:00:00Z",
+        "Volume": 5623068,
+        "vw": 77.723287
+    },
+    {
+        "ClosePrice": 74.53,
+        "HighPrice": 77.33,
+        "LowPrice": 74.22,
+        "n": 45986,
+        "OpenPrice": 77.07,
+        "Timestamp": "2022-05-10T04:00:00Z",
+        "Volume": 5719348,
+        "vw": 75.395195
+    },
+    {
+        "ClosePrice": 78.18,
+        "HighPrice": 79.04,
+        "LowPrice": 77.39,
+        "n": 35737,
+        "OpenPrice": 77.76,
+        "Timestamp": "2022-05-11T04:00:00Z",
+        "Volume": 4651395,
+        "vw": 78.24765
+    },
+    {
+        "ClosePrice": 79.23,
+        "HighPrice": 79.47,
+        "LowPrice": 77.91,
+        "n": 33073,
+        "OpenPrice": 78.49,
+        "Timestamp": "2022-05-12T04:00:00Z",
+        "Volume": 4314958,
+        "vw": 78.709887
+    },
+    {
+        "ClosePrice": 81.28,
+        "HighPrice": 81.42,
+        "LowPrice": 79.93,
+        "n": 31915,
+        "OpenPrice": 80.6,
+        "Timestamp": "2022-05-13T04:00:00Z",
+        "Volume": 4179922,
+        "vw": 80.962842
+    },
+    {
+        "ClosePrice": 83.11,
+        "HighPrice": 83.39,
+        "LowPrice": 80.82,
+        "n": 33976,
+        "OpenPrice": 80.98,
+        "Timestamp": "2022-05-16T04:00:00Z",
+        "Volume": 4819892,
+        "vw": 82.462648
+    },
+    {
+        "ClosePrice": 81.11,
+        "HighPrice": 83.63,
+        "LowPrice": 80.86,
+        "n": 28642,
+        "OpenPrice": 83.05,
+        "Timestamp": "2022-05-17T04:00:00Z",
+        "Volume": 4117343,
+        "vw": 82.335795
+    },
+    {
+        "ClosePrice": 79.29,
+        "HighPrice": 82.04,
+        "LowPrice": 78.65,
+        "n": 31222,
+        "OpenPrice": 82.02,
+        "Timestamp": "2022-05-18T04:00:00Z",
+        "Volume": 3881498,
+        "vw": 80.083942
+    },
+    {
+        "ClosePrice": 80.58,
+        "HighPrice": 81.35,
+        "LowPrice": 78.45,
+        "n": 30948,
+        "OpenPrice": 78.5,
+        "Timestamp": "2022-05-19T04:00:00Z",
+        "Volume": 4132263,
+        "vw": 79.86972
+    },
+    {
+        "ClosePrice": 81.65,
+        "HighPrice": 81.84,
+        "LowPrice": 80.25,
+        "n": 25627,
+        "OpenPrice": 81.21,
+        "Timestamp": "2022-05-20T04:00:00Z",
+        "Volume": 3072067,
+        "vw": 81.192964
+    },
+    {
+        "ClosePrice": 81.97,
+        "HighPrice": 82.16,
+        "LowPrice": 80.91,
+        "n": 20157,
+        "OpenPrice": 81.36,
+        "Timestamp": "2022-05-23T04:00:00Z",
+        "Volume": 2988693,
+        "vw": 81.587635
+    },
+    {
+        "ClosePrice": 82,
+        "HighPrice": 82.84,
+        "LowPrice": 81.34,
+        "n": 13095,
+        "OpenPrice": 82.03,
+        "Timestamp": "2022-05-24T04:00:00Z",
+        "Volume": 1520351,
+        "vw": 81.992156
+    },
+    {
+        "ClosePrice": 82.48,
+        "HighPrice": 82.69,
+        "LowPrice": 81.53,
+        "n": 16782,
+        "OpenPrice": 82.21,
+        "Timestamp": "2022-05-25T04:00:00Z",
+        "Volume": 1939828,
+        "vw": 82.178886
+    },
+    {
+        "ClosePrice": 84.59,
+        "HighPrice": 85.1,
+        "LowPrice": 83.15,
+        "n": 30149,
+        "OpenPrice": 83.15,
+        "Timestamp": "2022-05-26T04:00:00Z",
+        "Volume": 3778913,
+        "vw": 84.422513
     }
 ]

@@ -1,4 +1,4 @@
-import * as tf from '@tensorflow/tfjs-node-gpu';
+import * as tf from '@tensorflow/tfjs';
 import tfn from '@tensorflow/tfjs-node';
 
 export default class TensorFlowAdaptor {
