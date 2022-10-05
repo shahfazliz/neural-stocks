@@ -221,5 +221,7 @@ collectionService
                 console.log(`  ${tickerSymbol} with expected move of: ${MathFn.currency(lastInputSet.get(tickerSymbol + '_StandardDeviation') * 100)}%`);
                 console.log(`    Long: ${capitalToRisk[index * 2]}`); // 0, 2, 4
                 console.log(`    Short: ${capitalToRisk[index * 2 + 1]}`); // 1, 3, 5
+
+                // To see the price range = (Math.E ** standard deviation) * close price
             });
     });
