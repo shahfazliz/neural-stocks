@@ -4,22 +4,19 @@
   "description": "Attempt to created a neural network to help decide to long or short SPX, NDX and RUT.",
   "main": "app.js",
   "scripts": {
-    "extractgenome": "(title Extract Genome & node ./controller/extractGenome.js) && title Extract Genome",
-    "predictgeneticalgo": "(title Predict Genetic Algo & node ./controller/predictGeneticAlgo.js) && title Predict Genetic Algo",
-    "predictneuralnetwork": "(title Predict Neural Network & node ./controller/predictNeuralNetwork.js) && title Predict Neural Network",
-    "traingeneticalgo": "(title Train Genetic Algo & node ./controller/trainGeneticAlgo.js) && title Train Genetic Algo",
-    "trainneuralnetwork": "(title Train Neural Network & node ./controller/trainNeuralNetwork.js) && title Train Neural Network",
-    "updatedata": "(title Update Data & node ./controller/updateData.js) && title Update Data",
-    "updatevolumeprofile": "(title Update Volume Profile & node ./controller/updateVolumeProfile.js) && title Update Volume Profile",
-    "validategeneticalgo": "(title Validate Genetic Algo & node ./controller/validateGeneticAlgo.js) && title Validate Genetic Algo",
-    "validateneuralnetwork": "(title Validate Neural Network & node ./controller/validateNeuralNetwork.js) && title Validate Neural Network"
+    "extractgenome": "node ./controller/extractGenome.js",
+    "predictgeneticalgo": "node ./controller/predictGeneticAlgo.js",
+    "predictneuralnetwork": "node ./controller/predictNeuralNetwork.js",
+    "traingeneticalgo": "node ./controller/trainGeneticAlgo.js",
+    "trainneuralnetwork": "node ./controller/trainNeuralNetwork.js",
+    "updatedata": "node ./controller/updateData.js",
+    "updatevolumeprofile": "node ./controller/updateVolumeProfile.js",
+    "validategeneticalgo": "node ./controller/validateGeneticAlgo.js",
+    "validateneuralnetwork": "node ./controller/validateNeuralNetwork.js"
   },
   "author": "Shahfazliz Shahron",
   "license": "ISC",
   "type": "module",
-  "devDependencies": {
-    "windows-build-tools": "^5.2.2"
-  },
   "dependencies": {
     "@tensorflow/tfjs-node": "^3.12.0",
     "@tensorflow/tfjs-node-gpu": "^3.16.0",
